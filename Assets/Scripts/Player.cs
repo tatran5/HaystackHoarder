@@ -25,41 +25,6 @@ public class Player : MonoBehaviour
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Player::OnTriggerEnter");
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        Debug.Log("Player::OnTriggerStay");
-        GameObject objectCollided = other.gameObject;
-        if (objectCollided.name.Equals("Haystack") && Input.GetKey(KeyCode.Space) && !hasHay)
-        {
-            GetComponent<Rigidbody>().velocity = new Vector3();
-            if (timeHarvestHay >= Haystack.timeHarvestRequired)
-            {
-                Debug.Log("Player::OnCollisionStay: about to spawn new haystack");
-
-                hasHay = true;
-                objectCollided.GetComponent<Haystack>().decreaseHay();
-                timeHarvestHay = 0;
-            }
-            else
-            {
-                Debug.Log("Player::OnCollisionStay: update time");
-                timeHarvestHay += Time.fixedDeltaTime;
-                Debug.Log("Time left: " + (Haystack.timeHarvestRequired - timeHarvestHay).ToString());
-            }
-
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Debug.Log("Player::OnTriggerExit");
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
     }
