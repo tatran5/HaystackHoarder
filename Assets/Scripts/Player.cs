@@ -27,42 +27,47 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            timeHarvestHay = 0;
+    }
+    private void OnCollisionWithHaystack(Haystack haystack)
+    {     
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+        if (!hasHay)
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                if (timeHarvestHay >= Haystack.timeHarvestRequired)
+                {
+                    hasHay = true;
+                    timeHarvestHay = 0f;
+                    haystack.DecreaseHay();
+                }
+                else
+                    timeHarvestHay += Time.fixedDeltaTime;
+            }
+            else
+                timeHarvestHay = 0f;
+        }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        Debug.Log("Player::OnCollisionStay");
         GameObject objectCollided = collision.gameObject;
-        if (objectCollided.name.Equals("Haystack") && Input.GetKey(KeyCode.Space) && !hasHay)
+        if (objectCollided.GetComponent<Haystack>())
         {
-            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-            collision.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            collision.gameObject.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-            if (timeHarvestHay >= Haystack.timeHarvestRequired)
-            {
-                Debug.Log("Player::OnCollisionStay: about to spawn new haystack");
-
-                hasHay = true;
-                objectCollided.GetComponent<Haystack>().decreaseHay();
-                timeHarvestHay = 0;
-            }
-            else
-            {
-                Debug.Log("Player::OnCollisionStay: update time");
-                timeHarvestHay += Time.fixedDeltaTime;
-                Debug.Log("Time left: " + (Haystack.timeHarvestRequired - timeHarvestHay).ToString());
-            }
-
+            OnCollisionWithHaystack(collision.gameObject.GetComponent<Haystack>());
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        GameObject objectCollided = collision.gameObject;
-        if (objectCollided.name.Equals("Haystack") && Input.GetKey(KeyCode.Space) && !hasHay)
-        {
-            timeHarvestHay = 0;
-        }
+
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        timeHarvestHay = 0;
     }
 }

@@ -8,10 +8,10 @@ public class Haystack : MonoBehaviour
      * of how much hay is left in the stack and how quickly it can be harvested. 
      * Must destroy itself upon running out of hay */
 
-    public static int hayAmountInitial = 7;
+    private static int hayAmountInitial = 2;
     public static float timeHarvestRequired = 3f; // in second
 
-    public int hayAmountLeft = hayAmountInitial;
+    private int hayAmountLeft = hayAmountInitial;
 
     // Start is called before the first frame update
     void Start()
@@ -27,12 +27,13 @@ public class Haystack : MonoBehaviour
 
     /* Decrease hay. If there's no hay left, set haystack to be inactive, and make another
      * inactive haystack to be active */
-    public void decreaseHay()
+    public void DecreaseHay()
     {
         hayAmountLeft--;
+        Debug.Log("decreaseHay called");
         if (hayAmountLeft == 0)
         {
-            Haystack[] haystacks = FindObjectsOfType<Haystack>();
+            Haystack[] haystacks = Resources.FindObjectsOfTypeAll<Haystack>();
             int loopCount = 0;
 
             while (true)
@@ -42,12 +43,16 @@ public class Haystack : MonoBehaviour
                 if (!chosenHaystack.gameObject.activeSelf)
                 {
                     chosenHaystack.gameObject.SetActive(true);
+                    Debug.Log("Haystack::decreaseHay() set another hay active");
                     gameObject.SetActive(false);
                     hayAmountLeft = hayAmountInitial;
                     break;
                 }
-                if (loopCount > haystacks.Length * haystacks.Length)
+                if (loopCount >= haystacks.Length * haystacks.Length * 4)
+                {
                     Debug.Log("Haystack::decreaseHay() might run into infinite loop");
+                    break;
+                }
                 loopCount++;
             }
         }
