@@ -28,10 +28,14 @@ public class Player : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         GameObject collidedObject = collision.gameObject;
-        if (collidedObject.GetComponent<Tractor>() && Input.GetKey(Controller.kbInteract))
+
+        Tractor tractor = collidedObject.GetComponent<Tractor>();
+        if (tractor && Input.GetKey(Controller.kbEnterExitTractor))
         {
-            Debug.Log(Time.deltaTime);
-        }
+            tractor.SetTractorHasPlayer(true);
+            Destroy(gameObject);
+            Debug.Log(Random.Range(0f, 10f));
+        } 
     }
 
     private void OnCollisionExit(Collision collision)

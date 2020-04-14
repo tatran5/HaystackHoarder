@@ -20,6 +20,11 @@ public class Tractor : MonoBehaviour
         
     }
 
+    public void SetTractorHasPlayer(bool hasPlayer)
+    {
+        this.hasPlayer = hasPlayer;
+    }
+
     // Update is called once per frame
     void Update()
     {
