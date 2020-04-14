@@ -43,7 +43,6 @@ public class Haystack : MonoBehaviour
                 if (!chosenHaystack.gameObject.activeSelf)
                 {
                     chosenHaystack.gameObject.SetActive(true);
-                    Debug.Log("Haystack::decreaseHay() set another hay active");
                     gameObject.SetActive(false);
                     hayAmountLeft = hayAmountInitial;
                     break;
