@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour
 
     public static KeyCode kbInteract = KeyCode.Space;
     public static KeyCode kbPlaceTrap = KeyCode.C;
-    public static KeyCode kbEnterTractor = KeyCode.LeftShift;
+    public static KeyCode kbEnterExitTractor = KeyCode.LeftShift;
     
     // Start is called before the first frame update
     void Start()

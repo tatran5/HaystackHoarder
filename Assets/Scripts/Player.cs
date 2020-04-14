@@ -6,9 +6,6 @@ public class Player : MonoBehaviour
 {
     public static float speed = 3f; //dummy speed to test hay harvesting function
 
-    private float timeHarvestHay = 0f;
-    private bool hasHay = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -18,56 +15,28 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Dummy movement for player
         if (Input.GetKey(Controller.kbMoveLeft))
-            transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
-        if (Input.GetKey(Controller.kbMoveRight))
-            transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            timeHarvestHay = 0;
-    }
-    private void OnCollisionWithHaystack(Haystack haystack)
-    {     
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-        if (!hasHay)
-        {
-            if (Input.GetKey(Controller.kbInteract))
-            {
-                if (timeHarvestHay >= Haystack.timeHarvestRequired)
-                {
-                    hasHay = true;
-                    timeHarvestHay = 0f;
-                    haystack.DecreaseHay();
-                }
-                else
-                    timeHarvestHay += Time.fixedDeltaTime;
-            }
-            else
-                timeHarvestHay = 0f;
-        }
+            transform.position -= new Vector3(Time.deltaTime * speed, 0, 0);
+        else if (Input.GetKey(Controller.kbMoveRight))
+            transform.position += new Vector3(Time.deltaTime * speed, 0, 0);
+        if (Input.GetKey(Controller.kbMoveForward))
+            transform.position += new Vector3(0, 0, Time.deltaTime * speed);
+        else if (Input.GetKey(Controller.kbMoveBackward))
+            transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        GameObject objectCollided = collision.gameObject;
-        if (objectCollided.GetComponent<Haystack>())
+        GameObject collidedObject = collision.gameObject;
+        if (collidedObject.GetComponent<Tractor>() && Input.GetKey(Controller.kbInteract))
         {
-            OnCollisionWithHaystack(collision.gameObject.GetComponent<Haystack>());
+
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
 
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        timeHarvestHay = 0;
+    
     }
 }

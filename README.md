@@ -16,6 +16,7 @@ Unity version used to create this project: 2019.2.13f1
 - Enter or exit the tractor using shift key
 - Pickup hay while in tractor by using space bar when the player is close to tractor
 - Pickup hay from the tractor by using space bar when the player is close to tractor
+- Fuel depletes whenever player  moves the tractor
 
 ### Haystack
 #### Fields: 
@@ -27,6 +28,3 @@ When putting haystacks into scene, it is **important** to have some haystack [de
 
 #### Potential changes
 - The player can harvest hay without actually colliding with the object (just need to be close enough?)
-
-# Note:
-- May need to refactor movement  after all implementation is done to synchronize
