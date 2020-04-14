@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Tractor : MonoBehaviour
 {
-    private static float speed = 7f;
-    private static float fuelMax = 100f;
-    private static float fuelDepletePerSec = 5f;
+    public static float speed = 7f;
+    public static float fuelMax = 100f;
+    public static float fuelDepletePerSec = 5f;
 
     private float fuelLeft = fuelMax;
     private bool hasHay = false;
-    private bool hasPlayer = true;
+    private bool hasPlayer = false;
 
     private float timeHarvestHay = 0f;
 
@@ -37,7 +37,6 @@ public class Tractor : MonoBehaviour
                 transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
 
             fuelLeft -= (Time.deltaTime % 1) * fuelDepletePerSec;
-            Debug.Log("fuelLeft: " + fuelLeft);
         }
     }
 

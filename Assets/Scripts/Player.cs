@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
         GameObject collidedObject = collision.gameObject;
         if (collidedObject.GetComponent<Tractor>() && Input.GetKey(Controller.kbInteract))
         {
-
+            Debug.Log(Time.deltaTime);
         }
     }
 
