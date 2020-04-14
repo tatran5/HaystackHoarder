@@ -19,9 +19,9 @@ public class Player : MonoBehaviour
     void Update()
     {
         // Dummy movement for player
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(Controller.kbMoveLeft))
             transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(Controller.kbMoveRight))
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
     }
 
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
         if (!hasHay)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(Controller.kbInteract))
             {
                 if (timeHarvestHay >= Haystack.timeHarvestRequired)
                 {
