@@ -5,12 +5,15 @@ using UnityEngine;
 public class Tractor : MonoBehaviour
 {
     public static float speed = 7f;
+    public static Vector3 epsilonOffsetSpawnPlayer = new Vector3(0.1f, 0, 0.1f);
     public static float fuelMax = 100f;
     public static float fuelDepletePerSec = 5f;
+    
+    public GameObject playerPrefab;
 
     private float fuelLeft = fuelMax;
     private bool hasHay = false;
-    private bool hasPlayer = false;
+    private bool hasPlayer = true;
 
     private float timeHarvestHay = 0f;
 
@@ -20,18 +23,84 @@ public class Tractor : MonoBehaviour
         
     }
 
-    public void SetTractorHasPlayer(bool hasPlayer)
+    public void SetHasPlayer(bool hasPlayer)
     {
         this.hasPlayer = hasPlayer;
+    }
+
+    public bool GetHasPlayer()
+    {
+        return hasPlayer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (hasPlayer && fuelLeft > 0 && 
-            (Input.GetKey(Controller.kbMoveLeft) || Input.GetKey(Controller.kbMoveRight) ||
-             Input.GetKey(Controller.kbMoveForward) || Input.GetKey(Controller.kbMoveBackward)))
-            HandleMovement();
+        if (hasPlayer)
+        {
+            if (fuelLeft > 0 &&
+                (Input.GetKey(Controller.kbMoveLeft) || Input.GetKey(Controller.kbMoveRight) ||
+                 Input.GetKey(Controller.kbMoveForward) || Input.GetKey(Controller.kbMoveBackward)))
+                HandleMovement();
+            if (Input.GetKeyDown(Controller.kbEnterExitTractor))
+                HandlePlayerExitTractor();
+        }
+    }
+
+    private void HandlePlayerExitTractor()
+    {
+        float xOffset = 0f;
+        float zOffset = 0f;
+        
+        float tractorScaleX = transform.localScale.x;
+        float tractorScaleZ = transform.localScale.z;
+
+        float playerScaleX = playerPrefab.transform.localScale.x;
+        float playerScaleZ = playerPrefab.transform.localScale.z;
+
+        // additional offset in the each direction when spawning player due to tractor's scale
+        xOffset += tractorScaleX % 2 == 0 ? 0f : 0.5f;
+        zOffset += tractorScaleZ % 2 == 0 ? 0f : 0.5f;
+
+        // additional offset in the each direction when spawning player due to player's scale
+        xOffset += playerScaleX % 2 == 0 ? 0f : -0.5f;
+        zOffset += playerScaleZ % 2 == 0 ? 0f : -0.5f;
+
+        float playerPosYBottom = transform.position.y - transform.localScale.y / 2f;
+
+        float yOffset = 1.6f; //TODO: calculate the appropriate y 
+        for (float x = -1; x < tractorScaleX + 1; x++)
+        {
+            float xOffsetBoundary = 0f;
+            if (x == -1) xOffsetBoundary = -epsilonOffsetSpawnPlayer.x;
+            if (x == tractorScaleX) xOffsetBoundary = epsilonOffsetSpawnPlayer.x;
+
+            for (float z = -1; z < tractorScaleZ + 1; z++)
+            {
+                float zOffsetBoundary = 0f;
+                if (z == -1) zOffsetBoundary = -epsilonOffsetSpawnPlayer.z;
+                if (z == tractorScaleZ ) zOffsetBoundary = epsilonOffsetSpawnPlayer.z;
+
+                float playerPosX = xOffsetBoundary + xOffset + x;
+                float playerPosZ = zOffsetBoundary + zOffset + z;
+                Vector3 playerPos = new Vector3(playerPosX, yOffset, playerPosZ);
+
+                if (OverlapPlayer(playerPos)) {
+                    Debug.Log(playerPos);
+                    Instantiate(playerPrefab, playerPos, Quaternion.identity);
+                }
+                
+            }
+        }
+
+
+        Debug.Log("There's no space for player to get out off the tractor");
+    }
+
+    private bool OverlapPlayer(Vector3 playerPos)
+    {
+        // Just in case the player's size in z or x direction is larger than 1
+        return true;
     }
 
     private void HandleMovement()

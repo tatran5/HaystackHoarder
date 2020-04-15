@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -24,23 +24,18 @@ public class Player : MonoBehaviour
         else if (Input.GetKey(Controller.kbMoveBackward))
             transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
     }
-
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision other)
     {
-        GameObject collidedObject = collision.gameObject;
-
+        Debug.Log(other.gameObject.ToString());
+        GameObject collidedObject = other.gameObject;
         Tractor tractor = collidedObject.GetComponent<Tractor>();
-        if (tractor && Input.GetKey(Controller.kbEnterExitTractor))
+        if (tractor && !tractor.GetHasPlayer() && Input.GetKeyDown(KeyCode.Z))
         {
-            tractor.SetTractorHasPlayer(true);
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            tractor.SetHasPlayer(true);
             Destroy(gameObject);
-            Debug.Log(Random.Range(0f, 10f));
-        } 
+        }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-
-    
-    }
 }
