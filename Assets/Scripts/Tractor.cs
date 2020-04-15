@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tractor : MonoBehaviour
 {
     public static float speed = 7f;
-    public static Vector3 epsilonOffsetSpawnPlayer = new Vector3(0.1f, 0, 0.1f);
+    public static Vector3 epsilonOffsetSpawnPlayer = new Vector3(0.1f);
     public static float fuelMax = 100f;
     public static float fuelDepletePerSec = 5f;
     
@@ -49,50 +49,40 @@ public class Tractor : MonoBehaviour
 
     private void HandlePlayerExitTractor()
     {
-        float xOffset = 0f;
-        float zOffset = 0f;
-        
-        float tractorScaleX = transform.localScale.x;
-        float tractorScaleZ = transform.localScale.z;
+        Vector3 tractorScale = transform.localScale;
+        Vector3 playerScale = playerPrefab.transform.localScale;
+        Vector3 offsetScale = Vector3.zero; // offset due to scale
 
-        float playerScaleX = playerPrefab.transform.localScale.x;
-        float playerScaleZ = playerPrefab.transform.localScale.z;
+        // additional offset in the each direction when spawning player due to tractor and player's scale
+        offsetScale.x += tractorScale.x % 2 == 0 ? 0f : 0.5f;
+        offsetScale.z += tractorScale.z % 2 == 0 ? 0f : 0.5f;
+        offsetScale.x += playerScale.x % 2 == 0 ? 0f : -0.5f;
+        offsetScale.z += playerScale.z % 2 == 0 ? 0f : -0.5f;
 
-        // additional offset in the each direction when spawning player due to tractor's scale
-        xOffset += tractorScaleX % 2 == 0 ? 0f : 0.5f;
-        zOffset += tractorScaleZ % 2 == 0 ? 0f : 0.5f;
-
-        // additional offset in the each direction when spawning player due to player's scale
-        xOffset += playerScaleX % 2 == 0 ? 0f : -0.5f;
-        zOffset += playerScaleZ % 2 == 0 ? 0f : -0.5f;
-
-        float playerPosYBottom = transform.position.y - transform.localScale.y / 2f;
-
-        float yOffset = 1.6f; //TODO: calculate the appropriate y 
-        for (float x = -1; x < tractorScaleX + 1; x++)
+        Vector3 playerPos =  new Vector3(0, transform.position.y - tractorScale.y / 2f + playerScale.y / 2f, 0);
+        Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
+        for (float x = -1; x < tractorScale.x + 1; x++)
         {
-            float xOffsetBoundary = 0f;
-            if (x == -1) xOffsetBoundary = -epsilonOffsetSpawnPlayer.x;
-            if (x == tractorScaleX) xOffsetBoundary = epsilonOffsetSpawnPlayer.x;
+            offsetBoundary.x = 0f;
+            if (x == -1) offsetBoundary.x = -epsilonOffsetSpawnPlayer.x;
+            else if (x == tractorScale.x) offsetBoundary.x = epsilonOffsetSpawnPlayer.x;
 
-            for (float z = -1; z < tractorScaleZ + 1; z++)
+            for (float z = -1; z < tractorScale.z + 1; z++)
             {
-                float zOffsetBoundary = 0f;
-                if (z == -1) zOffsetBoundary = -epsilonOffsetSpawnPlayer.z;
-                if (z == tractorScaleZ ) zOffsetBoundary = epsilonOffsetSpawnPlayer.z;
+                offsetBoundary.z = 0f;
+                if (z == -1) offsetBoundary.z = -epsilonOffsetSpawnPlayer.z;
+                else if (z == tractorScale.z) offsetBoundary.z = epsilonOffsetSpawnPlayer.z;
 
-                float playerPosX = xOffsetBoundary + xOffset + x;
-                float playerPosZ = zOffsetBoundary + zOffset + z;
-                Vector3 playerPos = new Vector3(playerPosX, yOffset, playerPosZ);
+                playerPos.x = offsetScale.x + offsetBoundary.x + x;
+                playerPos.z = offsetScale.z + offsetBoundary.z + z;
 
-                if (OverlapPlayer(playerPos)) {
-                    Debug.Log(playerPos);
+                if (OverlapPlayer(playerPos) && (x != 0 || z!= 0)) {
                     Instantiate(playerPrefab, playerPos, Quaternion.identity);
+                   // break;
                 }
                 
             }
         }
-
 
         Debug.Log("There's no space for player to get out off the tractor");
     }
