@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tractor : MonoBehaviour
 {
     public static float speed = 7f;
-    public static Vector3 epsilonOffsetSpawnPlayer = new Vector3(0.1f);
+    public static float epsilon = 0.15f;
     public static float fuelMax = 100f;
     public static float fuelDepletePerSec = 5f;
     
@@ -59,38 +59,51 @@ public class Tractor : MonoBehaviour
         offsetScale.x += playerScale.x % 2 == 0 ? 0f : -0.5f;
         offsetScale.z += playerScale.z % 2 == 0 ? 0f : -0.5f;
 
-        Vector3 playerPos =  new Vector3(0, transform.position.y - tractorScale.y / 2f + playerScale.y / 2f, 0);
+        Vector3 playerPos =  new Vector3(0, 
+            transform.position.y - tractorScale.y / 2f + playerScale.y / 2f + epsilon, 
+            0);
         Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
-        for (float x = -1; x < tractorScale.x + 1; x++)
+        bool spawnedPlayer = false;
+        for (float x = -1; x < tractorScale.x + 1 && !spawnedPlayer; x++)
         {
             offsetBoundary.x = 0f;
-            if (x == -1) offsetBoundary.x = -epsilonOffsetSpawnPlayer.x;
-            else if (x == tractorScale.x) offsetBoundary.x = epsilonOffsetSpawnPlayer.x;
+            if (x == -1) offsetBoundary.x = -epsilon;
+            else if (x == tractorScale.x) offsetBoundary.x = epsilon;
 
-            for (float z = -1; z < tractorScale.z + 1; z++)
+            for (float z = -1; z < tractorScale.z + 1 && !spawnedPlayer; z++)
             {
                 offsetBoundary.z = 0f;
-                if (z == -1) offsetBoundary.z = -epsilonOffsetSpawnPlayer.z;
-                else if (z == tractorScale.z) offsetBoundary.z = epsilonOffsetSpawnPlayer.z;
+                if (z == -1) offsetBoundary.z = -epsilon;
+                else if (z == tractorScale.z) offsetBoundary.z = epsilon;
 
-                playerPos.x = offsetScale.x + offsetBoundary.x + x;
-                playerPos.z = offsetScale.z + offsetBoundary.z + z;
+                playerPos.x = transform.position.x + offsetScale.x + offsetBoundary.x + x;
+                playerPos.z = transform.position.z + offsetScale.z + offsetBoundary.z + z;
 
-                if (OverlapPlayer(playerPos) && (x != 0 || z!= 0)) {
-                    Instantiate(playerPrefab, playerPos, Quaternion.identity);
-                   // break;
-                }
+               if (!OverlapWithOthers(playerPos, playerScale, transform.rotation)) {
+                    Instantiate(playerPrefab, playerPos, transform.rotation);
+                    spawnedPlayer = true;
+               }
                 
             }
         }
 
-        Debug.Log("There's no space for player to get out off the tractor");
+        if (!spawnedPlayer)
+           Debug.Log("There's not enough space for player to get out off the tractor");
     }
 
-    private bool OverlapPlayer(Vector3 playerPos)
+    private bool OverlapWithOthers(Vector3 objectPos, Vector3 objectScale, Quaternion objectRot)
     {
-        // Just in case the player's size in z or x direction is larger than 1
-        return true;
+        float radius = epsilon + objectScale.z > objectScale.x ? objectScale.z : objectScale.x;
+        Collider[] overlapColliders = Physics.OverlapSphere(objectPos, radius);
+        
+        // Because the radius is the longest scale of the player in a direction, 
+        // Physics.OverlapSphere might return true with tractor as the collider 
+        // (even though it's not overlapping.)
+        for (int i = 0; i < overlapColliders.Length; i++)
+            if (!overlapColliders[i].gameObject.CompareTag("Ground") &&
+                !overlapColliders[i].gameObject.GetComponent<Tractor>())
+                return true;
+        return false;
     }
 
     private void HandleMovement()
