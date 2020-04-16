@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Animal.cs" />
     <Compile Include="Assets\Scripts\Axe.cs" />
     <Compile Include="Assets\Scripts\Barn.cs" />
+    <Compile Include="Assets\Scripts\ControllableObject.cs" />
     <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\Fence.cs" />
     <Compile Include="Assets\Scripts\FuelStation.cs" />
