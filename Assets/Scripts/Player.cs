@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
             transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
 
         if (Input.GetKeyDown(Controller.kbEnterExitTractor))
-            HandleEnterTractor
+            HandleEnterTractor();
     }
 
     //
@@ -44,8 +44,6 @@ public class Player : MonoBehaviour
                 tractor.SetHasPlayer(true);
                 Destroy(gameObject);
             }
-
-            HandleTractorDetected(tractor);
         }
     }
 
