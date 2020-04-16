@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public static float speed = 3f; //dummy speed to test hay harvesting function
+    public static Vector3 epsilon = new Vector3(0.2f, 0.2f, 0.2f);
 
     // Start is called before the first frame update
     void Start()
@@ -23,18 +24,28 @@ public class Player : MonoBehaviour
             transform.position += new Vector3(0, 0, Time.deltaTime * speed);
         else if (Input.GetKey(Controller.kbMoveBackward))
             transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
+
+        if (Input.GetKeyDown(Controller.kbEnterExitTractor))
+            HandleEnterTractor
     }
-    private void OnCollisionStay(Collision other)
+
+    //
+    private void HandleEnterTractor()
     {
-        Debug.Log(other.gameObject.ToString());
-        GameObject collidedObject = other.gameObject;
-        Tractor tractor = collidedObject.GetComponent<Tractor>();
-        if (tractor && !tractor.GetHasPlayer() && Input.GetKeyDown(KeyCode.Z))
+        Collider[] colliders = Physics.OverlapBox(transform.position,
+                   transform.localScale + epsilon, transform.rotation);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            tractor.SetHasPlayer(true);
-            Destroy(gameObject);
+            Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
+            if (tractor && !tractor.GetHasPlayer())
+            {
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                tractor.SetHasPlayer(true);
+                Destroy(gameObject);
+            }
+
+            HandleTractorDetected(tractor);
         }
     }
 
