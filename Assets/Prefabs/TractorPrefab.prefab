@@ -126,3 +126,5 @@ MonoBehaviour:
   speed: 0
   playerPrefab: {fileID: 565198110448255067, guid: 8ac2805fb3b11eb4fb7e8e4a3bf58293,
     type: 3}
+  hayAmount: 0
+  hasPlayer: 0

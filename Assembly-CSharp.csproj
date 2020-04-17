@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\Axe.cs" />
     <Compile Include="Assets\Scripts\Barn.cs" />
     <Compile Include="Assets\Scripts\ControllableObject.cs" />
-    <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\Fence.cs" />
     <Compile Include="Assets\Scripts\FuelStation.cs" />
     <Compile Include="Assets\Scripts\Global.cs" />
@@ -75,6 +74,7 @@
     <Compile Include="Assets\Scripts\Pitfall.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Tractor.cs" />
+    <Compile Include="Assets\Scripts\UI\ProgressBar.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/WhenCollisionStillWorked/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

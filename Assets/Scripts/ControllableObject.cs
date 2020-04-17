@@ -31,21 +31,21 @@ public class ControllableObject : MonoBehaviour
     public bool HandleMovement()
     {
         bool moved = false;
-        if (Input.GetKey(Controller.kbMoveLeft))
+        if (Input.GetKey(kbMoveLeft))
         {
             transform.position -= new Vector3(Time.deltaTime * speed, 0, 0);
             moved = true;
-        } else if (Input.GetKey(Controller.kbMoveRight))
+        } else if (Input.GetKey(kbMoveRight))
         {
             transform.position += new Vector3(Time.deltaTime * speed, 0, 0);
             moved = true;
         }
             
-        if (Input.GetKey(Controller.kbMoveForward))
+        if (Input.GetKey(kbMoveForward))
         {
             transform.position += new Vector3(0, 0, Time.deltaTime * speed);
             moved = true;
-        } else if (Input.GetKey(Controller.kbMoveBackward))
+        } else if (Input.GetKey(kbMoveBackward))
         {
             transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
             moved = true;

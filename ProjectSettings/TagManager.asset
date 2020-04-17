@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Tractor
+  - Barn
+  - Haystack
   layers:
   - Default
   - TransparentFX

@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Player : ControllableObject
 {
+    public ProgressBar progressBar;
+
     private float hayAmount = 0f;
     private bool isHayProcessed = false;
     private float timeProcessHay = 0f;
 
+    // TODO: Delete variables once finish testing
+    private float testProgress = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
+        progressBar.SetMaxValue(1);
         speed = 3f;
     }
 
@@ -19,55 +25,72 @@ public class Player : ControllableObject
     {
         HandleMovement();
 
+        //TODO: delete this if statement once finish testing
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            testProgress += 0.1f;
+            progressBar.SetProgress(testProgress);
+        }
+
         if (Input.GetKeyDown(kbEnterExitTractor))
-            HandleEnterTractor();
-        else if (Input.GetKeyDown(kbInteract))
-        {
-            Collider[] colliders = Physics.OverlapBox(transform.position,
-                    transform.localScale + epsilon, transform.rotation);
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                GameObject collidedObject = colliders[i].gameObject;
+                EnterTractor();
+            else if (Input.GetKeyDown(kbInteract))
+                InteractOnce();
+            else if (Input.GetKey(kbInteract))
+                InteractOverTime();
 
-                if (collidedObject.tag.Equals("Tractor"))
-                {
-                    // Get hay from tractor
-                    Tractor tractor = collidedObject.GetComponent<Tractor>();
-                    hayAmount = tractor.hayAmount;
-                    tractor.hayAmount = 0f;
-                }
-            }
-        }
-        else if (Input.GetKey(kbInteract))
-        {
-            Collider[] colliders = Physics.OverlapBox(transform.position,
-                    transform.localScale + epsilon, transform.rotation);
-            for (int i = 0; i < colliders.Length; i++)
+            else if (Input.GetKeyUp(kbInteract))
             {
-                GameObject collidedObject = colliders[i].gameObject;
-
-                if (collidedObject.tag.Equals("Barn"))
-                {
-                    // Process hay
-                    if (timeProcessHay >= Barn.timeProcessHayRequired)
-                    {
-                        isHayProcessed = true;
-                        timeProcessHay = 0f;
-                    }
-                    else
-                        timeProcessHay += Time.deltaTime;
-                } else {
-                    timeProcessHay = 0f;
-                }
+                timeProcessHay = 0f;
             }
-        }
-        else if (Input.GetKeyUp(kbInteract))
+    }
+
+    private void InteractOnce()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position,
+        transform.localScale + epsilon, transform.rotation);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            timeProcessHay = 0f;
+            GameObject collidedObject = colliders[i].gameObject;
+
+            if (collidedObject.tag.Equals("Tractor"))
+            {
+                // Get hay from tractor
+                Tractor tractor = collidedObject.GetComponent<Tractor>();
+                hayAmount = tractor.hayAmount;
+                tractor.hayAmount = 0f;
+            }
         }
     }
 
-    private void HandleEnterTractor()
+    private void InteractOverTime()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position,
+                    transform.localScale + epsilon, transform.rotation);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            GameObject collidedObject = colliders[i].gameObject;
+
+            if (collidedObject.tag.Equals("Barn"))
+            {
+                // Process hay
+                if (timeProcessHay >= Barn.timeProcessHayRequired)
+                {
+                    isHayProcessed = true;
+                    timeProcessHay = 0f;
+                }
+                else
+                    timeProcessHay += Time.deltaTime;
+            }
+            else
+            {
+                timeProcessHay = 0f;
+            }
+        }
+
+    }
+
+    private void EnterTractor()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
                     transform.localScale + epsilon, transform.rotation);
