@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Player : ControllableObject
 {
-   
+    private float hayAmount = 0f;
+    private bool isHayProcessed = false;
+    private float timeProcessHay = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,30 +17,75 @@ public class Player : ControllableObject
     // Update is called once per frame
     void Update()
     {
-        HandleMovement(); 
+        HandleMovement();
 
-        if (Input.GetKeyDown(Controller.kbEnterExitTractor))
+        if (Input.GetKeyDown(kbEnterExitTractor))
             HandleEnterTractor();
+        else if (Input.GetKeyDown(kbInteract))
+        {
+            Collider[] colliders = Physics.OverlapBox(transform.position,
+                    transform.localScale + epsilon, transform.rotation);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                GameObject collidedObject = colliders[i].gameObject;
+
+                if (collidedObject.tag.Equals("Tractor"))
+                {
+                    // Get hay from tractor
+                    Tractor tractor = collidedObject.GetComponent<Tractor>();
+                    hayAmount = tractor.hayAmount;
+                    tractor.hayAmount = 0f;
+                }
+            }
+        }
+        else if (Input.GetKey(kbInteract))
+        {
+            Collider[] colliders = Physics.OverlapBox(transform.position,
+                    transform.localScale + epsilon, transform.rotation);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                GameObject collidedObject = colliders[i].gameObject;
+
+                if (collidedObject.tag.Equals("Barn"))
+                {
+                    // Process hay
+                    if (timeProcessHay >= Barn.timeProcessHayRequired)
+                    {
+                        isHayProcessed = true;
+                        timeProcessHay = 0f;
+                    }
+                    else
+                        timeProcessHay += Time.deltaTime;
+                } else {
+                    timeProcessHay = 0f;
+                }
+            }
+        }
+        else if (Input.GetKeyUp(kbInteract))
+        {
+            timeProcessHay = 0f;
+        }
     }
 
     private void HandleEnterTractor()
     {
-        if (Input.GetKeyDown(Controller.kbEnterExitTractor))
+        Collider[] colliders = Physics.OverlapBox(transform.position,
+                    transform.localScale + epsilon, transform.rotation);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            Collider[] colliders = Physics.OverlapBox(transform.position,
-                   transform.localScale + epsilon, transform.rotation);
-            for (int i = 0; i < colliders.Length; i++)
+            Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
+            if (tractor && !tractor.hasPlayer)
             {
-                Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
-                if (tractor && !tractor.GetHasPlayer())
-                {
-                    GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                    tractor.SetHasPlayer(true);
-                    Destroy(gameObject);
-                }
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                tractor.hasPlayer = true;
+                Destroy(gameObject);
             }
         }
     }
 
+    private void ProcessHayAtBarn()
+    {
+
+    }
 }

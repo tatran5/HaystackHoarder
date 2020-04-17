@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 708723718341605971}
   m_Layer: 0
   m_Name: TractorPrefab
-  m_TagString: Untagged
+  m_TagString: Tractor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -122,5 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1dd1d272be0474d968906b372c2094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 0
   playerPrefab: {fileID: 565198110448255067, guid: 8ac2805fb3b11eb4fb7e8e4a3bf58293,
     type: 3}

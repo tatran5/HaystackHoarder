@@ -11,8 +11,8 @@ public class Tractor : ControllableObject
     public GameObject playerPrefab;
 
     private float fuelLeft = fuelMax;
-    private bool hasHay = false;
-    private bool hasPlayer = false;
+    public float hayAmount = 0f;
+    public bool hasPlayer = false;
 
     private float timeSincePlayerEnter = 0f;
     private float timeHarvestHay = 0f;
@@ -24,16 +24,6 @@ public class Tractor : ControllableObject
         speed = 7f;
     }
 
-    public void SetHasPlayer(bool hasPlayer)
-    {
-        this.hasPlayer = hasPlayer;
-    }
-
-    public bool GetHasPlayer()
-    {
-        return hasPlayer;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -43,19 +33,22 @@ public class Tractor : ControllableObject
 
             if (fuelLeft > 0 && HandleMovement()) fuelLeft -= (Time.deltaTime % 1) * fuelDepletePerSec;
 
-            HandlePlayerExitTractor();
+            // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
+            if (Input.GetKeyDown(kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
+                HandlePlayerExitTractor();
 
             // Handle collision with tractor
-            if (Input.GetKey(Controller.kbInteract))
+            if (Input.GetKey(kbInteract))
             {
                 Collider[] colliders = Physics.OverlapBox(transform.position,
                     transform.localScale + epsilon, transform.rotation);
                 for (int i = 0; i < colliders.Length; i++)
                 {
-                    Haystack haystack = colliders[i].gameObject.GetComponent<Haystack>();
-                    if (haystack) HarvestHay(haystack);
+                    if (colliders[i].gameObject.tag.Equals("Haystack"))
+                        HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
                 }
-            } else  
+            }
+            else
                 timeHarvestHay = 0f;
         }
     }
@@ -65,11 +58,11 @@ public class Tractor : ControllableObject
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        if (!hasHay)
+        if (hayAmount == 0)
         {
             if (timeHarvestHay >= Haystack.timeHarvestRequired)
             {
-                hasHay = true;
+                hayAmount = 1f; // TODO: update 
                 timeHarvestHay = 0f;
                 haystack.DecreaseHay();
             }
@@ -80,52 +73,48 @@ public class Tractor : ControllableObject
 
     private void HandlePlayerExitTractor()
     {
-        // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
-        if (Input.GetKeyDown(Controller.kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
+        Vector3 tractorScale = transform.localScale;
+        Vector3 playerScale = playerPrefab.transform.localScale;
+        Vector3 offsetScale = Vector3.zero; // offset due to scale
+
+        // additional offset in the each direction when spawning player due to tractor and player's scale
+        offsetScale.x += tractorScale.x % 2 == 0 ? 0f : 0.5f;
+        offsetScale.z += tractorScale.z % 2 == 0 ? 0f : 0.5f;
+        offsetScale.x += playerScale.x % 2 == 0 ? 0f : -0.5f;
+        offsetScale.z += playerScale.z % 2 == 0 ? 0f : -0.5f;
+
+        Vector3 playerPos = new Vector3(0,
+            transform.position.y - tractorScale.y / 2f + playerScale.y / 2f + epsilon.y,
+            0);
+        Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
+        bool spawnedPlayer = false;
+        for (float x = -1; x < tractorScale.x + 1 && !spawnedPlayer; x++)
         {
-            Vector3 tractorScale = transform.localScale;
-            Vector3 playerScale = playerPrefab.transform.localScale;
-            Vector3 offsetScale = Vector3.zero; // offset due to scale
+            offsetBoundary.x = 0f;
+            if (x == -1) offsetBoundary.x = -epsilon.x;
+            else if (x == tractorScale.x) offsetBoundary.x = epsilon.x;
 
-            // additional offset in the each direction when spawning player due to tractor and player's scale
-            offsetScale.x += tractorScale.x % 2 == 0 ? 0f : 0.5f;
-            offsetScale.z += tractorScale.z % 2 == 0 ? 0f : 0.5f;
-            offsetScale.x += playerScale.x % 2 == 0 ? 0f : -0.5f;
-            offsetScale.z += playerScale.z % 2 == 0 ? 0f : -0.5f;
-
-            Vector3 playerPos = new Vector3(0,
-                transform.position.y - tractorScale.y / 2f + playerScale.y / 2f + epsilon.y,
-                0);
-            Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
-            bool spawnedPlayer = false;
-            for (float x = -1; x < tractorScale.x + 1 && !spawnedPlayer; x++)
+            for (float z = -1; z < tractorScale.z + 1 && !spawnedPlayer; z++)
             {
-                offsetBoundary.x = 0f;
-                if (x == -1) offsetBoundary.x = -epsilon.x;
-                else if (x == tractorScale.x) offsetBoundary.x = epsilon.x;
+                offsetBoundary.z = 0f;
+                if (z == -1) offsetBoundary.z = -epsilon.z;
+                else if (z == tractorScale.z) offsetBoundary.z = epsilon.z;
 
-                for (float z = -1; z < tractorScale.z + 1 && !spawnedPlayer; z++)
+                playerPos.x = transform.position.x + offsetScale.x + offsetBoundary.x + x;
+                playerPos.z = transform.position.z + offsetScale.z + offsetBoundary.z + z;
+
+                if (!PlayerOverlapOthers(playerPos, transform.rotation))
                 {
-                    offsetBoundary.z = 0f;
-                    if (z == -1) offsetBoundary.z = -epsilon.z;
-                    else if (z == tractorScale.z) offsetBoundary.z = epsilon.z;
-
-                    playerPos.x = transform.position.x + offsetScale.x + offsetBoundary.x + x;
-                    playerPos.z = transform.position.z + offsetScale.z + offsetBoundary.z + z;
-
-                    if (!PlayerOverlapOthers(playerPos, transform.rotation))
-                    {
-                        Instantiate(playerPrefab, playerPos, transform.rotation);
-                        spawnedPlayer = true;
-                        hasPlayer = false;
-                        timeSincePlayerEnter = 0f;
-                    }
+                    Instantiate(playerPrefab, playerPos, transform.rotation);
+                    spawnedPlayer = true;
+                    hasPlayer = false;
+                    timeSincePlayerEnter = 0f;
                 }
             }
-
-            if (!spawnedPlayer)
-                Debug.Log("There's not enough space for player to get out off the tractor");
         }
+
+        if (!spawnedPlayer)
+            Debug.Log("There's not enough space for player to get out off the tractor");
     }
 
     private bool PlayerOverlapOthers(Vector3 playerPos, Quaternion playerRot)
