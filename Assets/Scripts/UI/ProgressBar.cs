@@ -11,8 +11,25 @@ public class ProgressBar : MonoBehaviour
     {
         slider.maxValue = maxValue;
     }
-    public void SetProgress(float progressValue)
+
+    public float GetMaxValue()
     {
-        slider.value = progressValue;
+        return slider.maxValue;
+    }
+
+    public void SetValue(float value, float newMaxValue = 1f)
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+            SetMaxValue(newMaxValue);
+        }
+        value = value < slider.maxValue ? value : slider.maxValue;
+        slider.value = value;
+    }
+
+    public void SetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }

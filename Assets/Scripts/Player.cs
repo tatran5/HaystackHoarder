@@ -16,7 +16,7 @@ public class Player : ControllableObject
     // Start is called before the first frame update
     void Start()
     {
-        progressBar.SetMaxValue(1);
+        progressBar.SetActive(false);
         speed = 3f;
     }
 
@@ -25,28 +25,19 @@ public class Player : ControllableObject
     {
         HandleMovement();
 
-        //TODO: delete this if statement once finish testing
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log("Pressed T");
-            testProgress += 0.2f;
-            progressBar.SetProgress(testProgress);
-        }
-
         if (Input.GetKeyDown(kbEnterExitTractor))
                 EnterTractor();
             else if (Input.GetKeyDown(kbInteract))
                 InteractOnce();
             else if (Input.GetKey(kbInteract))
                 InteractOverTime();
-
             else if (Input.GetKeyUp(kbInteract))
             {
                 timeProcessHay = 0f;
             }
     }
 
-    private void InteractOnce()
+    public override void InteractOnce()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
         transform.localScale + epsilon, transform.rotation);
@@ -64,7 +55,7 @@ public class Player : ControllableObject
         }
     }
 
-    private void InteractOverTime()
+    public override void InteractOverTime()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
                     transform.localScale + epsilon, transform.rotation);
@@ -74,6 +65,7 @@ public class Player : ControllableObject
 
             if (collidedObject.tag.Equals("Barn"))
             {
+               
                 // Process hay
                 if (timeProcessHay >= Barn.timeProcessHayRequired)
                 {
@@ -85,6 +77,7 @@ public class Player : ControllableObject
             }
             else
             {
+                progressBar.SetActive(false);
                 timeProcessHay = 0f;
             }
         }

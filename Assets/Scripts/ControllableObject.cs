@@ -16,18 +16,6 @@ public class ControllableObject : MonoBehaviour
     public float speed = 0f;
     public static Vector3 epsilon = new Vector3(0.15f, 0.15f, 0.15f);
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public bool HandleMovement()
     {
         bool moved = false;
@@ -35,22 +23,32 @@ public class ControllableObject : MonoBehaviour
         {
             transform.position -= new Vector3(Time.deltaTime * speed, 0, 0);
             moved = true;
-        } else if (Input.GetKey(kbMoveRight))
+        }
+        else if (Input.GetKey(kbMoveRight))
         {
             transform.position += new Vector3(Time.deltaTime * speed, 0, 0);
             moved = true;
         }
-            
+
         if (Input.GetKey(kbMoveForward))
         {
             transform.position += new Vector3(0, 0, Time.deltaTime * speed);
             moved = true;
-        } else if (Input.GetKey(kbMoveBackward))
+        }
+        else if (Input.GetKey(kbMoveBackward))
         {
             transform.position -= new Vector3(0, 0, Time.deltaTime * speed);
             moved = true;
         }
 
         return moved;
+    }
+
+    public virtual void InteractOnce() { }
+
+    public virtual void InteractOverTime() { }
+
+    public void UpdateProgressBar(ProgressBar progressBar, float value, float maxValue)
+    {
     }
 }

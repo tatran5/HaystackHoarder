@@ -18,9 +18,12 @@ public class Tractor : ControllableObject
     private float timeHarvestHay = 0f;
     private float hayHarvested = 0f;
 
+    public ProgressBar progressBar;
+
     // Start is called before the first frame update
     void Start()
     {
+        progressBar.gameObject.SetActive(false);
         speed = 7f;
     }
 
@@ -35,24 +38,36 @@ public class Tractor : ControllableObject
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
             if (Input.GetKeyDown(kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
-                HandlePlayerExitTractor();
+                InteractOnce(); // This calls PlayerExitsTractor
 
             // Handle collision with tractor
             if (Input.GetKey(kbInteract))
             {
-                Collider[] colliders = Physics.OverlapBox(transform.position,
-                    transform.localScale + epsilon, transform.rotation);
-                for (int i = 0; i < colliders.Length; i++)
-                {
-                    if (colliders[i].gameObject.tag.Equals("Haystack"))
-                        HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
-                }
+                InteractOverTime();
             }
             else
+            {
+                progressBar.gameObject.SetActive(false);
                 timeHarvestHay = 0f;
+            }
         }
     }
 
+    public override void InteractOverTime()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position,
+                    transform.localScale + epsilon, transform.rotation);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject.tag.Equals("Haystack"))
+                HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
+        }
+    }
+    public override void InteractOnce()
+    {
+        // Player exits tractor
+        HandlePlayerExitTractor();
+    }
     private void HarvestHay(Haystack haystack)
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -67,10 +82,13 @@ public class Tractor : ControllableObject
                 haystack.DecreaseHay();
             }
             else
+            {
                 timeHarvestHay += Time.fixedDeltaTime;
+                progressBar.SetValue(timeHarvestHay, Haystack.timeHarvestRequired);
+            }
         }
     }
-
+    
     private void HandlePlayerExitTractor()
     {
         Vector3 tractorScale = transform.localScale;
