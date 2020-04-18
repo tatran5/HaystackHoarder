@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
+    Global globalObj;
+    public Vector2Int gridPos;
 
     // Variables related to the feed meter that depletes with time
     public float feedMeter;
     public int feedTickLength;  // How mHuch time it takes to deplete meter by one.
                                 // Altered per animal, can also be altered to affect difficulty.
-    int feedTimer;       // Pairs with previous variable, updates with Update()
+    int feedTimer;              // Pairs with previous variable, updates with Update()
     
     public float weight;        // Varies per animal
     public float speed;         // Speed at which the animal runs
 
     public int wanderLength;
     public int wanderTimer;
-    public Vector3 wanderDirection;
 
+    public Vector2 wanderPoint;
+    public Vector3 wanderDirection;
 
     // Start is called before the first frame update
     void Start()
     {
+        globalObj = GameObject.Find("GlobalObject").GetComponent<Global>();
+
         feedMeter = 50.0f;
         feedTickLength = 75;
         feedTimer = 0;
@@ -32,6 +37,7 @@ public class Animal : MonoBehaviour
         wanderLength = 200;
         wanderTimer = 0;
         wanderDirection = Vector3.zero;
+
     }
 
     // Update is called once per frame
@@ -46,7 +52,7 @@ public class Animal : MonoBehaviour
         }
 
         // Wander Behavior
-        UpdateWander();
+        Move();
     }
 
     void FeedAnimal() {
@@ -54,19 +60,18 @@ public class Animal : MonoBehaviour
         feedTimer = 0;
     }
 
-    void UpdateWander() {
+    void Move() {
         if (wanderDirection == Vector3.zero) {
             float wanderX = Random.Range(-1.0f, 1.0f);
             float wanderZ = Random.Range(-1.0f, 1.0f);
-            wanderDirection = new Vector3(wanderX, 0, wanderZ);
-            wanderDirection = Vector3.Normalize(wanderDirection);
+            wanderDirection = new Vector3(wanderX, 0.0f, wanderZ);
         }
 
         wanderTimer += 1;
 
         if (wanderTimer >= wanderLength)
         {
-            wanderDirection = Vector3.zero;
+            wanderDirection = Vector2.zero;
             wanderTimer = 0;
         }
         else {
