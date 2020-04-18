@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Pitfall.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Tractor.cs" />
+    <Compile Include="Assets\Scripts\UI\Billboard.cs" />
     <Compile Include="Assets\Scripts\UI\ProgressBar.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/WhenCollisionStillWorked/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

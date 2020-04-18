@@ -28,7 +28,8 @@ public class Player : ControllableObject
         //TODO: delete this if statement once finish testing
         if (Input.GetKeyDown(KeyCode.T))
         {
-            testProgress += 0.1f;
+            Debug.Log("Pressed T");
+            testProgress += 0.2f;
             progressBar.SetProgress(testProgress);
         }
 
