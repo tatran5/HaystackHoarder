@@ -6,8 +6,7 @@ public class Player : ControllableObject
 {
     public ProgressBar progressBar;
 
-    private bool hasHay = false;
-    private bool hasBale = false;
+    private State state = State.Empty;
 
 
     // TODO: Delete variables once finish testing
@@ -44,19 +43,21 @@ public class Player : ControllableObject
             GameObject collidedObject = colliders[i].gameObject;
 
             if (collidedObject.tag.Equals("Tractor"))
-            {
-                // Get hay from tractor
-                Tractor tractor = collidedObject.GetComponent<Tractor>();
-                if (tractor.GetHay())
-                {
-                    hasHay = true;
-                    gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
-                }
-            }
+                GetHayFromTractor(collidedObject.GetComponent<Tractor>());
             else if (collidedObject.tag.Equals("Barn"))
             {
-                hasHay = false;
-                gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
+                Barn barn = collidedObject.GetComponent<Barn>();
+                
+                if (state == State.HasHay && barn.state == State.Empty)
+                {
+                    barn.StartProcessingHay();
+                    state = State.Empty;
+                    gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
+                } else if (state == State.Empty && barn.GetBale())
+                {
+                    state = State.HasBale;
+                    gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
+                }
             }
         }
     }
@@ -69,15 +70,6 @@ public class Player : ControllableObject
         {
             GameObject collidedObject = colliders[i].gameObject;
 
-            if (collidedObject.tag.Equals("Barn"))
-            {
-               
-                
-            }
-            else
-            {
-
-            }
         }
 
     }
@@ -99,6 +91,14 @@ public class Player : ControllableObject
         }
     }
 
+    private void GetHayFromTractor(Tractor tractor)
+    {
+        if (tractor.GetHay())
+        {
+            state = State.HasHay;
+            gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
+        }
+    }
     private void ProcessHayAtBarn()
     {
 

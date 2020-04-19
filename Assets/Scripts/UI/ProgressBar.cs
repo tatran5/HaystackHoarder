@@ -42,4 +42,9 @@ public class ProgressBar : MonoBehaviour
     {
         return slider.value == slider.maxValue;
     }
+
+    public bool IsEmpty()
+    {
+        return slider.value == 0f;
+    }
 }

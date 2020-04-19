@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum State { Empty, Processing, HasBale }
-
 public class Barn : MonoBehaviour
 {
-    public static float timeProcessHayRequired = 3f; // in second
+    public static float timeProcessHayRequired = 5f; // in second
 
     public float timeProcessingHay = 0f;
 
+    //TODO: delete these fields used for debugging for hashay
+    public Material testBarnMaterial;
+    public Material testHasBaleMaterial;
+    public Material testProcessHayMaterial;
+
     /* If progress baar is not active, barn is empty. 
-     * If progress bar is active but not full, hay is being processed. 
-     * If progress bar is active and full, hay has turned into bale*/
-    public ProgressBar progressBar; 
-    State state = State.Empty;
+     * If progress bar is active, hay is being processed.*/
+    public ProgressBar progressBar;
+    public State state = State.Empty;
 
 
     private void Start()
     {
+        progressBar.SetMaxValue(timeProcessHayRequired);
         progressBar.SetActive(false);
     }
 
@@ -31,12 +34,14 @@ public class Barn : MonoBehaviour
             {
                 timeProcessingHay += Time.deltaTime;
                 progressBar.SetValue(timeProcessingHay, timeProcessHayRequired);
-            } else
+            }
+            else
             {
                 timeProcessingHay = 0f;
-                progressBar.SetValue(timeProcessHayRequired, timeProcessHayRequired);
                 state = State.HasBale;
-            }              
+                progressBar.SetActive(false);
+                gameObject.GetComponent<MeshRenderer>().material = testHasBaleMaterial;
+            }
 
         }
     }
@@ -44,17 +49,24 @@ public class Barn : MonoBehaviour
     public void StartProcessingHay()
     {
         if (!progressBar.IsActive())
+        {
+            state = State.Processing;
             progressBar.SetActive(true);
+            gameObject.GetComponent<MeshRenderer>().material = testProcessHayMaterial; //TODO: delete this after finish testing
+        }
     }
 
     // Deplete bale if there's any in the barn and return whether there's bale to take in the first place
     public bool GetBale()
     {
-        bool hasBale = progressBar.IsFull();
-        if (hasBale) {
+        if (state == State.HasBale)
+        {
             progressBar.SetValue(0, timeProcessHayRequired);
             progressBar.SetActive(false);
+            gameObject.GetComponent<MeshRenderer>().material = testBarnMaterial;
+            state = State.Empty;
+            return true;
         }
-        return hasBale;
+        return false; ;
     }
 }
