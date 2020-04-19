@@ -32,4 +32,14 @@ public class ProgressBar : MonoBehaviour
     {
         gameObject.SetActive(active);
     }
+
+    public bool IsActive()
+    {
+        return gameObject.activeSelf;
+    }
+
+    public bool IsFull()
+    {
+        return slider.value == slider.maxValue;
+    }
 }

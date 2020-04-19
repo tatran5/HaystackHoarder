@@ -6,12 +6,14 @@ public class Player : ControllableObject
 {
     public ProgressBar progressBar;
 
-    private float hayAmount = 0f;
-    private bool isHayProcessed = false;
-    private float timeProcessHay = 0f;
+    private bool hasHay = false;
+    private bool hasBale = false;
+
 
     // TODO: Delete variables once finish testing
     private float testProgress = 0f;
+    public Material testHasHayMaterial;
+    public Material testPlayerMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +33,6 @@ public class Player : ControllableObject
                 InteractOnce();
             else if (Input.GetKey(kbInteract))
                 InteractOverTime();
-            else if (Input.GetKeyUp(kbInteract))
-            {
-                timeProcessHay = 0f;
-            }
     }
 
     public override void InteractOnce()
@@ -49,8 +47,16 @@ public class Player : ControllableObject
             {
                 // Get hay from tractor
                 Tractor tractor = collidedObject.GetComponent<Tractor>();
-                hayAmount = tractor.hayAmount;
-                tractor.hayAmount = 0f;
+                if (tractor.GetHay())
+                {
+                    hasHay = true;
+                    gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
+                }
+            }
+            else if (collidedObject.tag.Equals("Barn"))
+            {
+                hasHay = false;
+                gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
             }
         }
     }
@@ -66,19 +72,11 @@ public class Player : ControllableObject
             if (collidedObject.tag.Equals("Barn"))
             {
                
-                // Process hay
-                if (timeProcessHay >= Barn.timeProcessHayRequired)
-                {
-                    isHayProcessed = true;
-                    timeProcessHay = 0f;
-                }
-                else
-                    timeProcessHay += Time.deltaTime;
+                
             }
             else
             {
-                progressBar.SetActive(false);
-                timeProcessHay = 0f;
+
             }
         }
 

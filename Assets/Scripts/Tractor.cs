@@ -16,9 +16,12 @@ public class Tractor : ControllableObject
 
     private float timeSincePlayerEnter = 0f;
     private float timeHarvestHay = 0f;
-    private float hayHarvested = 0f;
+    private bool hasHay = false;
 
     public ProgressBar progressBar;
+
+    public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
+    public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +41,7 @@ public class Tractor : ControllableObject
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
             if (Input.GetKeyDown(kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
-                InteractOnce(); // This calls PlayerExitsTractor
+                HandlePlayerExitTractor(); // This calls PlayerExitsTractor
 
             // Handle collision with tractor
             if (Input.GetKey(kbInteract))
@@ -63,11 +66,7 @@ public class Tractor : ControllableObject
                 HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
         }
     }
-    public override void InteractOnce()
-    {
-        // Player exits tractor
-        HandlePlayerExitTractor();
-    }
+     
     private void HarvestHay(Haystack haystack)
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -77,9 +76,10 @@ public class Tractor : ControllableObject
         {
             if (timeHarvestHay >= Haystack.timeHarvestRequired)
             {
-                hayAmount = 1f; // TODO: update 
+                hasHay = true;
                 timeHarvestHay = 0f;
                 haystack.DecreaseHay();
+                gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; //TODO: delete this after finish debugging
             }
             else
             {
@@ -143,6 +143,17 @@ public class Tractor : ControllableObject
             if (!colliders[i].gameObject.CompareTag("Ground") &&
                 !colliders[i].gameObject.GetComponent<Tractor>())
                 return true;
+        return false;
+    }
+
+    public bool GetHay()
+    {
+        if (hasHay)
+        {
+            hasHay = false;
+            gameObject.GetComponent<MeshRenderer>().material = testTractorMaterial;
+            return true;
+        }
         return false;
     }
 }
