@@ -5,7 +5,7 @@ using UnityEngine;
 public enum TractorState { HasHayOnly, HasPlayerOnly, HasHayAndPlayer, Empty}
 public class Tractor : ControllableObject
 {
-    public static float timeMax = 5f; // The max time that this tractor can be moved
+    public float timeMax = 5f; // The max time that this tractor can be moved
 
     public GameObject playerPrefab;
     public ProgressBar progressBar;
@@ -14,7 +14,7 @@ public class Tractor : ControllableObject
     private float timeSincePlayerEnter = 0f;
     public static float timeOffsetPlayerEnter = 0.1f; 
 
-    private float timeMove = 0;
+    public float timeMove = 0;
     private float timeHarvestHay = 0f;
 
     public TractorState state = TractorState.Empty;

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TutorialState { Welcome, CharacterMovement, EnterExitTractor, HarvestHay, RefillFuel, ProcessHay, AdditionalMessage, None }
+public enum TutorialState { Welcome, CharacterMovement, EnterExitTractor, RefillFuel, HarvestHay, 
+    ProcessHay, FeedAnimals, AdditionalMessage, None }
 public class GlobalTutorial : MonoBehaviour
 {
     public TutorialState lastState = TutorialState.None;
@@ -22,13 +23,28 @@ public class GlobalTutorial : MonoBehaviour
     void HandleEndState() { }
     void HandleAdditionalMessageState() { }
     void HandleEndTutorial() { }
-    void HandleProcessHayState() { }
+    void HandleProcessHayState() 
+    {
+        if (!textIsUpdated)
+        {
+            tutorialText.text = "Get out of your tractor. Then, unload hay from the tractor by using " + 
+                ControllableObject.kbInteract.ToString() + " key, and carry hay to the barn. Once you're there, press " +
+                ControllableObject.kbInteract.ToString() + " again to process hay into bale. Wait a bit for the process to complete. " +
+                "Press " + readyKey.ToString() + " once it's done.";
+        }
+        else if (Input.GetKeyDown(readyKey))
+        {
+            textIsUpdated = false;
+            UnhighlightObject(GameObject.FindGameObjectsWithTag("FuelStation")[0]);
+            UpdateStates(state, TutorialState.HarvestHay);
+        }
+    }
     void HandleRefillFuelState() 
     {
         if (!textIsUpdated)
         {
             textIsUpdated = true;
-            tutorialText.text = "Oh no! Your tractor is out of fuel. Get out of the tractor and go to the fuel station, press "
+            tutorialText.text = "Can't move your tractor? Your tractor is out of fuel. Get out of the tractor and go to the fuel station, press "
                 + ControllableObject.kbInteract.ToString() + " to get fuel, then run back to your tractor and press the same key to refill its fuel.\n"
                 + "Press " + readyKey.ToString() + " once you have done so.";
             HighlightObject(GameObject.FindGameObjectsWithTag("FuelStation")[0]);
@@ -37,7 +53,7 @@ public class GlobalTutorial : MonoBehaviour
         {
             textIsUpdated = false;
             UnhighlightObject(GameObject.FindGameObjectsWithTag("FuelStation")[0]);
-            UpdateStates(state, lastState);
+            UpdateStates(state, TutorialState.HarvestHay);
         }
     }
     
@@ -55,7 +71,7 @@ public class GlobalTutorial : MonoBehaviour
         {
             textIsUpdated = false;
             UnhighlightObject(GameObject.FindGameObjectsWithTag("Haystack")[0]);
-            UpdateStates(state, lastState);
+            UpdateStates(state, TutorialState.ProcessHay);
         }
     }
     void HandleEnterExitTractorState()
@@ -128,10 +144,12 @@ public class GlobalTutorial : MonoBehaviour
             HandleCharacterMovementState();
         else if (state == TutorialState.EnterExitTractor)
             HandleEnterExitTractorState();
-        else if (state == TutorialState.HarvestHay)
-            HandleHarvestHayState();
         else if (state == TutorialState.RefillFuel)
             HandleRefillFuelState();
+        else if (state == TutorialState.HarvestHay)
+            HandleHarvestHayState();
+        else if (state == TutorialState.ProcessHay)
+            HandleProcessHayState();
         else if (state == TutorialState.AdditionalMessage)
             HandleAdditionalMessageState();
         else
