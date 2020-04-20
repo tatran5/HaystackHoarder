@@ -113,6 +113,7 @@ MonoBehaviour:
   testProcessHayMaterial: {fileID: 2100000, guid: a622f828a03f8ea4ab375c5be565a537,
     type: 2}
   progressBar: {fileID: 1574809811505310921}
+  state: 3
 --- !u!1 &2221848668542144959
 GameObject:
   m_ObjectHideFlags: 0

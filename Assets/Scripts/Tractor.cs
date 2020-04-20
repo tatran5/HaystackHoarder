@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TractorState { HasHayOnly, HasPlayerOnly, HasHayAndPlayer, Empty}
 public class Tractor : ControllableObject
 {
-    public static float fuelMax = 100f;
-    public static float fuelDepletePerSec = 5f;
-    public static float timeOffsetPlayerEnter = 0.1f; // offset to prevent player enter and exit the tractor at the same time
+    public static float timeMax = 5f; // The max time that this tractor can be moved
 
     public GameObject playerPrefab;
-
-    private float fuelLeft = fuelMax;
-    public float hayAmount = 0f;
-    public bool hasPlayer = false;
-
-    private float timeSincePlayerEnter = 0f;
-    private float timeHarvestHay = 0f;
-    private bool hasHay = false;
-
     public ProgressBar progressBar;
+
+    // Fields to prevent player enter and exit the tractor at the same time
+    private float timeSincePlayerEnter = 0f;
+    public static float timeOffsetPlayerEnter = 0.1f; 
+
+    private float timeMove = 0;
+    private float timeHarvestHay = 0f;
+
+    public TractorState state = TractorState.Empty;
 
     public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
     public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
@@ -33,11 +32,11 @@ public class Tractor : ControllableObject
     // Update is called once per frame
     void Update()
     {
-        if (hasPlayer)
+        if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
             timeSincePlayerEnter += Time.deltaTime;
 
-            if (fuelLeft > 0 && HandleMovement()) fuelLeft -= (Time.deltaTime % 1) * fuelDepletePerSec;
+            if (timeMove < timeMax && HandleMovement()) timeMove += Time.deltaTime;
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
             if (Input.GetKeyDown(kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
@@ -72,11 +71,11 @@ public class Tractor : ControllableObject
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        if (hayAmount == 0)
+        if (state != TractorState.HasHayAndPlayer)
         {
             if (timeHarvestHay >= Haystack.timeHarvestRequired)
             {
-                hasHay = true;
+                state = TractorState.HasHayAndPlayer;
                 timeHarvestHay = 0f;
                 haystack.DecreaseHay();
                 gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; //TODO: delete this after finish debugging
@@ -125,8 +124,11 @@ public class Tractor : ControllableObject
                 {
                     Instantiate(playerPrefab, playerPos, transform.rotation);
                     spawnedPlayer = true;
-                    hasPlayer = false;
                     timeSincePlayerEnter = 0f;
+                    if (state == TractorState.HasHayAndPlayer)
+                        state = TractorState.HasHayOnly;
+                    else
+                        state = TractorState.Empty;
                 }
             }
         }
@@ -148,12 +150,30 @@ public class Tractor : ControllableObject
 
     public bool GetHay()
     {
-        if (hasHay)
+        if (state == TractorState.HasHayOnly)
         {
-            hasHay = false;
+            state = TractorState.Empty;
             gameObject.GetComponent<MeshRenderer>().material = testTractorMaterial;
             return true;
         }
         return false;
+    }
+
+    public bool HasPlayer()
+    {
+        return state == TractorState.HasHayAndPlayer || state == TractorState.HasPlayerOnly;
+    }
+
+    public void PlayerEnter()
+    {
+        if (state == TractorState.Empty)
+            state = TractorState.HasPlayerOnly;
+        else if (state == TractorState.HasHayOnly)
+            state = TractorState.HasHayAndPlayer;
+    }
+
+    public void RefillFuel()
+    {
+        timeMove = 0f;
     }
 }

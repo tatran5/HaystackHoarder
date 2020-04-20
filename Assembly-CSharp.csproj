@@ -73,7 +73,6 @@
     <Compile Include="Assets\Scripts\Haystack.cs" />
     <Compile Include="Assets\Scripts\Pitfall.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\State.cs" />
     <Compile Include="Assets\Scripts\Tractor.cs" />
     <Compile Include="Assets\Scripts\UI\Billboard.cs" />
     <Compile Include="Assets\Scripts\UI\ProgressBar.cs" />

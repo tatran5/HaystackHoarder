@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BarnState {HasHay, HasBale, Processing, Empty}
 public class Barn : MonoBehaviour
 {
     public static float timeProcessHayRequired = 5f; // in second
@@ -16,7 +17,7 @@ public class Barn : MonoBehaviour
     /* If progress baar is not active, barn is empty. 
      * If progress bar is active, hay is being processed.*/
     public ProgressBar progressBar;
-    public State state = State.Empty;
+    public BarnState state = BarnState.Empty;
 
 
     private void Start()
@@ -28,7 +29,7 @@ public class Barn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (state == State.Processing)
+        if (state == BarnState.Processing)
         {
             if (timeProcessingHay < timeProcessHayRequired)
             {
@@ -38,7 +39,7 @@ public class Barn : MonoBehaviour
             else
             {
                 timeProcessingHay = 0f;
-                state = State.HasBale;
+                state = BarnState.HasBale;
                 progressBar.SetActive(false);
                 gameObject.GetComponent<MeshRenderer>().material = testHasBaleMaterial;
             }
@@ -50,7 +51,7 @@ public class Barn : MonoBehaviour
     {
         if (!progressBar.IsActive())
         {
-            state = State.Processing;
+            state = BarnState.Processing;
             progressBar.SetActive(true);
             gameObject.GetComponent<MeshRenderer>().material = testProcessHayMaterial; //TODO: delete this after finish testing
         }
@@ -59,12 +60,12 @@ public class Barn : MonoBehaviour
     // Deplete bale if there's any in the barn and return whether there's bale to take in the first place
     public bool GetBale()
     {
-        if (state == State.HasBale)
+        if (state == BarnState.HasBale)
         {
             progressBar.SetValue(0, timeProcessHayRequired);
             progressBar.SetActive(false);
             gameObject.GetComponent<MeshRenderer>().material = testBarnMaterial;
-            state = State.Empty;
+            state = BarnState.Empty;
             return true;
         }
         return false; ;
