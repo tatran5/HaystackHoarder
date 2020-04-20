@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Fence.cs" />
     <Compile Include="Assets\Scripts\FuelStation.cs" />
     <Compile Include="Assets\Scripts\Global.cs" />
+    <Compile Include="Assets\Scripts\GlobalTutorial.cs" />
     <Compile Include="Assets\Scripts\Haystack.cs" />
     <Compile Include="Assets\Scripts\Pitfall.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />

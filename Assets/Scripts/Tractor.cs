@@ -176,4 +176,9 @@ public class Tractor : ControllableObject
     {
         timeMove = 0f;
     }
+
+    public bool HasFuel()
+    {
+        return timeMove < timeMax;
+    }
 }

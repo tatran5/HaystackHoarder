@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 7431080714023693988}
   m_Layer: 0
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -471,6 +471,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   progressBar: {fileID: 1950628825680656015}
+  team: 0
+  state: 3
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
   testPlayerMaterial: {fileID: 2100000, guid: 565a7ebc3e0fe2f4cb28b94107497a50, type: 2}
 --- !u!54 &7431080714023693988
