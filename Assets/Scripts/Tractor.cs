@@ -5,6 +5,7 @@ using UnityEngine;
 public enum TractorState { HasHayOnly, HasPlayerOnly, HasHayAndPlayer, Empty}
 public class Tractor : ControllableObject
 {
+    public int team = 0;
     public float timeMax = 5f; // The max time that this tractor can be moved
 
     public GameObject playerPrefab;

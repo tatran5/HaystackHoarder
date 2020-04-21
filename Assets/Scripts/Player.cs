@@ -96,7 +96,7 @@ public class Player : ControllableObject
         for (int i = 0; i < colliders.Length; i++)
         {
             Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
-            if (tractor && !tractor.HasPlayer())
+            if (tractor && !tractor.HasPlayer() && tractor.team == team)
             {
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
