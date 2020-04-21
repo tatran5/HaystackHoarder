@@ -65,7 +65,6 @@ public class Player : ControllableObject
     {
         if (state == PlayerState.HasHay && barn.state == BarnState.Empty)
         {
-            Debug.Log("WAWA");
             barn.StartProcessingHay();
             state = PlayerState.Empty;
             gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay

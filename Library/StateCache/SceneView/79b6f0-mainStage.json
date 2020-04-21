@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":false,"pivot":{"x":1.3176616430282593,"y":-0.000002469584387654322,"z":3.863294839859009},"rotation":{"x":-0.07970340549945831,"y":-0.023325640708208085,"z":0.0018651060527190567,"w":-0.9965462684631348},"size":3.5543394088745119,"orthographic":false}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":false,"pivot":{"x":-2.1221628189086916,"y":-7.342014312744141,"z":5.218878746032715},"rotation":{"x":-0.6098636984825134,"y":-0.011419854126870633,"z":0.008780415169894696,"w":-0.7924910187721252},"size":8.359406471252442,"orthographic":false}
+>>>>>>> animal

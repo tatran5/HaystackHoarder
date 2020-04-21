@@ -2,6 +2,27 @@
 
 Unity version used to create this project: 2019.2.13f1
 
+### GLOBAL GRID SYSTEM
+
+The components in a level should be mapped to the grid system described below. Players and animals should be sized such that they take up one square unit of space. While their volume may intersect with other grid cells, their world position will correspond to one square at a time. Ideally, this system should be used for detecting collisions with STATIC components in the world, e.g. obstacles, farm structures, and fences (their location remains the same when they are destroyed / rebuilt).
+
+##Setup
+
+The grid system represented by a one-dimensional array to conserve space. Because of this, cells are marked by a single number that represents the array index used to access its data. Each array element is a boolean that is `true` if the space is empty for characters to walk on, `false` otherwise. This maps out as follows:
+
+![](grid.png)
+
+A `width` by `height` grid will have `height` rows and `width` columns. The row, column, and cell numbers are all zero-indexed. Furthermore, coordinates are treated as (col number, row number). Therefore, the square numbered 4 in the above example is at (4, 0), and the square numbered 50 would be at (1, 7). This can be converted into the array index number using `width` * `row` + `col`, where `row` and `col` are the row and column numbers. 
+
+Lastly, the grid system's worldspace dimensions must be specified by the map creators. The grid assumes that these dimensions will be proportional to the grid's size, such that the unit spaces on the grid are square. Then it can simply calculate the length of a cell's sides. The map center determines where the entire grid is located in world space.
+
+##Helper Functions
+- **grid_getCellIndexOfCoords:** returns the index of the cell at the given coordinates
+- **grid_getCoordsOfCellIndex:** returns the (col, row) representation of the cell at the given index
+- **grid_getCellCoordsOfPos:** returns the (col, row) representation of the cell containing the given position
+- **grid_getCellIndexOfPos:** return the index of the cell containing the given position
+- **grid_getCenterOfCell:** return the position at the center of the cell at the given index
+
 ### Before implementing, if your implementation is related to user input, you might want to take a look at Controller class. This avoids the situation of changing input handling in many different classes when the key binded to an action needs to be changed.
 
 ### Tractor
