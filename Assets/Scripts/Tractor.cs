@@ -74,7 +74,7 @@ public class Tractor : ControllableObject
 
         if (state != TractorState.HasHayAndPlayer)
         {
-            if (timeHarvestHay >= Haystack.timeHarvestRequired)
+            if (timeHarvestHay >= haystack.timeHarvestRequired)
             {
                 state = TractorState.HasHayAndPlayer;
                 timeHarvestHay = 0f;
@@ -84,7 +84,7 @@ public class Tractor : ControllableObject
             else
             {
                 timeHarvestHay += Time.fixedDeltaTime;
-                progressBar.SetValue(timeHarvestHay, Haystack.timeHarvestRequired);
+                progressBar.SetValue(timeHarvestHay, haystack.timeHarvestRequired);
             }
         }
     }

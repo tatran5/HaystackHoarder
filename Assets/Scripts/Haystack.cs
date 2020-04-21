@@ -8,15 +8,15 @@ public class Haystack : MonoBehaviour
      * of how much hay is left in the stack and how quickly it can be harvested. 
      * Must destroy itself upon running out of hay */
 
-    private static int hayAmountInitial = 1;
-    public static float timeHarvestRequired = 2f; // in second
+    public int hayAmountInitial = 3;
+    public float timeHarvestRequired = 2f; // in second
 
-    private int hayAmountLeft = hayAmountInitial;
+    private int hayAmountLeft;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        hayAmountLeft = hayAmountInitial;
     }
 
     // Update is called once per frame

@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 3774248884896636952}
   - component: {fileID: 6228415393692850211}
   m_Layer: 0
-  m_Name: TractorPrefab
+  m_Name: Tractor
   m_TagString: Tractor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.2, z: 1.2}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3774248884896636952
 Rigidbody:
@@ -413,11 +413,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
+  team: 0
+  timeMax: 5
   playerPrefab: {fileID: 2073338333761812175, guid: 6d00710b193b89d41bd3325268d9bf18,
     type: 3}
-  hayAmount: 0
-  hasPlayer: 0
   progressBar: {fileID: 3227623999136225415}
+  timeMove: 0
+  state: 3
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
 --- !u!1 &7213350716091812695
