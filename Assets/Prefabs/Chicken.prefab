@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 4513077253783689398}
   - component: {fileID: 5108935113941785253}
   - component: {fileID: 4920632293151428968}
+  - component: {fileID: 704682055738435425}
+  - component: {fileID: 3387804198805551315}
   m_Layer: 0
-  m_Name: Animal
+  m_Name: Chicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -92,3 +95,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &704682055738435425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168416071305360503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8125a8e6707b18e4798c36c8df242ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feedMeter: 0
+  feedTickLength: 0
+  weight: 0
+  speed: 0
+  wanderPoint: {x: 0, y: 0}
+  wanderDirection: {x: 0, y: 0, z: 0}
+--- !u!54 &3387804198805551315
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168416071305360503}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
