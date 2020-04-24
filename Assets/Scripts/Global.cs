@@ -79,12 +79,13 @@ public class Global : MonoBehaviour
                            ((float)(cellCoords.y) + 0.5f) * cellLength + mapBottomLeftCorner.y);
     }
 
-    // Raycasts from the current cell to the cells covered by the
-    // direction, testing for cells set to false (blockages). The animal
-    // will wander off as far as it can in a direction before wandering to
-    // a new one.
-    // Implementation is taking from https://theshoemaker.de/2016/02/ray-casting-in-2d-grids/.
-    // CURRENT IMPLEMENTATION: Naive
+    /* Raycasts from the current cell to the cells covered by the
+     * direction, testing for cells set to false (blockages). The animal
+     * will wander off as far as it can in a direction before wandering to
+     * a new one.
+     * Implementation is taking from https://theshoemaker.de/2016/02/ray-casting-in-2d-grids/.
+     * CURRENT IMPLEMENTATION: Naive
+     */
 
     public int grid_raycastFromPoint(Vector2 origin, Vector2 direction) {
         Vector2 dir = direction.normalized;
@@ -141,7 +142,6 @@ public class Global : MonoBehaviour
         // Find all static environment elements and map them on the grid
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
         foreach (Fence f in fences) {
-            //Debug.Log(f);
             bool vertical = false; 
             float fenceLength = f.gameObject.transform.localScale.x;
             Vector3 rotation = f.gameObject.transform.eulerAngles;
@@ -173,17 +173,13 @@ public class Global : MonoBehaviour
             if (vertical) {
                 for (int z = endpCoords1.y; z <= endpCoords2.y; z++) {
                     indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
-                 //   Debug.Log(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
                 }
             } else {
                 for (int x = endpCoords1.x; x <= endpCoords2.x; x++) {
                     indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
-                //    Debug.Log(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
                 }
             }
-
            
-
             f.SetOccupiedCells(indices);
             grid_setCellsFalse(indices.ToArray());
         }

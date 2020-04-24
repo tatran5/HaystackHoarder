@@ -7,20 +7,23 @@ public class Fence : MonoBehaviour
 
     Global globalObj;
 
-    // Controls how fast health deterioriates over time
-    float health;
+
+    public bool broken;
+    private float health;
     int breakTimer;
-    int breakTickLength;
+    int breakTickLength;    // Controls how fast health deterioriates over time
 
-    // Saves the indices of the cells that this fence occupies,
-    // which is calculated in Global's Start() function. This
-    // makes setting the cells to true / false a little faster.
+    List<int> occupiedCells = new List<int>();  // Saves the indices of the cells
+                                                // that this fence occupies, which
+                                                // s calculated in Global's Start().
 
-    List<int> occupiedCells = new List<int>();
+    public int penNumber;       // Corresponds with player number, used for
+                                // tracking pen fences. Ranges from 1 - 4.
 
     // Start is called before the first frame update
     void Start()
     {
+        broken = false;
         health = 100.0f;
         breakTimer = 0;
         breakTickLength = 200;
@@ -39,10 +42,12 @@ public class Fence : MonoBehaviour
 
         if (health <= 0.1f) {
             globalObj.grid_setCellsTrue(occupiedCells.ToArray());
+            broken = true;
         }
     }
 
     public void FixFence() {
+        broken = false;
         health = 100.0f;
     }
     

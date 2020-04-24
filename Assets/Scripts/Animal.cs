@@ -15,13 +15,23 @@ public class Animal : MonoBehaviour
     public float weight;        // Varies per animal
     public float speed;         // Speed at which the animal runs
 
+    public int penNumber;       // Corresponds with player number, used for
+                                // tracking pen fences. Ranges from 1 - 4.
+                                // If the animal is running free, penNumber
+                                // will be set to 0.
+                                
+    int checkFencesTickLength;
+    int checkFencesTimer;
 
-    // Variables for naive wander behavior
-    int wanderLength;
-    int wanderTimer;
+    public Vector2 targetPoint;
+    public Vector3 targetDirection;
 
-    public Vector2 wanderPoint;
-    public Vector3 wanderDirection;
+    List<Fence> fences;
+
+    bool PositionEquality(Vector2 pos1, Vector2 pos2)
+    {
+        return Mathf.Abs(pos1.x - pos2.x) < 0.25f && Mathf.Abs(pos1.y - pos2.y) < 0.25f;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -32,13 +42,20 @@ public class Animal : MonoBehaviour
         feedTickLength = 75;
         feedTimer = 0;
 
-        wanderLength = 200;
-        wanderTimer = 0;
-
         speed = 2.0f;
 
-        wanderPoint = Vector2.zero;
-        wanderDirection = Vector3.zero;
+        checkFencesTickLength = 70;
+        checkFencesTimer = 0;
+
+        targetPoint = Vector2.zero;
+        targetDirection = Vector3.zero;
+        
+        Fence[] fenceArray = GameObject.FindObjectsOfType<Fence>();
+        foreach (Fence f in fenceArray) {
+            if (f.penNumber == penNumber) {
+                fences.Add(f);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -52,52 +69,81 @@ public class Animal : MonoBehaviour
         }
     }
 
-    void FixedUpdate() {
-        // Wander Behavior
-        Move();
+    void FixedUpdate()
+    {
+        if (penNumber > 0)
+        {
+            int fenceIndex = CheckForEscape();
+            if (fenceIndex > 0)
+            {
+                GetEscapeDirection();
+            }
+            else {
+                GetIdleDirection();
+            }
+        }
+        else if (targetDirection == Vector3.zero) {
+            GetWanderDirection();
+        }
+
+        gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+    }
+    
+    // Returns the index of the fence that is broken,
+    // if any. If all fences are intact, return -1;
+    int CheckForEscape() {
+        checkFencesTimer += 1;
+        if (checkFencesTimer >= checkFencesTickLength) {
+            for (int i = 0; i < fences.Count; i++) {
+                if (fences[i].broken) {
+                    penNumber = 0;
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
-    public void FeedAnimal() {
-        feedMeter = 100.0f;
-        feedTimer = 0;
+    void GetEscapeDirection() {
+
     }
 
-    bool PositionEquality(Vector2 pos1, Vector2 pos2) {
-        return Mathf.Abs(pos1.x - pos2.x) < 0.25f && Mathf.Abs(pos1.y - pos2.y) < 0.25f;
+    void GetIdleDirection() {
+
     }
 
-    void Move() {
+    void GetWanderDirection() {
 
         Vector2 currentPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
 
-        if (wanderDirection == Vector3.zero) {
-            float wanderX = Random.Range(-1.0f, 1.0f);
-            float wanderZ = Random.Range(-1.0f, 1.0f);
-            wanderDirection = new Vector3(wanderX, 0.0f, wanderZ);
+        float wanderX = Random.Range(-1.0f, 1.0f);
+        float wanderZ = Random.Range(-1.0f, 1.0f);
+        targetDirection = new Vector3(wanderX, 0.0f, wanderZ);
 
-            // Ray to cast along
-            Vector2 wanderDir = new Vector2(wanderDirection.x, wanderDirection.z);
+        // Ray to cast along
+        Vector2 targetDir = new Vector2(targetDirection.x, targetDirection.z);
 
-            Vector2 targetPos = Vector2.zero;
-            int targetIndex = globalObj.grid_raycastFromPoint(currentPos, wanderDir);
-            if (targetIndex >= 0) {
-                wanderPoint = globalObj.grid_getCenterOfCell(targetIndex);
-                wanderDirection = new Vector3(wanderPoint.x, 0.0f, wanderPoint.y)
-                                    - new Vector3(currentPos.x, 0.0f, currentPos.y);
-                wanderDirection = wanderDirection.normalized;
-            }
-            else {
-                wanderDirection = Vector3.zero;
-            }
+        Vector2 targetPos = Vector2.zero;
+        int targetIndex = globalObj.grid_raycastFromPoint(currentPos, targetDir);
+        if (targetIndex >= 0) {
+            targetPoint = globalObj.grid_getCenterOfCell(targetIndex);
+            targetDirection = new Vector3(targetPoint.x, 0.0f, targetPoint.y)
+                              - new Vector3(currentPos.x, 0.0f, currentPos.y);
+            targetDirection = targetDirection.normalized;
+        } else {
+           targetDirection = Vector3.zero;
         }
 
-        if (PositionEquality(wanderPoint, currentPos))
+        if (PositionEquality(targetPoint, currentPos))
         {
-            wanderDirection = Vector3.zero;
-        }
-        else {
-            gameObject.transform.position += wanderDirection * speed * Time.deltaTime;
+            targetDirection = Vector3.zero;
         }
     }
-    
+
+    public void FeedAnimal()
+    {
+        feedMeter = 100.0f;
+        feedTimer = 0;
+    }
 }
