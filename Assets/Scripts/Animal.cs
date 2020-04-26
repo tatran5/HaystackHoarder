@@ -29,11 +29,13 @@ public class Animal : MonoBehaviour
     public Vector2 targetPoint;
     public Vector3 targetDirection;
 
-    public Vector2 previousPos;
     public Vector2 currentPos;
+
     public int stuckTimer;
-    public int stuckMaxLength; 
-    
+    public int stuckTimerTicks;
+    public int stuckTimerTickLength;
+    public int stuckMaxTicks;
+
 
     List<Fence> fences;
 
@@ -50,13 +52,16 @@ public class Animal : MonoBehaviour
         feedMeter = 50.0f;
         speed = 2.0f;
 
-        feedTickLength = 75;
-        checkFencesTickLength = 70;
+        feedTickLength = 150;
+        checkFencesTickLength = 35;
 
         feedTimer = 0;
-        stuckTimer = 0;
-        stuckMaxLength = 100;
         checkFencesTimer = 0;
+
+        stuckTimer = 0;
+        stuckTimerTicks = 0;
+        stuckTimerTickLength = 100;
+        stuckMaxTicks = 3;
 
         targetPoint = Vector2.zero;
         targetDirection = Vector3.zero;
@@ -69,10 +74,7 @@ public class Animal : MonoBehaviour
                 fences.Add(f);
             }
         }
-
-        previousPos = Vector2.zero;
         currentPos = Vector2.zero;
-
     }
 
     // Update is called once per frame
@@ -107,30 +109,50 @@ public class Animal : MonoBehaviour
                 if (fenceIndex > 0)
                 {
                     GetEscapeDirection(fenceIndex);
-                    //stuckTimer = 0;
                 }
                 else if (targetDirection == Vector3.zero)
                 {
                     //GetIdleDirection();
-                    //stuckTimer = 0;
                 }
             }
-        }
-        else {
+        } else {
             if (targetDirection == Vector3.zero)
             {
                 GetWanderDirection();
-               // stuckTimer = 0;
-            } else if (PositionEquality(previousPos, currentPos)) {
-             //   stuckTimer += 1;
-            }
-
-            if (stuckTimer >= stuckMaxLength) {
-                stuckTimer -= 10;
             }
         }
-
         gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+    }
+
+    // If the animal collides with something dynamic (a constantly changing
+    // position, like the player, tractor, and other animals), this should
+    // redirect it.
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Collider collider = collision.collider;
+        if (collider.gameObject.layer == 9)
+        {
+            targetDirection = Vector3.zero;
+        }
+        else if (collider.gameObject.layer == 8) {
+            stuckTimer += 1;
+            if (stuckTimer >= stuckTimerTickLength) {
+                stuckTimerTicks += 1;
+                if (stuckTimerTicks >= stuckMaxTicks) {
+                    targetDirection = Vector3.zero;
+                }
+            }
+        }
+    }
+
+    void OnCollisionExit(Collision collision) {
+        Collider collider = collision.collider;
+        if (collider.gameObject.layer == 8)
+        {
+            stuckTimer = 0;
+            stuckTimerTicks = 0;
+        }
     }
 
     bool GetTargetPoint(Vector2 direction)
@@ -175,16 +197,15 @@ public class Animal : MonoBehaviour
         Vector2 v = endpoints[1] - currentPos;
 
         float angleRange = Mathf.Acos(Vector2.Dot(u, v) / (u.magnitude * v.magnitude));
-        angleRange /= 2;
 
-        float angle = Random.Range(-angleRange, angleRange);
+        float angle = Random.Range(-angleRange / 3, angleRange / 3);
 
         Vector2 animalToFence = new Vector2(f.gameObject.transform.position.x,
                                               f.gameObject.transform.position.z)
                                    - currentPos;
 
-        Vector2 targetDir = new Vector2(animalToFence.x * Mathf.Cos(-angle) - animalToFence.y * Mathf.Sin(-angle),
-                                        animalToFence.x * Mathf.Sin(-angle) + animalToFence.y * Mathf.Cos(-angle));
+        Vector2 targetDir = new Vector2(animalToFence.x * Mathf.Cos(angle) - animalToFence.y * Mathf.Sin(angle),
+                                        animalToFence.x * Mathf.Sin(angle) + animalToFence.y * Mathf.Cos(angle));
 
         if (!GetTargetPoint(targetDir)) {
             targetDirection = Vector3.zero;

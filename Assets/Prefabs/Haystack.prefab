@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2839822902107836146}
   - component: {fileID: 3717498355635531669}
   - component: {fileID: 313372228612340780}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Haystack
   m_TagString: Haystack
   m_Icon: {fileID: 0}
@@ -106,3 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9d992cb1615a0458e11afa44dc2591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hayAmountInitial: 3
+  timeHarvestRequired: 2

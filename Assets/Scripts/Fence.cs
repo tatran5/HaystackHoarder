@@ -26,8 +26,7 @@ public class Fence : MonoBehaviour
         broken = false;
         //health = 100.0f;
         breakTimer = 0;
-        breakTickLength = 200;
-
+        breakTickLength = 300;
 
         Vector3 rotation = gameObject.transform.eulerAngles;
         vertical = Mathf.Approximately(rotation.y, 90.0f) ||
@@ -54,6 +53,7 @@ public class Fence : MonoBehaviour
         broken = true;
         globalObj.grid_setCellsTrue(occupiedCells.ToArray());
         gameObject.GetComponentInChildren<Renderer>().enabled = false;
+        gameObject.GetComponent<Collider>().enabled = false;
         Destroy(gameObject.GetComponent<Rigidbody>());
     }
 
@@ -64,6 +64,7 @@ public class Fence : MonoBehaviour
         globalObj.grid_setCellsFalse(occupiedCells.ToArray());
         gameObject.GetComponentInChildren<Renderer>().enabled = true;
         gameObject.AddComponent<Rigidbody>();
+        gameObject.GetComponent<Collider>().enabled = true;
     }
 
     public void SetOccupiedCells(List<int> indices) {

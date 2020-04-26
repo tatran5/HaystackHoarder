@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5960736599837316336}
   - component: {fileID: 6559836105612002915}
   - component: {fileID: -4168740265206554867}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barn
   m_TagString: Barn
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5208292586524744109}
   - component: {fileID: 8124730493787540504}
   - component: {fileID: 1574809811505310921}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 6944367600252268307}
   - component: {fileID: 3230995210918155780}
   - component: {fileID: 273136001427297506}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 6769974029322491737}
   - component: {fileID: 2737734419216366620}
   - component: {fileID: 4164839072210713262}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 3701548757326159101}
   - component: {fileID: 2713123220073663534}
   - component: {fileID: 7175504195923765943}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}

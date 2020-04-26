@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4920632293151428968}
   - component: {fileID: 704682055738435425}
   - component: {fileID: 3387804198805551315}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168416071305360503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.47, y: -0.33522582, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -111,8 +111,13 @@ MonoBehaviour:
   feedTickLength: 0
   weight: 0
   speed: 0
-  wanderPoint: {x: 0, y: 0}
-  wanderDirection: {x: 0, y: 0, z: 0}
+  penNumber: 0
+  targetPoint: {x: 0, y: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  previousPos: {x: 0, y: 0}
+  currentPos: {x: 0, y: 0}
+  stuckTimer: 0
+  stuckMaxLength: 0
 --- !u!54 &3387804198805551315
 Rigidbody:
   m_ObjectHideFlags: 0

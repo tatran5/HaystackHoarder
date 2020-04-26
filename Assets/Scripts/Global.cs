@@ -140,8 +140,16 @@ public class Global : MonoBehaviour
         mapBottomLeftCorner = mapCenter - 0.5f * mapSize;
 
         // Find all static environment elements and map them on the grid
+
+        MapFences();
+        MapHaystacks();
+        MapBuildings();
+    }
+
+    void MapFences() {
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
-        foreach (Fence f in fences) {
+        foreach (Fence f in fences)
+        {
 
             Vector2[] endpt = f.GetEndpoints();
 
@@ -150,19 +158,33 @@ public class Global : MonoBehaviour
 
             List<int> indices = new List<int>();
 
-            if (f.vertical) {
-                for (int z = endpCoords1.y; z <= endpCoords2.y; z++) {
+            if (f.vertical)
+            {
+                for (int z = endpCoords1.y; z <= endpCoords2.y; z++)
+                {
                     indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
                 }
-            } else {
-                for (int x = endpCoords1.x; x <= endpCoords2.x; x++) {
+            }
+            else
+            {
+                for (int x = endpCoords1.x; x <= endpCoords2.x; x++)
+                {
                     indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
                 }
             }
-           
+
             f.SetOccupiedCells(indices);
             grid_setCellsFalse(indices.ToArray());
         }
+    }
+
+    void MapHaystacks() {
+        Haystack[] haystackArray = GameObject.FindObjectsOfType<Haystack>();
+
+    }
+
+    void MapBuildings() {
+
     }
 
     // Update is called once per frame
