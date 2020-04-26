@@ -124,6 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   broken: 0
-  health: 5
+  health: 100
   vertical: 0
   penNumber: 1
