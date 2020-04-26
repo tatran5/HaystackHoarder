@@ -142,35 +142,15 @@ public class Global : MonoBehaviour
         // Find all static environment elements and map them on the grid
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
         foreach (Fence f in fences) {
-            bool vertical = false; 
-            float fenceLength = f.gameObject.transform.localScale.x;
-            Vector3 rotation = f.gameObject.transform.eulerAngles;
 
-            // Assumes that the fence is either vertically or horizontally aligned
-            // with the grid
-            vertical = Mathf.Approximately(rotation.y, 90.0f) ||
-                       Mathf.Approximately(rotation.y, 270.0f);
+            Vector2[] endpt = f.GetEndpoints();
 
-            Vector2 center = new Vector2(f.gameObject.transform.position.x,
-                                         f.gameObject.transform.position.z);
-            Vector2 endpoint1 = Vector2.zero;
-            Vector2 endpoint2 = Vector2.zero;
-
-            if (vertical) {
-                endpoint1 = center - new Vector2(0.0f, fenceLength / 2.0f);
-                endpoint2 = center + new Vector2(0.0f, fenceLength / 2.0f);
-            }
-            else {
-                endpoint1 = center - new Vector2(fenceLength / 2.0f, 0.0f);
-                endpoint2 = center + new Vector2(fenceLength / 2.0f, 0.0f);
-            }
-
-            Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpoint1);
-            Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpoint2);
+            Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpt[0]);
+            Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpt[1]);
 
             List<int> indices = new List<int>();
 
-            if (vertical) {
+            if (f.vertical) {
                 for (int z = endpCoords1.y; z <= endpCoords2.y; z++) {
                     indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
                 }
