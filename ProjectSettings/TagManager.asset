@@ -9,7 +9,7 @@ TagManager:
   - Barn
   - Haystack
   - FuelStation
-  - Chicken
+  - Animal
   layers:
   - Default
   - TransparentFX
@@ -19,8 +19,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Static
+  - Dynamic
   - 
   - 
   - 

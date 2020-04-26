@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8970535213265325911}
   - component: {fileID: 3501495804409159553}
   - component: {fileID: 8487536468153911851}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 6191597333606462159}
   - component: {fileID: 3363678850213218715}
   - component: {fileID: 1111560029246021341}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 3786040523543562801}
   - component: {fileID: 7353427078733041786}
   - component: {fileID: 3227623999136225415}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 2003983510379837602}
   - component: {fileID: 2631539199902958017}
   - component: {fileID: 5850386956554188380}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

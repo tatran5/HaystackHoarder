@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 369498796468604170}
   - component: {fileID: 369498796468604169}
   - component: {fileID: 4352712857787830288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,3 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167cda610dedd294a86349965ce7e9ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  broken: 0
+  health: 5
+  vertical: 0
+  penNumber: 1

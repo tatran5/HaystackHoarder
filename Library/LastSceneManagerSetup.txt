@@ -1,4 +1,5 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Scenes/GameLobby.unity
   isLoaded: 0
   isActive: 0
@@ -40,6 +41,9 @@ sceneSetups:
   isActive: 0
   isSubScene: 0
 - path: Assets/Scenes/2PlayerVS.unity
+=======
+- path: Assets/Scenes/AlphaDemo.unity
+>>>>>>> c670f25303f5a90f4d2e71b17f22823618a99c95
   isLoaded: 1
   isActive: 1
   isSubScene: 0

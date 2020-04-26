@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1759071108679578469}
   - component: {fileID: 9205129165232237892}
   - component: {fileID: 2789256076793157303}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FuelStation
   m_TagString: FuelStation
   m_Icon: {fileID: 0}
