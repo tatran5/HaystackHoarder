@@ -11,7 +11,7 @@ public class Haystack : MonoBehaviour
     public int hayAmountInitial = 3;
     public float timeHarvestRequired = 2f; // in second
 
-    private int hayAmountLeft;
+    public int hayAmountLeft;
 
     // Start is called before the first frame update
     void Start()
@@ -29,31 +29,11 @@ public class Haystack : MonoBehaviour
      * inactive haystack to be active */
     public void DecreaseHay()
     {
-        hayAmountLeft--;
+		gameObject.GetComponent<PUN2_HaystackController>().callDecrease();
         Debug.Log("decreaseHay called");
-        if (hayAmountLeft == 0)
-        {
-            Haystack[] haystacks = Resources.FindObjectsOfTypeAll<Haystack>();
-            int loopCount = 0;
-
-            while (true)
-            {
-                Haystack chosenHaystack = haystacks[Random.Range(0, haystacks.Length - 1)];
-
-                if (!chosenHaystack.gameObject.activeSelf)
-                {
-                    chosenHaystack.gameObject.SetActive(true);
-                    gameObject.SetActive(false);
-                    hayAmountLeft = hayAmountInitial;
-                    break;
-                }
-                if (loopCount >= haystacks.Length * haystacks.Length * 4)
-                {
-                    Debug.Log("Haystack::decreaseHay() might run into infinite loop");
-                    break;
-                }
-                loopCount++;
-            }
-        }
+   //     if (hayAmountLeft == 0)
+   //     {
+			//gameObject.GetComponent<PUN2_HaystackController>().deactivated = true;
+   //     }
     }
 }

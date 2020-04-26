@@ -22,25 +22,43 @@ public class Tractor : ControllableObject
 
     public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
     public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
+	public Material T1;
+	public Material T2;
+	public Material T3;
 
-    // Start is called before the first frame update
-    void Start()
+	public Vector3 playerPos;
+
+	// Start is called before the first frame update
+	void Start()
     {
         progressBar.gameObject.SetActive(false);
         speed = 7f;
-    }
+	}
 
     // Update is called once per frame
     void Update()
     {
-        if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
+		if (team == 1)
+		{
+			gameObject.GetComponent<MeshRenderer>().material = T1;
+		}
+		else if (team == 2)
+		{
+			gameObject.GetComponent<MeshRenderer>().material = T2;
+		}
+		else
+		{
+			gameObject.GetComponent<MeshRenderer>().material = T3;
+		}
+
+		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
             timeSincePlayerEnter += Time.deltaTime;
 
             if (timeMove < timeMax && HandleMovement()) timeMove += Time.deltaTime;
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
-            if (Input.GetKeyDown(kbEnterExitTractor) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
+            if (Input.GetKeyDown(KeyCode.RightShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter) //LINE MODIFIED BY EVIE
                 HandlePlayerExitTractor(); // This calls PlayerExitsTractor
 
             // Handle collision with tractor
@@ -101,7 +119,7 @@ public class Tractor : ControllableObject
         offsetScale.x += playerScale.x % 2 == 0 ? 0f : -0.5f;
         offsetScale.z += playerScale.z % 2 == 0 ? 0f : -0.5f;
 
-        Vector3 playerPos = new Vector3(0,
+        playerPos = new Vector3(0,
             transform.position.y - tractorScale.y / 2f + playerScale.y / 2f + epsilon.y,
             0);
         Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
@@ -123,7 +141,7 @@ public class Tractor : ControllableObject
 
                 if (!PlayerOverlapOthers(playerPos, transform.rotation))
                 {
-                    Instantiate(playerPrefab, playerPos, transform.rotation);
+                    //Instantiate(playerPrefab, playerPos, transform.rotation);
                     spawnedPlayer = true;
                     timeSincePlayerEnter = 0f;
                     if (state == TractorState.HasHayAndPlayer)

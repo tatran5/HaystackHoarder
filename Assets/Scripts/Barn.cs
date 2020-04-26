@@ -9,6 +9,8 @@ public class Barn : MonoBehaviour
 
     public float timeProcessingHay = 0f;
 
+	public int team = 0;
+
     //TODO: delete these fields used for debugging for hashay
     public Material testBarnMaterial;
     public Material testHasBaleMaterial;
@@ -58,9 +60,9 @@ public class Barn : MonoBehaviour
     }
 
     // Deplete bale if there's any in the barn and return whether there's bale to take in the first place
-    public bool GetBale()
+    public bool GetBale(int t)
     {
-        if (state == BarnState.HasBale)
+        if (state == BarnState.HasBale && t == team)
         {
             progressBar.SetValue(0, timeProcessHayRequired);
             progressBar.SetActive(false);

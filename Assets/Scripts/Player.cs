@@ -11,24 +11,43 @@ public class Player : ControllableObject
     public ProgressBar progressBar;
     public int team = 0;
     public PlayerState state = PlayerState.Empty;
+	public bool toDestroy = false;
 
 
     // TODO: Delete variables once finish testing
     private float testProgress = 0f;
     public Material testHasHayMaterial;
     public Material testPlayerMaterial;
+	public Material tractorColor;
+	public Material P1;
+	public Material P2;
+	public Material P3;
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
     {
         progressBar.SetActive(false);
         speed = 3f;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
+		if (team == 1)
+		{
+			gameObject.GetComponent<MeshRenderer>().material = P1;
+		}
+		else if (team == 2)
+		{
+			gameObject.GetComponent<MeshRenderer>().material = P2;
+		}
+		else
+		{
+			gameObject.GetComponent<MeshRenderer>().material = P3;
+		}
+
+		HandleMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
                 EnterTractor();
@@ -63,13 +82,13 @@ public class Player : ControllableObject
     // Handle give hay & take bale
     private void InteractOnceWithBarn(Barn barn)
     {
-        if (state == PlayerState.HasHay && barn.state == BarnState.Empty)
+        if (state == PlayerState.HasHay && barn.state == BarnState.Empty && team == barn.team)
         {
             barn.StartProcessingHay();
             state = PlayerState.Empty;
             gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
         }
-        else if (state == PlayerState.Empty && barn.GetBale())
+        else if (state == PlayerState.Empty && barn.GetBale(team))
         {
             state = PlayerState.HasBale;
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
@@ -99,9 +118,12 @@ public class Player : ControllableObject
             {
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                tractor.PlayerEnter();
-                Destroy(gameObject);
-            }
+				tractor.PlayerEnter();
+				//Destroy(gameObject);
+				gameObject.GetComponent<PUN2_PlayerSync>().destroy = true;
+				//Destroy(tractor);
+				//gameObject.GetComponent<MeshRenderer>().material = tractorColor;
+			}
         }
     }
 

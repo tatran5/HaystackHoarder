@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/GameLobby.unity
+    guid: 926fd6700a05b4ea9964ccfdb2312f7a
+  - enabled: 0
+    path: Assets/Scenes/SampleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/WaitingRoom.unity
+    guid: 7b0a4689eca304602841bb2695e01c39
+  - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: baee51eea49c6004fb0e766993d0c410
+  - enabled: 1
+    path: Assets/Scenes/2PlayerVS.unity
+    guid: 3f30bc185b49f41df987a79e4da6d155
   m_configObjects: {}
