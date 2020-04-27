@@ -55,9 +55,7 @@ public class Fence : MonoBehaviour
 	{
 		broken = true;
 		globalObj.grid_setCellsTrue(occupiedCells.ToArray());
-		gameObject.GetComponentInChildren<Renderer>().enabled = false;
-		gameObject.GetComponent<Collider>().enabled = false;
-		Destroy(gameObject.GetComponent<Rigidbody>());
+		gameObject.GetComponent<PUN2_FenceSync>().Break();
 	}
 
 	public void FixFence()

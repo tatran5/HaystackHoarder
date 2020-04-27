@@ -36,6 +36,11 @@ public class Animal : MonoBehaviour
 	public int stuckTimerTickLength;
 	public int stuckMaxTicks;
 
+	public Material normal;
+	public Material highlighted;
+
+	bool selected = false;
+
 
 	List<Fence> fences;
 
@@ -47,6 +52,7 @@ public class Animal : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		gameObject.GetComponent<MeshRenderer>().material = normal;
 		globalObj = GameObject.Find("GlobalObject").GetComponent<Global>();
 
 		feedMeter = 50.0f;
@@ -88,6 +94,13 @@ public class Animal : MonoBehaviour
 		{
 			feedMeter -= 1.0f;
 			feedTimer = 0;
+		}
+
+		//slowly darken the color the lower the feed meter gets
+        if (!selected)
+		{
+			Color curr = gameObject.GetComponent<MeshRenderer>().material.color;
+			gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter/50f) * curr.r, (feedMeter / 50f) * curr.g, (feedMeter / 50f) * curr.b, 1.0f));
 		}
 	}
 
@@ -162,6 +175,20 @@ public class Animal : MonoBehaviour
 			stuckTimer = 0;
 			stuckTimerTicks = 0;
 		}
+	}
+
+    public void Highlighted()
+	{
+		gameObject.GetComponent<MeshRenderer>().material = highlighted;
+		selected = true;
+	}
+
+	public void Normal()
+	{
+		gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter / 50f) * normal.color.r,
+                                                                    (feedMeter / 50f) * normal.color.g,
+                                                                    (feedMeter / 50f) * normal.color.b, 1.0f));
+		selected = false;
 	}
 
 	bool GetTargetPoint(Vector2 direction)
@@ -252,7 +279,8 @@ public class Animal : MonoBehaviour
 
 	public void FeedAnimal()
 	{
-		feedMeter = 100.0f;
+		Debug.Log("FEEDING ANIMAL!!");
+		feedMeter = 50.0f;// 100.0f;
 		feedTimer = 0;
 	}
 }

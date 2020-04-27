@@ -22,6 +22,10 @@ public class Player : ControllableObject
 	public Material P1;
 	public Material P2;
 	public Material P3;
+	public Material P1HasHay;
+	public Material P2HasHay;
+	public Material P1HasFuel;
+	public Material P2HasFuel;
 
 	// Start is called before the first frame update
 	void Start()
@@ -36,11 +40,32 @@ public class Player : ControllableObject
     {
 		if (team == 1)
 		{
-			gameObject.GetComponent<MeshRenderer>().material = P1;
+			if (state == PlayerState.HasHay || state == PlayerState.HasBale)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P1HasHay;
+			}
+			else if (state == PlayerState.HasFuel)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P1HasFuel;
+			}
+			else
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P1;
+			}
 		}
 		else if (team == 2)
 		{
-			gameObject.GetComponent<MeshRenderer>().material = P2;
+			if (state == PlayerState.HasHay || state == PlayerState.HasBale)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P2HasHay;
+			}
+			else if (state == PlayerState.HasFuel)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P2HasFuel;
+			} else 
+			{
+				gameObject.GetComponent<MeshRenderer>().material = P2;
+			}
 		}
 		else
 		{
@@ -147,4 +172,25 @@ public class Player : ControllableObject
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
         }
     }
+
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.gameObject.tag == "Animal")
+		{
+			other.gameObject.GetComponent<Animal>().Highlighted();
+			if (state == PlayerState.HasBale && Input.GetKeyDown(kbInteract))
+			{
+				state = PlayerState.Empty;
+				other.gameObject.GetComponent<Animal>().FeedAnimal();
+			}
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject.tag == "Animal")
+		{
+			other.gameObject.GetComponent<Animal>().Normal();
+		}
+	}
 }

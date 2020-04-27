@@ -32,16 +32,18 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - ClickRpc
+  - DecreaseHay
   - DestroyRpc
   - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
   - DoDeath
+  - Fire
   - Reanimate
-  - UpdatePlayerCount
-  - SwitchScenes
+  - RespawnSpaceship
   - SetActive
-  - DecreaseHay
+  - SwitchScenes
+  - UpdatePlayerCount
+  - BreakFence
+  - changeMaterial
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

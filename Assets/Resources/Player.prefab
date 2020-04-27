@@ -377,6 +377,7 @@ GameObject:
   - component: {fileID: 5424069491463693544}
   - component: {fileID: 7431080714023693988}
   - component: {fileID: 4713965591986013955}
+  - component: {fileID: 507489474895904792}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -482,6 +483,10 @@ MonoBehaviour:
   P1: {fileID: 2100000, guid: 2a829fd803c5f409a823b1246fe73ee3, type: 2}
   P2: {fileID: 2100000, guid: 05dd160e6d76b460e9cd4788b36363ec, type: 2}
   P3: {fileID: 2100000, guid: 99be529f6504b4dde8a43c88e13943a7, type: 2}
+  P1HasHay: {fileID: 2100000, guid: e31d86a1c2654432f9fb7907a85deeca, type: 2}
+  P2HasHay: {fileID: 2100000, guid: f06cb7feda6a84224b680d10637c51af, type: 2}
+  P1HasFuel: {fileID: 2100000, guid: 78944a97fd9d840778f59741eab6e887, type: 2}
+  P2HasFuel: {fileID: 2100000, guid: 1678e3166372042c3bf8f8fea2144d4a, type: 2}
 --- !u!114 &5424069491463693544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,3 +541,16 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!135 &507489474895904792
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073338333761812175}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3
+  m_Center: {x: 0, y: 0, z: 0}

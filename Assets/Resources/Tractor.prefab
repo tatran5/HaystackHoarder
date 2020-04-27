@@ -442,6 +442,10 @@ MonoBehaviour:
   T1: {fileID: 2100000, guid: 81cd370fb093d428fb093f3f8b5551c8, type: 2}
   T2: {fileID: 2100000, guid: f52deba99a6ee4fa2ae363b331877cf2, type: 2}
   T3: {fileID: 2100000, guid: 262adf1b2f97547abacd11082b86a792, type: 2}
+  T1HasHay: {fileID: 2100000, guid: e31d86a1c2654432f9fb7907a85deeca, type: 2}
+  T2HasHay: {fileID: 2100000, guid: f06cb7feda6a84224b680d10637c51af, type: 2}
+  T1Dead: {fileID: 2100000, guid: 590327d040282478f9409715c3af00d4, type: 2}
+  T2Dead: {fileID: 2100000, guid: baf1e5b31b6b14fcca5910630163a155, type: 2}
   playerPos: {x: 0, y: 0, z: 0}
 --- !u!114 &4731665851218603753
 MonoBehaviour:

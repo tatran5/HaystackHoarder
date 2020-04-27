@@ -109,11 +109,16 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 	}
 
-	[PunRPC]
-	void Reanimate(int o)
+    public void changeColor(Vector3 color)
 	{
-        //set position of player appropriately
+		photonView.RPC("changeMaterial", RpcTarget.AllViaServer, photonView.ViewID, color);
+	}
 
+	[PunRPC]
+	void changeMaterial(int viewID, Vector3 rgb)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+        target.gameObject.GetComponent<MeshRenderer>().material.color = new Color(rgb.x, rgb.y, rgb.z, 1.0f);
 
 	}
 }

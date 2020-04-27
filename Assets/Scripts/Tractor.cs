@@ -25,6 +25,10 @@ public class Tractor : ControllableObject
 	public Material T1;
 	public Material T2;
 	public Material T3;
+	public Material T1HasHay;
+	public Material T2HasHay;
+	public Material T1Dead;
+	public Material T2Dead;
 
 	public Vector3 playerPos;
 
@@ -40,16 +44,38 @@ public class Tractor : ControllableObject
     {
 		if (team == 1)
 		{
-			gameObject.GetComponent<MeshRenderer>().material = T1;
+			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T1HasHay;
+			} else
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T1;
+			}
+			if (!HasFuel())
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T1Dead;
+			}
 		}
 		else if (team == 2)
 		{
-			gameObject.GetComponent<MeshRenderer>().material = T2;
+			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T2HasHay;
+			} else
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T2;
+			}
+			if (!HasFuel())
+			{
+				gameObject.GetComponent<MeshRenderer>().material = T2Dead;
+			}
 		}
 		else
 		{
 			gameObject.GetComponent<MeshRenderer>().material = T3;
 		}
+
+        
 
 		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
