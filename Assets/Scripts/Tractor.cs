@@ -35,9 +35,24 @@ public class Tractor : ControllableObject
 	// Start is called before the first frame update
 	void Start()
     {
-        progressBar.gameObject.SetActive(false);
+        SetupProgressBar();
         speed = 7f;
 	}
+
+    void SetupProgressBar()
+    {
+        GameObject canvasGO = transform.GetChild(0).gameObject;
+        canvasGO.transform.localScale = new Vector3(
+            canvasGO.transform.localScale.x * 1 / transform.localScale.x,
+            canvasGO.transform.localScale.y * 1 / transform.localScale.y,
+            canvasGO.transform.localScale.z * 1 / transform.localScale.z);
+        canvasGO.transform.position = new Vector3(
+            canvasGO.transform.position.x,
+            canvasGO.transform.position.y * transform.localScale.y,
+            canvasGO.transform.position.z);
+        progressBar = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
+        progressBar.SetActive(true);
+    }
 
     // Update is called once per frame
     void Update()
