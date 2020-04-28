@@ -6,7 +6,7 @@ public enum TractorState { HasHayOnly, HasPlayerOnly, HasHayAndPlayer, Empty}
 public class Tractor : ControllableObject
 {
     public int team = 0;
-    public float timeMax = 5f; // The max time that this tractor can be moved
+    public float timeMoveMax = 5f; // The max time that this tractor can be moved
 
     public GameObject playerPrefab;
     public ProgressBar progressBar;
@@ -51,7 +51,7 @@ public class Tractor : ControllableObject
             canvasGO.transform.position.y * transform.localScale.y,
             canvasGO.transform.position.z);
         progressBar = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-        progressBar.SetActive(true);
+        progressBar.SetActive(false);
     }
 
     // Update is called once per frame
@@ -94,9 +94,10 @@ public class Tractor : ControllableObject
 
 		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
+            progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
             timeSincePlayerEnter += Time.deltaTime;
 
-            if (timeMove < timeMax && HandleMovement()) timeMove += Time.deltaTime;
+            if (timeMove < timeMoveMax && HandleMovement()) timeMove += Time.deltaTime;
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
             if (Input.GetKeyDown(KeyCode.RightShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter) //LINE MODIFIED BY EVIE
@@ -230,6 +231,8 @@ public class Tractor : ControllableObject
             state = TractorState.HasPlayerOnly;
         else if (state == TractorState.HasHayOnly)
             state = TractorState.HasHayAndPlayer;
+        progressBar.SetActive(true);
+        progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
     }
 
     public void RefillFuel()
@@ -239,6 +242,6 @@ public class Tractor : ControllableObject
 
     public bool HasFuel()
     {
-        return timeMove < timeMax;
+        return timeMove < timeMoveMax;
     }
 }
