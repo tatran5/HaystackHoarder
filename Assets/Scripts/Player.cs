@@ -13,6 +13,11 @@ public class Player : ControllableObject
     public PlayerState state = PlayerState.Empty;
 	public bool toDestroy = false;
 
+    // Motion
+    public float rotationSpeed = 450;
+    private Quaternion targetRotation;
+    private Animator animator;
+
 
     // TODO: Delete variables once finish testing
     private float testProgress = 0f;
@@ -72,7 +77,7 @@ public class Player : ControllableObject
 			gameObject.GetComponent<MeshRenderer>().material = P3;
 		}
 
-		HandleMovement();
+		HandlePlayerMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
                 EnterTractor();
@@ -80,6 +85,24 @@ public class Player : ControllableObject
                 InteractOnce();
             else if (Input.GetKey(kbInteract))
                 InteractOverTime();
+    }
+
+    bool HandlePlayerMovement()
+    {
+        Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        if (input != Vector3.zero)
+        {
+            Debug.Log("Movement input");
+            targetRotation = Quaternion.LookRotation(input);
+            transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
+                targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
+           // animator.Play("Move_L");
+            transform.position += input * Time.deltaTime;
+            return true;
+        }
+        else
+           // animator.Play("Idle");
+        return false;
     }
 
     public override void InteractOnce()
