@@ -141,7 +141,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 				progressBar.SetMaxValue(tractorState.timeMoveMax);
 				progressBar.SetValue(tractorState.timeMoveMax - tractorState.timeMove, tractorState.timeMoveMax);
 			}
-			
+
 			//Debug.Log("Fill: " + (tractorState.timeMoveMax - tractorState.timeMove) + " Max: " + tractorState.timeMoveMax);
 			if (Input.GetKey(KeyCode.RightShift))
 			{
@@ -152,14 +152,15 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 						if (!o.activeSelf)
 						{
 							//o.SetActive(true);
-							Tractor t = (Tractor) localScripts[0];
+							Tractor t = (Tractor)localScripts[0];
 							Player p = o.GetComponent<Player>();
-                            if (p.team == t.team)
+							if (p.team == t.team && t.spawnedPlayer)
 							{
 								if (t.playerPos != null)
 								{
 									Debug.Log("Looking goood");
-									o.transform.position = t.playerPos;
+									Vector3 newPos = t.gameObject.transform.position;
+									o.transform.position = new Vector3(newPos.x + 2f, newPos.y, newPos.z);
 								}
 								o.SetActive(true);
 							}

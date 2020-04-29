@@ -440,6 +440,7 @@ MonoBehaviour:
   timeMove: 0
   timeHarvestHay: 0
   timeHarvestRequired: 0
+  spawnedPlayer: 0
   state: 3
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
