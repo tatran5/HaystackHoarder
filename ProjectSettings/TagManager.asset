@@ -10,6 +10,7 @@ TagManager:
   - Haystack
   - FuelStation
   - Animal
+  - Wall
   layers:
   - Default
   - TransparentFX

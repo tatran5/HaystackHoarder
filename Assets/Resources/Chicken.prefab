@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5108935113941785253}
   - component: {fileID: 4920632293151428968}
   - component: {fileID: 5755941631105720452}
-  - component: {fileID: 704682055738435425}
+  - component: {fileID: 879823412369141254}
   - component: {fileID: 3387804198805551315}
   - component: {fileID: 3499706033699792430}
   m_Layer: 9
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localScripts:
-  - {fileID: 704682055738435425}
+  - {fileID: 0}
   localObjects: []
---- !u!114 &704682055738435425
+--- !u!114 &879823412369141254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3168416071305360503}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8125a8e6707b18e4798c36c8df242ac0, type: 3}
+  m_Script: {fileID: 11500000, guid: 68534a48a23a0224c804521016aa155b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   feedMeter: 0
@@ -137,8 +137,8 @@ MonoBehaviour:
   stuckTimerTicks: 0
   stuckTimerTickLength: 0
   stuckMaxTicks: 0
-  normal: {fileID: 2100000, guid: f5086960df008a74987b1a3b8ab46508, type: 2}
-  highlighted: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
+  normal: {fileID: 0}
+  highlighted: {fileID: 0}
 --- !u!54 &3387804198805551315
 Rigidbody:
   m_ObjectHideFlags: 0

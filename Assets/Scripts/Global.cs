@@ -126,14 +126,18 @@ public class Global : MonoBehaviour
 
     public void grid_setCellsTrue(int[] indices) {
         foreach (int i in indices) {
-            grid[i] = true;
+            if (i > -1) {
+                grid[i] = true;
+            }
         }
     }
 
     public void grid_setCellsFalse(int[] indices)
     {
         foreach (int i in indices) {
-            grid[i] = false;
+            if (i > -1) {
+                grid[i] = false;
+            }
         }
     }
 
@@ -149,10 +153,62 @@ public class Global : MonoBehaviour
         mapBottomLeftCorner = mapCenter - 0.5f * mapSize;
 
         // Find all static environment elements and map them on the grid
-
+        MapWalls();
         MapFences();
         MapHaystacks();
         MapBuildings();
+    }
+
+    void MapWalls() {
+        GameObject[] wallArray = GameObject.FindGameObjectsWithTag("Wall");
+        foreach (GameObject w in wallArray) {
+            // Assumes that the fence is either vertically or horizontally aligned
+            // with the grid.
+            float wallLength = w.gameObject.transform.localScale.x;
+
+            Vector2 center = new Vector2(w.gameObject.transform.position.x,
+                                         w.gameObject.transform.position.z);
+            Vector2 endpoint1 = Vector2.zero;
+            Vector2 endpoint2 = Vector2.zero;
+
+
+            Vector3 rotation = w.gameObject.transform.eulerAngles;
+            bool vertical = Mathf.Approximately(rotation.y, 90.0f) ||
+                            Mathf.Approximately(rotation.y, 270.0f);
+
+            if (vertical)
+            {
+                endpoint1 = center - new Vector2(0.0f, wallLength / 2.0f);
+                endpoint2 = center + new Vector2(0.0f, wallLength / 2.0f);
+            }
+            else
+            {
+                endpoint1 = center - new Vector2(wallLength / 2.0f, 0.0f);
+                endpoint2 = center + new Vector2(wallLength / 2.0f, 0.0f);
+            }
+
+            Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpoint1);
+            Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpoint2);
+
+            List<int> indices = new List<int>();
+
+            if (vertical)
+            {
+                for (int z = endpCoords1.y; z <= endpCoords2.y; z++)
+                {
+                    indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
+                }
+            }
+            else
+            {
+                for (int x = endpCoords1.x; x <= endpCoords2.x; x++)
+                {
+                    indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
+                }
+            }
+            
+            grid_setCellsFalse(indices.ToArray());
+        }
     }
 
     void MapFences() {
@@ -193,7 +249,20 @@ public class Global : MonoBehaviour
     }
 
     void MapBuildings() {
+        Barn[] barnArray = GameObject.FindObjectsOfType<Barn>();
 
+        foreach (Barn b in barnArray) {
+            Vector2 center = new Vector2(b.gameObject.transform.position.x,
+                                         b.gameObject.transform.position.z);
+        }
+
+        FuelStation[] fuelStationArray = GameObject.FindObjectsOfType<FuelStation>();
+
+        foreach (FuelStation f in fuelStationArray)
+        {
+            Vector2 center = new Vector2(f.gameObject.transform.position.x,
+                                         f.gameObject.transform.position.z);
+        }
     }
 
     // Update is called once per frame
