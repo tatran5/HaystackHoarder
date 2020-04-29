@@ -9,16 +9,18 @@ public class Tractor : ControllableObject
     public float timeMoveMax = 5f; // The max time that this tractor can be moved
 
     public GameObject playerPrefab;
-    public ProgressBar progressBar;
+    
 
     // Fields to prevent player enter and exit the tractor at the same time
     private float timeSincePlayerEnter = 0f;
     public static float timeOffsetPlayerEnter = 0.1f; 
 
     public float timeMove = 0;
-    private float timeHarvestHay = 0f;
+    public float timeHarvestHay = 0f;
+	public float timeHarvestRequired = 0f;
 
-    public TractorState state = TractorState.Empty;
+
+	public TractorState state = TractorState.Empty;
 
     public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
     public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
@@ -35,28 +37,14 @@ public class Tractor : ControllableObject
 	// Start is called before the first frame update
 	void Start()
     {
-        SetupProgressBar();
         speed = 7f;
+		timeMoveMax = 25f;
 	}
-
-    void SetupProgressBar()
-    {
-        GameObject canvasGO = transform.GetChild(0).gameObject;
-        canvasGO.transform.localScale = new Vector3(
-            canvasGO.transform.localScale.x * 1 / transform.localScale.x,
-            canvasGO.transform.localScale.y * 1 / transform.localScale.y,
-            canvasGO.transform.localScale.z * 1 / transform.localScale.z);
-        canvasGO.transform.position = new Vector3(
-            canvasGO.transform.position.x,
-            canvasGO.transform.position.y * transform.localScale.y,
-            canvasGO.transform.position.z);
-        progressBar = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-        progressBar.SetActive(false);
-    }
 
     // Update is called once per frame
     void Update()
     {
+		
 		if (team == 1)
 		{
 			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
@@ -84,6 +72,7 @@ public class Tractor : ControllableObject
 			{
 				gameObject.GetComponent<MeshRenderer>().material = T2Dead;
 			}
+			timeMoveMax = 30f;
 		}
 		else
 		{
@@ -94,7 +83,6 @@ public class Tractor : ControllableObject
 
 		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
-            progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
             timeSincePlayerEnter += Time.deltaTime;
 
             if (timeMove < timeMoveMax && HandleMovement()) timeMove += Time.deltaTime;
@@ -110,11 +98,13 @@ public class Tractor : ControllableObject
             }
             else
             {
-                progressBar.gameObject.SetActive(false);
+                //progressBar.gameObject.SetActive(false);
                 timeHarvestHay = 0f;
             }
         }
-    }
+		//progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
+		//Debug.Log("Value: " + (timeMoveMax - timeMove));
+	}
 
     public override void InteractOverTime()
     {
@@ -140,12 +130,14 @@ public class Tractor : ControllableObject
                 timeHarvestHay = 0f;
                 haystack.DecreaseHay();
                 gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; //TODO: delete this after finish debugging
-            }
+				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = false;
+			}
             else
             {
                 timeHarvestHay += Time.fixedDeltaTime;
-                progressBar.SetValue(timeHarvestHay, haystack.timeHarvestRequired);
-            }
+				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = true;
+				timeHarvestRequired = haystack.timeHarvestRequired;
+			}
         }
     }
     
@@ -231,8 +223,8 @@ public class Tractor : ControllableObject
             state = TractorState.HasPlayerOnly;
         else if (state == TractorState.HasHayOnly)
             state = TractorState.HasHayAndPlayer;
-        progressBar.SetActive(true);
-        progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
+        //gameObject.GetComponent<PUN2_TractorSync>().progressBar.SetActive(true);
+        //progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
     }
 
     public void RefillFuel()

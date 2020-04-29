@@ -260,6 +260,7 @@ namespace Photon.Realtime
 
         public void OnJoinRoomFailed(short returnCode, string message)
         {
+            Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnJoinRoomFailed(" + returnCode+","+message+").");
         }
 
         public void OnJoinRandomFailed(short returnCode, string message)

@@ -102,7 +102,7 @@ RectTransform:
   m_GameObject: {fileID: 3914791212528178532}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0}
+  m_LocalScale: {x: 0.0075651193, y: 0.0066291997, z: 0}
   m_Children:
   - {fileID: 3786040523543562801}
   m_Father: {fileID: 3810644166575021066}
@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.15169}
   m_SizeDelta: {x: 220, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8905591869965338044
@@ -418,6 +418,8 @@ MonoBehaviour:
   localScripts:
   - {fileID: 6228415393692850211}
   localObjects: []
+  progressBar: {fileID: 0}
+  harvestHay: 0
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,11 +434,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   team: 0
-  timeMax: 5
+  timeMoveMax: 5
   playerPrefab: {fileID: 2073338333761812175, guid: 6d00710b193b89d41bd3325268d9bf18,
     type: 3}
-  progressBar: {fileID: 3227623999136225415}
   timeMove: 0
+  timeHarvestHay: 0
+  timeHarvestRequired: 0
   state: 3
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
@@ -463,7 +466,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 6516778655448627573}
@@ -560,11 +563,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.475
+      value: -0.31449
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.000000010133
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalRotation.x
@@ -600,15 +603,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.6991099
+      value: 1.1214126
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.6
+      value: 1.0560001
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.8372533
+      value: 0.5525872
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}

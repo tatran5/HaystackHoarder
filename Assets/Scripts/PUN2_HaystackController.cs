@@ -65,7 +65,7 @@ public class PUN2_HaystackController : MonoBehaviourPun, IPunObservable
 			//We own this player: send the others our data
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
-			Debug.Log("Setting " + photonView.ViewID + " to " + gameObject.activeSelf);
+			//Debug.Log("Setting " + photonView.ViewID + " to " + gameObject.activeSelf);
 			stream.SendNext(gameObject.activeSelf);
 			//stream.SendNext(hayAmountLeft);
 		}

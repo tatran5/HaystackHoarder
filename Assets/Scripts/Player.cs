@@ -36,7 +36,7 @@ public class Player : ControllableObject
 	void Start()
     {
         progressBar.SetActive(false);
-        speed = 3f;
+        speed = 5f;
 
     }
 
@@ -77,7 +77,7 @@ public class Player : ControllableObject
 			gameObject.GetComponent<MeshRenderer>().material = P3;
 		}
 
-		HandlePlayerMovement();
+		HandleMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
                 EnterTractor();
@@ -87,25 +87,25 @@ public class Player : ControllableObject
                 InteractOverTime();
     }
 
-    bool HandlePlayerMovement()
-    {
-        Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        if (input != Vector3.zero)
-        {
-            Debug.Log("Movement input");
-            targetRotation = Quaternion.LookRotation(input);
-            transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
-                targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
-           // animator.Play("Move_L");
-            transform.position += input * Time.deltaTime;
-            return true;
-        }
-        else
-           // animator.Play("Idle");
-        return false;
-    }
+	bool HandlePlayerMovement()
+	{
+		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+		if (input != Vector3.zero)
+		{
+			//Debug.Log("Movement input");
+			targetRotation = Quaternion.LookRotation(input);
+			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
+				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
+			// animator.Play("Move_L");
+			transform.position += input * Time.deltaTime;
+			return true;
+		}
+		else
+			// animator.Play("Idle");
+			return false;
+	}
 
-    public override void InteractOnce()
+	public override void InteractOnce()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
         transform.localScale + epsilon, transform.rotation);

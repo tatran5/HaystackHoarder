@@ -31,19 +31,18 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - BreakFence
+  - changeMaterial
   - ClickRpc
   - DecreaseHay
   - DestroyRpc
   - DestroySpaceship
   - DoDeath
   - Fire
-  - Reanimate
   - RespawnSpaceship
   - SetActive
   - SwitchScenes
   - UpdatePlayerCount
-  - BreakFence
-  - changeMaterial
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

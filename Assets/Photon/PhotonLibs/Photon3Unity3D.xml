@@ -80,6 +80,18 @@
         <member name="M:ExitGames.Client.Photon.Encryption.IPhotonEncryptor.Init(System.Byte[],System.Byte[],System.Byte[],System.Boolean)">
             <summary>Initialize the encryptor.</summary>
         </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.IPhotonEncryptor.Encrypt(System.Byte[],System.Int32,System.Byte[],System.Int32@,System.Boolean)">
+            <summary>Encrypt data.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.IPhotonEncryptor.Decrypt(System.Byte[],System.Int32,System.Int32,System.Int32@,System.Boolean)">
+            <summary>Decrypt data.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.IPhotonEncryptor.CreateHMAC(System.Byte[],System.Int32,System.Int32)">
+            <summary>Calculates the HMAC for given data.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.IPhotonEncryptor.CheckHMAC(System.Byte[],System.Int32)">
+            <summary>Checks if the HMAC of the provided data is correct.</summary>
+        </member>
         <member name="F:ExitGames.Client.Photon.Encryption.EncryptorNet.BLOCK_SIZE">
             <summary>
             Defines block size for encryption/decryption algorithm
@@ -132,6 +144,42 @@
             <param name="encryptionSecret"></param>
             <param name="hmacSecret"></param>
             <param name="ivBytes"></param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.EncryptorNative.Encrypt(System.Byte[],System.Int32,System.Byte[],System.Int32@,System.Boolean)">
+            <summary>
+            Encrypts data. puts them into output buffer and prepends with IV
+            </summary>
+            <param name="data"></param>
+            <param name="len"></param>
+            <param name="output"></param>
+            <param name="offset"></param>
+            <param name="ivPrefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.EncryptorNative.CreateHMAC(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Finishes current HMAC
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.EncryptorNative.Decrypt(System.Byte[],System.Int32,System.Int32,System.Int32@,System.Boolean)">
+            <summary>
+            Decrypts buffer containing HMAC
+            </summary>
+            <param name="data">encrypted data prepened by IV</param>
+            <param name="offset">offset in the buffer</param>
+            <param name="len">len of data to decrypt</param>
+            /// <param name="outLen">len of decrypted data</param>
+            <param name="ivPrefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Encryption.EncryptorNative.CheckHMAC(System.Byte[],System.Int32)">
+            <summary>
+            Checkes wheter data have corect HMAC or not
+            </summary>
+            <param name="data">buffer with data and HMAC</param>
+            <param name="len">len of data including HMAC</param>
+            <returns>true if check pass, false otherwise</returns>
         </member>
         <member name="F:ExitGames.Client.Photon.EnetChannel.outgoingReliableUnsequencedNumber">
             <summary>Number for reliable unsequenced commands (separate from "standard" reliable sequenced). Used to avoid duplicates.</summary>
@@ -1262,7 +1310,7 @@
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.LastRoundTripTime">
-            <summary>The last measured rountrip time for this connection.</summary>
+            <summary>The last measured roundtrip time for this connection.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TimestampOfLastSocketReceive">
             <summary>
