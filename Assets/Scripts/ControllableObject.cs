@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ControllableObject : MonoBehaviour
 {
-    public static KeyCode kbMoveForward = KeyCode.UpArrow;
-    public static KeyCode kbMoveBackward = KeyCode.DownArrow;
-    public static KeyCode kbMoveLeft = KeyCode.LeftArrow;
-    public static KeyCode kbMoveRight = KeyCode.RightArrow;
+	public static KeyCode kbMoveForward = KeyCode.W;//KeyCode.UpArrow;
+	public static KeyCode kbMoveBackward = KeyCode.S;//KeyCode.DownArrow;
+	public static KeyCode kbMoveLeft = KeyCode.A;//KeyCode.LeftArrow;
+	public static KeyCode kbMoveRight = KeyCode.D;//KeyCode.RightArrow;
 
     public static KeyCode kbInteract = KeyCode.Space;
     public static KeyCode kbPlaceTrap = KeyCode.C;

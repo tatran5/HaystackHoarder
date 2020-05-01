@@ -105,13 +105,20 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			}
 
 			if (destroy)
-				{
-					//GameObject lo = localObjects[0];
-					//localObjects[0] = null;
-					destroy = false;
-					photonView.RPC("DoDeath", RpcTarget.All);
-					//Destroy(this);
-				}
+			{
+				//GameObject lo = localObjects[0];
+				//localObjects[0] = null;
+				destroy = false;
+				photonView.RPC("DoDeath", RpcTarget.All);
+				//Destroy(this);
+			}
+
+			Player play = (Player)localScripts[0];
+
+			if (play.state == PlayerState.HasHay && Input.GetKey(KeyCode.X))
+			{
+				play.state = PlayerState.Empty;
+			}
 		}
 	}
 	[PunRPC]

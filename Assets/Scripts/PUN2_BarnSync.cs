@@ -12,6 +12,8 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 	public BarnState state = BarnState.Empty;
 	public int team = 0;
 
+	public GameObject processedHay;
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -21,15 +23,7 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 		}
 		else
 		{
-			////Player is Remote, deactivate the scripts and object that should only be enabled for the local player
-			//for (int i = 0; i < localScripts.Length; i++)
-			//{
-			//	localScripts[i].enabled = false;
-			//}
-			//for (int i = 0; i < localObjects.Length; i++)
-			//{
-			//	localObjects[i].SetActive(false);
-			//}
+
 		}
 	}
 
@@ -76,9 +70,13 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 
 		} else
 		{
-			//Barn barn = (Barn)localScripts[0];
-			//state = barn.state;
-			//team = barn.team;
+		}
+        if (state == BarnState.HasBale)
+		{
+			processedHay.SetActive(true);
+		} else
+		{
+			processedHay.SetActive(false);
 		}
     }
 

@@ -38,7 +38,7 @@ public class Player : ControllableObject
 	void Start()
     {
         progressBar.SetActive(false);
-        speed = 5f;
+        speed = 4f;
 
     }
 
@@ -79,7 +79,7 @@ public class Player : ControllableObject
 			gameObject.GetComponent<MeshRenderer>().material = P3;
 		}
 
-		HandleMovement();
+		HandlePlayerMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
 		{
@@ -110,7 +110,7 @@ public class Player : ControllableObject
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 			// animator.Play("Move_L");
-			transform.position += input * Time.deltaTime;
+			transform.position += speed * input * Time.deltaTime;
 			return true;
 		}
 		else

@@ -18,25 +18,27 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	// Start is called before the first frame update
 	void Start()
     {
+		Animal animalScr = (Animal)localScripts[0];
+		SetupProgressBar();
+
 		if (photonView.IsMine)
 		{
-			Animal animalScr = (Animal)localScripts[0];
-			SetupProgressBar();
+			
 			
 			Debug.Log(happinessMeter.GetMaxValue());
 		}
 		else
 		{
 			//Player is Remote, deactivate the scripts and object that should only be enabled for the local player
-			for (int i = 0; i < localScripts.Length; i++)
-			{
-				localScripts[i].enabled = false;
-			}
-			for (int i = 0; i < localObjects.Length; i++)
-			{
-				localObjects[i].SetActive(false);
-			}
-			SetupProgressBar();
+			//for (int i = 0; i < localScripts.Length; i++)
+			//{
+			//	localScripts[i].enabled = false;
+			//}
+			//for (int i = 0; i < localObjects.Length; i++)
+			//{
+			//	localObjects[i].SetActive(false);
+			//}
+			//SetupProgressBar();
 		}
 	}
 
@@ -95,5 +97,18 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 			happinessMeter.SetMaxValue(100);
 			happinessMeter.SetValue(animalScr.feedMeter, 100);
 		}
+	}
+
+	public void callFeedAnimal(float amount)
+	{
+		photonView.RPC("feedAnimal", RpcTarget.AllViaServer, photonView.ViewID, amount);
+	}
+
+	[PunRPC]
+	public void feedAnimal(int viewID, float amount)
+	{
+		Debug.Log("hello? add amount " + amount + " to animal " + viewID);
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<Animal>().feedMeter += amount;
 	}
 }

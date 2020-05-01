@@ -3722,6 +3722,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barn (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4929785151690960215, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
+        type: 3}
+      propertyPath: viewIdField
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 6769974029322491737, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4452,6 +4457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Barn (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4929785151690960215, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
+        type: 3}
+      propertyPath: viewIdField
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 6769974029322491737, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
         type: 3}

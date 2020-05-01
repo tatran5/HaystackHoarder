@@ -19,6 +19,10 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	float harvestRequired;
 	public float team = 0;
 
+	public TractorState state = TractorState.Empty;
+
+	public GameObject hayOnTractor;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -172,6 +176,15 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 					}
 				}
 			}
+
+            if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
+			{
+				hayOnTractor.SetActive(true);
+			} else
+			{
+				hayOnTractor.SetActive(false);
+			}
+
 		}
 	}
 
@@ -189,6 +202,37 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
     public void callRemoveFuel(int viewID)
 	{
 		photonView.RPC("RemoveFuel", RpcTarget.AllViaServer, viewID);
+	}
+
+	public void callChangeState(int state)
+	{
+		photonView.RPC("changeState", RpcTarget.AllViaServer, photonView.ViewID, state);
+	}
+
+	[PunRPC]
+	public void changeState(int viewID, int state)
+	{
+		Debug.Log("hello? change state to " + state + " for viewID " + viewID);
+		PhotonView target = PhotonView.Find(viewID);
+		if (state == 0)
+		{
+			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
+			target.gameObject.GetComponent<Tractor>().state = TractorState.Empty;
+		}
+		else if (state == 1)
+		{
+			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayOnly;
+			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayOnly;
+		}
+		else if (state == 2)
+		{
+			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
+			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
+		} else
+		{
+			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
+			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;
+		}
 	}
 
 	[PunRPC]

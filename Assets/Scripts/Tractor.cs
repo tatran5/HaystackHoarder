@@ -6,9 +6,10 @@ public enum TractorState { HasHayOnly, HasPlayerOnly, HasHayAndPlayer, Empty}
 public class Tractor : ControllableObject
 {
     public int team = 0;
-    public float timeMoveMax = 5f; // The max time that this tractor can be moved
+	public float timeMoveMax = 5f; // The max time that this tractor can be moved
+	public float turnSpeed = 80f;
 
-    public GameObject playerPrefab;
+	public GameObject playerPrefab;
     
 
     // Fields to prevent player enter and exit the tractor at the same time
@@ -85,7 +86,7 @@ public class Tractor : ControllableObject
         {
             timeSincePlayerEnter += Time.deltaTime;
 
-            if (timeMove < timeMoveMax && HandleMovement()) timeMove += Time.deltaTime;
+            if (timeMove < timeMoveMax && HandleTractorMovement()) timeMove += Time.deltaTime;
 
             // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
             if (Input.GetKeyDown(KeyCode.RightShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter) //LINE MODIFIED BY EVIE
@@ -106,7 +107,19 @@ public class Tractor : ControllableObject
 		//Debug.Log("Value: " + (timeMoveMax - timeMove));
 	}
 
-    public override void InteractOverTime()
+	bool HandleTractorMovement()
+	{
+		if (Input.GetAxisRaw("Vertical") != 0)
+		{
+			transform.position += Input.GetAxisRaw("Vertical") * Time.deltaTime * speed * transform.forward;
+			transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * turnSpeed * Time.deltaTime, 0));
+			return true;
+		}
+		return false;
+	}
+
+
+	public override void InteractOverTime()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
                     transform.localScale + epsilon, transform.rotation);
@@ -127,7 +140,8 @@ public class Tractor : ControllableObject
             if (timeHarvestHay >= haystack.timeHarvestRequired)
             {
                 state = TractorState.HasHayAndPlayer;
-                timeHarvestHay = 0f;
+				gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
+				timeHarvestHay = 0f;
                 haystack.DecreaseHay();
                 gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; //TODO: delete this after finish debugging
 				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = false;
@@ -179,10 +193,14 @@ public class Tractor : ControllableObject
 				spawnedPlayer = true;
 				timeSincePlayerEnter = 0f;
 				if (state == TractorState.HasHayAndPlayer)
+				{
 					state = TractorState.HasHayOnly;
-				else
+					gameObject.GetComponent<PUN2_TractorSync>().callChangeState(1);
+				} else
+				{
 					state = TractorState.Empty;
-				//}
+					gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
+				}
 			}
 		}
 
@@ -206,7 +224,8 @@ public class Tractor : ControllableObject
         if (state == TractorState.HasHayOnly)
         {
             state = TractorState.Empty;
-            gameObject.GetComponent<MeshRenderer>().material = testTractorMaterial;
+			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
+			gameObject.GetComponent<MeshRenderer>().material = testTractorMaterial;
             return true;
         }
         return false;
@@ -220,12 +239,15 @@ public class Tractor : ControllableObject
     public void PlayerEnter()
     {
         if (state == TractorState.Empty)
-            state = TractorState.HasPlayerOnly;
-        else if (state == TractorState.HasHayOnly)
-            state = TractorState.HasHayAndPlayer;
-        //gameObject.GetComponent<PUN2_TractorSync>().progressBar.SetActive(true);
-        //progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
-    }
+		{
+			state = TractorState.HasPlayerOnly;
+			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(2);
+		} else if (state == TractorState.HasHayOnly)
+		{
+			state = TractorState.HasHayAndPlayer;
+			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
+		}
+	}
 
     public void RefillFuel()
     {

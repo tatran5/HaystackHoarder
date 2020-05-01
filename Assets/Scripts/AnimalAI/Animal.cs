@@ -290,7 +290,7 @@ public class Animal : MonoBehaviour
 	public void FeedAnimal()
 	{
 		Debug.Log("FEEDING ANIMAL!!");
-		feedMeter = 50.0f;// 100.0f;
+		gameObject.GetComponent<PUN2_AnimalSync>().callFeedAnimal(25f);
 		feedTimer = 0;
 	}
 }
