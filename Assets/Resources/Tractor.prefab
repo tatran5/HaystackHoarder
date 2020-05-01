@@ -324,6 +324,7 @@ Transform:
   m_Children:
   - {fileID: 8756121023974902272}
   - {fileID: 1405804098678910359}
+  - {fileID: 9129729247736624167}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -435,12 +436,13 @@ MonoBehaviour:
   speed: 0
   team: 0
   timeMoveMax: 5
+  turnSpeed: 70
   playerPrefab: {fileID: 2073338333761812175, guid: 6d00710b193b89d41bd3325268d9bf18,
     type: 3}
   timeMove: 0
   timeHarvestHay: 0
   timeHarvestRequired: 0
-  spawnedPlayer: 0
+  hayOnTractor: {fileID: 5253459658945005108}
   state: 3
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
@@ -621,4 +623,105 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd,
     type: 3}
   m_PrefabInstance: {fileID: 1408974067388831279}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4308225961566691133
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3810644166575021066}
+    m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0025682
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.041
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1548
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 24.034115
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 38.486835
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 34.18754
+      objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ca17ba9c495ed54782d03a2f585b8d2, type: 2}
+    - target: {fileID: -927199367670048503, guid: 9998fdc1f7411be44957b36ffac100c4,
+        type: 3}
+      propertyPath: m_Name
+      value: HayOnCar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9998fdc1f7411be44957b36ffac100c4, type: 3}
+--- !u!1 &5253459658945005108 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 9998fdc1f7411be44957b36ffac100c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4308225961566691133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9129729247736624167 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 9998fdc1f7411be44957b36ffac100c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4308225961566691133}
   m_PrefabAsset: {fileID: 0}

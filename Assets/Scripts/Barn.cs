@@ -11,6 +11,8 @@ public class Barn : MonoBehaviour
 
 	public int team = 0;
 
+    public GameObject processedHay;
+
     //TODO: delete these fields used for debugging for hashay
     public Material testBarnMaterial;
     public Material testHasBaleMaterial;
@@ -24,6 +26,7 @@ public class Barn : MonoBehaviour
 
     private void Start()
     {
+        processedHay.SetActive(false);
         progressBar.SetMaxValue(timeProcessHayRequired);
         progressBar.SetActive(false);
     }
@@ -44,6 +47,7 @@ public class Barn : MonoBehaviour
                 state = BarnState.HasBale;
                 progressBar.SetActive(false);
                 gameObject.GetComponent<MeshRenderer>().material = testHasBaleMaterial;
+                processedHay.SetActive(true);
             }
 
         }
@@ -68,6 +72,7 @@ public class Barn : MonoBehaviour
             progressBar.SetActive(false);
             gameObject.GetComponent<MeshRenderer>().material = testBarnMaterial;
             state = BarnState.Empty;
+            processedHay.SetActive(false);
             return true;
         }
         return false; ;

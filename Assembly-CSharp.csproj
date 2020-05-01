@@ -120,31 +120,31 @@
     <None Include="Assets\Meshes\Farmer\UnityChanShader\Shader\Unitychan_chara_hair.shader" />
     <None Include="Assets\Meshes\Farmer\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -324,10 +324,10 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="Photon3Unity3D">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/HaystackHoarder/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/networking/HaystackHoarder/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

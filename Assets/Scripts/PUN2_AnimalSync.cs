@@ -10,8 +10,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	//List of the GameObjects that should only be active for the local player (ex. Camera, AudioListener etc.)
 	public GameObject[] localObjects;
 	//Values that will be synced over network
-	public ProgressBar happinessMeter;
-	float feedMeter, feedTickLength;
 	Vector3 latestPos;
 	Quaternion latestRot;
 
@@ -20,10 +18,7 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
     {
 		if (photonView.IsMine)
 		{
-			Animal animalScr = (Animal)localScripts[0];
-			SetupProgressBar();
-			
-			Debug.Log(happinessMeter.GetMaxValue());
+
 		}
 		else
 		{
@@ -36,43 +31,27 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 			{
 				localObjects[i].SetActive(false);
 			}
-			SetupProgressBar();
 		}
-	}
-
-	void SetupProgressBar()
-	{
-		GameObject canvasGO = transform.GetChild(0).gameObject;
-		canvasGO.transform.localScale = new Vector3(
-			canvasGO.transform.localScale.x * 1 / transform.localScale.x,
-			canvasGO.transform.localScale.y * 1 / transform.localScale.y,
-			canvasGO.transform.localScale.z * 1 / transform.localScale.z);
-		canvasGO.transform.position = new Vector3(
-			canvasGO.transform.position.x,
-			canvasGO.transform.position.y * transform.localScale.y,
-			canvasGO.transform.position.z);
-		happinessMeter = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-		happinessMeter.SetMaxValue(100);
-		//progressBar.SetMaxValue(25);
-		//progressBar.SetActive(false);
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.IsWriting)
 		{
-			Animal animalScr = (Animal) localScripts[0];
 			//We own this player: send the others our data
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
-			stream.SendNext(animalScr.feedMeter);
+			Vector3 tempcolor = new Vector3(gameObject.GetComponent<MeshRenderer>().material.color.r, gameObject.GetComponent<MeshRenderer>().material.color.g, gameObject.GetComponent<MeshRenderer>().material.color.b);
+			stream.Serialize(ref tempcolor);
 		}
 		else
 		{
 			//Network player, receive data
 			latestPos = (Vector3)stream.ReceiveNext();
 			latestRot = (Quaternion)stream.ReceiveNext();
-			feedMeter = (float)stream.ReceiveNext();
+			Vector3 tempcolor = new Vector3(0.0f, 0.0f, 0.0f);
+			stream.Serialize(ref tempcolor);
+			gameObject.GetComponent<MeshRenderer>().material.color = new Color(tempcolor.x, tempcolor.y, tempcolor.z, 1.0f);
 		}
 	}
 
@@ -84,16 +63,10 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
 			transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
 			transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
-			happinessMeter.SetMaxValue(100);
-			happinessMeter.SetValue(feedMeter, 100);
-			//Debug.Log("Chickie #2: " + feedMeter + "/" + happinessMeter.GetMaxValue());
 		}
 		else
 		{
-			
-			Animal animalScr = (Animal)localScripts[0];
-			happinessMeter.SetMaxValue(100);
-			happinessMeter.SetValue(animalScr.feedMeter, 100);
+		
 		}
 	}
 }

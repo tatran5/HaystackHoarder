@@ -77,7 +77,7 @@ public class Player : ControllableObject
 			gameObject.GetComponent<MeshRenderer>().material = P3;
 		}
 
-		HandleMovement();
+		HandlePlayerMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
                 EnterTractor();
@@ -191,6 +191,7 @@ public class Player : ControllableObject
     {
         if (tractor.GetHay())
         {
+            tractor.RemoveHay();
             state = PlayerState.HasHay;
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
         }
