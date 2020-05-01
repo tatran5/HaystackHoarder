@@ -12,27 +12,39 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 	//Values that will be synced over network
 	Vector3 latestPos;
 	Quaternion latestRot;
-	bool RendCollEnabled = true;
+
+    public int team;
+	public bool broken;
+	public ProgressBar breakMeter;
+	public bool beingBroken = false;
 
 	// Start is called before the first frame update
 	void Start()
     {
 		if (photonView.IsMine)
 		{
-
+			SetupBreakMeter();
 		}
 		else
 		{
-			//Player is Remote, deactivate the scripts and object that should only be enabled for the local player
-			for (int i = 0; i < localScripts.Length; i++)
-			{
-				localScripts[i].enabled = false;
-			}
-			for (int i = 0; i < localObjects.Length; i++)
-			{
-				localObjects[i].SetActive(false);
-			}
+			SetupBreakMeter();
 		}
+	}
+
+	void SetupBreakMeter()
+	{
+		GameObject canvasGO = transform.GetChild(0).gameObject;
+		canvasGO.transform.localScale = new Vector3(
+			canvasGO.transform.localScale.x * 1 / transform.localScale.x,
+			canvasGO.transform.localScale.y * 1 / transform.localScale.y,
+			canvasGO.transform.localScale.z * 1 / transform.localScale.z);
+		canvasGO.transform.position = new Vector3(
+			canvasGO.transform.position.x,
+			canvasGO.transform.position.y * transform.localScale.y,
+			canvasGO.transform.position.z);
+		breakMeter = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
+		//Debug.Log("Break Meter? " + breakMeter);
+		breakMeter.SetActive(false);
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -42,14 +54,12 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 			//We own this player: send the others our data
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
-			stream.SendNext(RendCollEnabled);
 		}
 		else
 		{
 			//Network player, receive data
 			latestPos = (Vector3)stream.ReceiveNext();
 			latestRot = (Quaternion)stream.ReceiveNext();
-			RendCollEnabled = (bool)stream.ReceiveNext();
 		}
 	}
 
@@ -66,8 +76,40 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		}
 		else
 		{
-
+			//Debug.Log(breakMeter.IsActive());
 		}
+		if (breakMeter.IsActive())
+		{
+			Fence f = (Fence)localScripts[0];
+			breakMeter.SetMaxValue(f.totalTimeToBreak);
+			breakMeter.SetValue(f.timeToBreak, f.totalTimeToBreak);
+		}
+		if (beingBroken)
+		{
+			Fence f = (Fence)localScripts[0];
+			breakMeter.SetActive(true);
+			//Debug.Log("Set to active");
+		}
+		else
+		{
+			breakMeter.SetActive(false);
+			//Debug.Log("Set to inactive");
+		}
+	}
+
+    public void updateStats(float timeToBreak, bool beingBroken)
+	{
+		int ID = photonView.ViewID;
+		photonView.RPC("updateFenceScript", RpcTarget.AllViaServer, ID, timeToBreak, beingBroken);
+	}
+
+    [PunRPC]
+    public void updateFenceScript(int viewID, float timeToBreak, bool beingBroken)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		Fence f = target.GetComponent<Fence>();
+		f.timeToBreak = timeToBreak;
+		target.GetComponent<PUN2_FenceSync>().beingBroken = beingBroken;
 	}
 
     public void Break()
@@ -80,9 +122,13 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
     void BreakFence(int viewID)
 	{
 		PhotonView target = PhotonView.Find(viewID);
-		RendCollEnabled = false;
 		target.gameObject.GetComponentInChildren<Renderer>().enabled = false;
 		target.gameObject.GetComponent<Collider>().enabled = false;
 		Destroy(gameObject.GetComponent<Rigidbody>());
+		broken = true;
+		Fence f = target.gameObject.GetComponent<Fence>();
+		f.broken = true;
+		f.health = 0;
+		target.gameObject.GetComponent<PUN2_FenceSync>().beingBroken = false;
 	}
 }

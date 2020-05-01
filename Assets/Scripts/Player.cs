@@ -32,6 +32,8 @@ public class Player : ControllableObject
 	public Material P1HasFuel;
 	public Material P2HasFuel;
 
+	GameObject refFence;
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -80,11 +82,22 @@ public class Player : ControllableObject
 		HandleMovement();
 
         if (Input.GetKeyDown(kbEnterExitTractor))
-                EnterTractor();
-            else if (Input.GetKeyDown(kbInteract))
-                InteractOnce();
-            else if (Input.GetKey(kbInteract))
-                InteractOverTime();
+		{
+			EnterTractor();
+		} else if (Input.GetKeyDown(kbInteract))
+		{
+			InteractOnce();
+		} else if (Input.GetKey(kbInteract))
+		{
+			InteractOverTime();
+		} else
+		{
+            if (refFence)
+			{
+				refFence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
+				refFence = null;
+			}
+		}
     }
 
 	bool HandlePlayerMovement()
@@ -136,7 +149,7 @@ public class Player : ControllableObject
             state = PlayerState.Empty;
             gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
         }
-        else if (state == PlayerState.Empty && barn.GetBale(team))
+        else if (state == PlayerState.Empty && barn.GetBale())
         {
             state = PlayerState.HasBale;
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
@@ -149,13 +162,49 @@ public class Player : ControllableObject
                     transform.localScale + epsilon, transform.rotation);
         for (int i = 0; i < colliders.Length; i++)
         {
-            GameObject collidedObject = colliders[i].gameObject;
-
+			GameObject collidedObject = colliders[i].gameObject;
+			if (collidedObject.tag == "Fence")
+			{
+				PUN2_FenceSync sync = collidedObject.GetComponent<PUN2_FenceSync>();
+                if (sync.team != team)
+				{
+                    if (!sync.broken)
+					{
+						BreakFence(collidedObject);
+					}
+				}
+			}
         }
 
     }
 
-    private void EnterTractor()
+    private void BreakFence(GameObject fence)
+	{
+		refFence = fence;
+        if (state == PlayerState.Empty)
+		{
+            if (fence.GetComponent<Fence>().timeToBreak >= fence.GetComponent<Fence>().totalTimeToBreak)
+			{
+				fence.GetComponent<Fence>().BreakFence();
+				//fence.GetComponent<Fence>().timeToBreak = 0;
+				//fence.GetComponent<PUN2_FenceSync>().beingBroken = false;
+				fence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
+			} else
+			{
+				//fence.GetComponent<Fence>().timeToBreak += Time.fixedDeltaTime;
+				//fence.GetComponent<PUN2_FenceSync>().beingBroken = true;
+				fence.GetComponent<PUN2_FenceSync>().updateStats(fence.GetComponent<Fence>().timeToBreak + Time.fixedDeltaTime, true);
+				//Debug.Log("Interacting!!");
+			}
+		}
+	}
+
+    public void FixFence(GameObject fence)
+	{
+		Debug.Log("Hellloooo");
+	}
+
+	private void EnterTractor()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
                     transform.localScale + epsilon, transform.rotation);

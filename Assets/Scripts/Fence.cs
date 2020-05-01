@@ -19,6 +19,9 @@ public class Fence : MonoBehaviour
 
 	public int penNumber;       // Corresponds with player number, used for
 								// tracking pen fences. Ranges from 1 - 4.
+	public float totalTimeToBreak;
+	public float timeToBreak = 0f;
+	public int team;
 
 	// Start is called before the first frame update
 	void Start()
@@ -27,7 +30,7 @@ public class Fence : MonoBehaviour
 		//health = 100.0f;
 		breakTimer = 0;
 		breakTickLength = 300;
-
+		totalTimeToBreak = 0.8f;
 		Vector3 rotation = gameObject.transform.eulerAngles;
 		vertical = Mathf.Approximately(rotation.y, 90.0f) ||
 						Mathf.Approximately(rotation.y, 270.0f);

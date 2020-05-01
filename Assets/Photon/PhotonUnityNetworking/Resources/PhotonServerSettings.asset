@@ -43,6 +43,10 @@ MonoBehaviour:
   - SetActive
   - SwitchScenes
   - UpdatePlayerCount
+  - RemoveFuel
+  - StealBale
+  - changeState
+  - updateFenceScript
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

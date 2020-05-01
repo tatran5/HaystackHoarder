@@ -44,7 +44,8 @@ public class Barn : MonoBehaviour
                 state = BarnState.HasBale;
                 progressBar.SetActive(false);
                 gameObject.GetComponent<MeshRenderer>().material = testHasBaleMaterial;
-            }
+				gameObject.GetComponent<PUN2_BarnSync>().callChangeState(1);
+			}
 
         }
     }
@@ -56,19 +57,21 @@ public class Barn : MonoBehaviour
             state = BarnState.Processing;
             progressBar.SetActive(true);
             gameObject.GetComponent<MeshRenderer>().material = testProcessHayMaterial; //TODO: delete this after finish testing
-        }
+			gameObject.GetComponent<PUN2_BarnSync>().callChangeState(2);
+		}
     }
 
     // Deplete bale if there's any in the barn and return whether there's bale to take in the first place
-    public bool GetBale(int t)
+    public bool GetBale()
     {
-        if (state == BarnState.HasBale && t == team)
+        if (state == BarnState.HasBale)
         {
             progressBar.SetValue(0, timeProcessHayRequired);
             progressBar.SetActive(false);
             gameObject.GetComponent<MeshRenderer>().material = testBarnMaterial;
             state = BarnState.Empty;
-            return true;
+			gameObject.GetComponent<PUN2_BarnSync>().callChangeState(0);
+			return true;
         }
         return false; ;
     }

@@ -17,6 +17,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	public bool harvestHay;
 	float timeHarvest;
 	float harvestRequired;
+	public float team = 0;
 
 	// Use this for initialization
 	void Start()
@@ -29,16 +30,19 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 			if (PhotonNetwork.LocalPlayer.NickName == "Player 1")
 			{
 				t.team = 1;
+				team = 1;
 				gameObject.transform.position = GameObject.Find("T1SpawnPoint").transform.position;
 			}
 			else if (PhotonNetwork.LocalPlayer.NickName == "Player 2")
 			{
 				t.team = 2;
+				team = 2;
 				gameObject.transform.position = GameObject.Find("T2SpawnPoint").transform.position;
 			}
 			else
 			{
 				t.team = 3;
+				team = 3;
 			}
 			SetupProgressBar();
 			harvestHay = false;
@@ -126,7 +130,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 				progressBar.SetMaxValue(timeMax);
 				progressBar.SetValue(timeMax - timeM, timeMax);
 			}
-			
+			//Debug.Log("View ID: " + photonView.ViewID + " " + timeM);
 		}
 		else
 		{
@@ -171,7 +175,30 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 	}
 
-    public void changeColor(Vector3 color)
+    public void damageTractor()
+	{
+		//Debug.Log("We made it to this function! " + viewID + " in " + photonView.ViewID);
+		Tractor tractorState = (Tractor)localScripts[0];
+		if (tractorState.state == TractorState.Empty || tractorState.state == TractorState.HasHayOnly)
+		{
+			tractorState.RemoveFuel();
+			
+		}
+	}
+
+    public void callRemoveFuel(int viewID)
+	{
+		photonView.RPC("RemoveFuel", RpcTarget.AllViaServer, viewID);
+	}
+
+	[PunRPC]
+    public void RemoveFuel(int viewID)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_TractorSync>().damageTractor();
+	}
+
+	public void changeColor(Vector3 color)
 	{
 		photonView.RPC("changeMaterial", RpcTarget.AllViaServer, photonView.ViewID, color);
 	}

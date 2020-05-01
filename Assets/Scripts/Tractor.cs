@@ -234,7 +234,8 @@ public class Tractor : ControllableObject
 
 	public void RemoveFuel()
 	{
-		timeMove = timeMoveMax;
+		timeMove = timeMoveMax + 1;
+		Debug.Log("Removing fuel! " + timeMove);
 	}
 
 	public bool HasFuel()

@@ -13,6 +13,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	Quaternion latestRot;
 	public bool destroy = false;
 
+	public static Vector3 epsilon = new Vector3(0.15f, 0.15f, 0.15f);
+
 	// Use this for initialization
 	void Start()
 	{
@@ -84,6 +86,24 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		}
 		else
 		{
+			Collider[] colliders = Physics.OverlapBox(transform.position,
+					transform.localScale + epsilon, transform.rotation);
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				GameObject collidedObject = colliders[i].gameObject;
+
+                if (collidedObject.tag == "Tractor")
+				{
+					PUN2_TractorSync tract = (PUN2_TractorSync)collidedObject.GetComponent<PUN2_TractorSync>();
+					Player p = (Player)gameObject.GetComponent<Player>();
+					if (tract.team != p.team && Input.GetKey(KeyCode.Space))
+					{
+						tract.callRemoveFuel(collidedObject.GetComponent<PhotonView>().ViewID);
+					}
+				}
+
+			}
+
 			if (destroy)
 				{
 					//GameObject lo = localObjects[0];

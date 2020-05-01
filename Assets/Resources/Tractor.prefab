@@ -420,6 +420,7 @@ MonoBehaviour:
   localObjects: []
   progressBar: {fileID: 0}
   harvestHay: 0
+  team: 0
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
