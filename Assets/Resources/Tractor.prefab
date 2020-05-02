@@ -436,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1dd1d272be0474d968906b372c2094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 7
   team: 0
   timeMoveMax: 5
   turnSpeed: 80
@@ -447,6 +447,12 @@ MonoBehaviour:
   timeHarvestRequired: 0
   spawnedPlayer: 0
   state: 3
+  enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
+  enterTractorVolume: 0.05
+  exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
+  exitTractorVolume: 0.05
+  movingTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
+  movingTractorVolume: 0.09
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
   T1: {fileID: 2100000, guid: 81cd370fb093d428fb093f3f8b5551c8, type: 2}

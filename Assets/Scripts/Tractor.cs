@@ -23,7 +23,19 @@ public class Tractor : ControllableObject
 
 	public TractorState state = TractorState.Empty;
 
-    public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
+	public AudioClip enterTractorAC;
+	public float enterTractorVolume;
+	AudioSource enterTractorAS;
+
+	public AudioClip exitTractorAC;
+	public float exitTractorVolume;
+	AudioSource exitTractorAS;
+
+	public AudioClip movingTractorAC;
+	public float movingTractorVolume;
+	AudioSource movingTractorAS;
+
+	public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
     public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
 	public Material T1;
 	public Material T2;
@@ -38,8 +50,24 @@ public class Tractor : ControllableObject
 	// Start is called before the first frame update
 	void Start()
     {
-        speed = 7f;
+		speed = 7f;
 		timeMoveMax = 25f;
+		SetupSound();
+	}
+
+	void SetupSound()
+	{
+		enterTractorAS = gameObject.AddComponent<AudioSource>();
+		exitTractorAS = gameObject.AddComponent<AudioSource>();
+		movingTractorAS = gameObject.AddComponent<AudioSource>();
+
+		enterTractorAS.clip = enterTractorAC;
+		exitTractorAS.clip = exitTractorAC;
+		movingTractorAS.clip = movingTractorAC;
+
+		enterTractorAS.volume = enterTractorVolume;
+		exitTractorAS.volume = exitTractorVolume;
+		movingTractorAS.volume = movingTractorVolume;
 	}
 
     // Update is called once per frame
@@ -192,6 +220,8 @@ public class Tractor : ControllableObject
 				//Instantiate(playerPrefab, playerPos, transform.rotation);
 				spawnedPlayer = true;
 				timeSincePlayerEnter = 0f;
+				exitTractorAS.Play();
+				movingTractorAS.Stop();
 				if (state == TractorState.HasHayAndPlayer)
 				{
 					state = TractorState.HasHayOnly;
@@ -247,6 +277,9 @@ public class Tractor : ControllableObject
 			state = TractorState.HasHayAndPlayer;
 			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
 		}
+		enterTractorAS.Play();
+		movingTractorAS.loop = true;
+		movingTractorAS.PlayDelayed(enterTractorAS.clip.length);
 	}
 
     public void RefillFuel()

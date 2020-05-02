@@ -18,6 +18,9 @@ public class Player : ControllableObject
     private Quaternion targetRotation;
     private Animator animator;
 
+	// Sound
+	public AudioClip haySound;
+	public AudioClip getFuelSound;
 
     // TODO: Delete variables once finish testing
     private float testProgress = 0f;
@@ -213,7 +216,7 @@ public class Player : ControllableObject
             Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
             if (tractor && !tractor.HasPlayer() && tractor.team == team)
             {
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 				tractor.PlayerEnter();
 				//Destroy(gameObject);
