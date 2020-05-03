@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
+    public AudioClip backgroundAC;
+    public float backgroundVolume;
+    AudioSource backgroundAS;
+
 	public static float timeLeft = 420f; //7 minute
 	public Text textTimeLeft;
 
@@ -153,7 +157,18 @@ public class Global : MonoBehaviour
         MapFences();
         MapHaystacks();
         MapBuildings();
+        SetupSound();
     }
+
+    void SetupSound()
+    {
+        backgroundAS = gameObject.AddComponent<AudioSource>();
+        backgroundAS.clip = backgroundAC;
+        backgroundAS.volume = backgroundVolume;
+        backgroundAS.loop = true;
+        backgroundAS.Play();
+    }
+
 
     void MapFences() {
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();

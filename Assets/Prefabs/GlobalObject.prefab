@@ -220,6 +220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbee02debcd415946bd0e5623fef3dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundAC: {fileID: 8300000, guid: 4b3add4ef07b0604796bccf0ccd4ca61, type: 3}
+  backgroundVolume: 0.005
   textTimeLeft: {fileID: 6763496041244279659}
   mapSize: {x: 20, y: 20}
   gridSize: {x: 20, y: 20}
