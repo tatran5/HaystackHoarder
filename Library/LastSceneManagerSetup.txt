@@ -131,6 +131,22 @@ sceneSetups:
   isLoaded: 0
   isActive: 0
   isSubScene: 0
+- path: Assets/Scenes/GameLobby.unity
+  isLoaded: 0
+  isActive: 0
+  isSubScene: 0
+- path: Assets/Scenes/GameLobby.unity
+  isLoaded: 0
+  isActive: 0
+  isSubScene: 0
+- path: Assets/Scenes/GameLobby.unity
+  isLoaded: 0
+  isActive: 0
+  isSubScene: 0
+- path: Assets/Scenes/GameLobby.unity
+  isLoaded: 0
+  isActive: 0
+  isSubScene: 0
 - path: Assets/Scenes/2PlayerVS.unity
   isLoaded: 1
   isActive: 1

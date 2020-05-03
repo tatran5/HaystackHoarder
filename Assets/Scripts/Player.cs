@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public enum PlayerState {HasHay, HasBale, HasFuel, Empty}
 
 // Player should only hold one thing at a time?
@@ -16,7 +17,7 @@ public class Player : ControllableObject
     // Motion
     public float rotationSpeed = 450;
     private Quaternion targetRotation;
-    private Animator animator;
+    public Animator animator;
 
 	// SOUND VARIABLES START HERE ------------------
 	public AudioClip hayInteractionAC;
@@ -51,6 +52,7 @@ public class Player : ControllableObject
 	// Start is called before the first frame update
 	void Start()
     {
+		animator = GetComponent<Animator>();
         progressBar.SetActive(false);
         speed = 4f;
 		SetupSound();
@@ -138,12 +140,12 @@ public class Player : ControllableObject
 			targetRotation = Quaternion.LookRotation(input);
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
-			// animator.Play("Move_L");
+			animator.Play("Running");
 			transform.position += speed * input * Time.deltaTime;
 			return true;
 		}
 		else
-			// animator.Play("Idle");
+			animator.Play("Idle");
 			return false;
 	}
 

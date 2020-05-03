@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 879823412369141254}
   - component: {fileID: 3387804198805551315}
   - component: {fileID: 3499706033699792430}
+  - component: {fileID: -9166308631670929492}
   m_Layer: 9
   m_Name: Chicken
   m_TagString: Untagged
@@ -208,7 +209,7 @@ SphereCollider:
   m_GameObject: {fileID: 3168416071305360503}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -264,7 +265,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &3499706033699792430
 MonoBehaviour:
@@ -288,6 +289,19 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!65 &-9166308631670929492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168416071305360503}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6352240321121221722
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,11 +567,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.443
+      value: -0.401
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.045712
+      value: 0.040709
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalRotation.x
@@ -593,15 +607,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.731477
+      value: 4.323195
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.731477
+      value: 4.323195
       objectReference: {fileID: 0}
     - target: {fileID: 4168730798278848, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4.731477
+      value: 4.323195
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22ebc3f42e2c70d4caf06a1d1e892649, type: 3}

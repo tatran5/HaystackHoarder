@@ -370,7 +370,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5873270045283981465}
-  - component: {fileID: 5147476030828125856}
   - component: {fileID: 4149395924574173313}
   - component: {fileID: 6099927334581964252}
   - component: {fileID: 7005368146099996864}
@@ -378,6 +377,7 @@ GameObject:
   - component: {fileID: 7431080714023693988}
   - component: {fileID: 4713965591986013955}
   - component: {fileID: 507489474895904792}
+  - component: {fileID: 3107387483958747817}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -401,14 +401,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5147476030828125856
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2073338333761812175}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &4149395924574173313
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -479,6 +471,7 @@ MonoBehaviour:
   state: 3
   toDestroy: 0
   rotationSpeed: 450
+  animator: {fileID: 0}
   hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
   hayInteractionVolume: 0.05
   getFuelAC: {fileID: 8300000, guid: 9b90244cde3a3f84ab106814be39e316, type: 3}
@@ -562,6 +555,25 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &3107387483958747817
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073338333761812175}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 00f29fed70d36ea449e7e84d64ce54ab, type: 3}
+  m_Controller: {fileID: 9100000, guid: 5ac77fbf22500014586a86a9e5885799, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &9067745572349028595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -629,7 +641,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.4085
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 95469785492024282, guid: 4c8a1f87c4d472844902fd64df709748, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4c8a1f87c4d472844902fd64df709748, type: 3}
 --- !u!4 &9068492874802555235 stripped
 Transform:
