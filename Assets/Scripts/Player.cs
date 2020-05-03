@@ -18,12 +18,23 @@ public class Player : ControllableObject
     private Quaternion targetRotation;
     private Animator animator;
 
-	// Sound
-	public AudioClip haySound;
-	public AudioClip getFuelSound;
+	// SOUND VARIABLES START HERE ------------------
+	public AudioClip hayInteractionAC;
+	public float hayInteractionVolume;
+	AudioSource hayInteractionAS;
 
-    // TODO: Delete variables once finish testing
-    private float testProgress = 0f;
+	public AudioClip getFuelAC;
+	public float getFuelVolume;
+	AudioSource getFuelAS;
+
+	public AudioClip refillFuelAC;
+	public float refillFuelVolume;
+	AudioSource refillFuelAS;
+
+	// SOUND VARIABLES END HERE ------------------
+
+	// TODO: Delete variables once finish testing
+	private float testProgress = 0f;
     public Material testHasHayMaterial;
     public Material testPlayerMaterial;
 	public Material tractorColor;
@@ -42,8 +53,23 @@ public class Player : ControllableObject
     {
         progressBar.SetActive(false);
         speed = 4f;
-
+		SetupSound();
     }
+	
+	void SetupSound()
+	{
+		hayInteractionAS = gameObject.AddComponent<AudioSource>();
+		hayInteractionAS.clip = hayInteractionAC;
+		hayInteractionAS.volume = hayInteractionVolume;
+
+		getFuelAS = gameObject.AddComponent<AudioSource>();
+		getFuelAS.clip = getFuelAC;
+		getFuelAS.volume = getFuelVolume;
+
+		refillFuelAS = gameObject.AddComponent<AudioSource>();
+		refillFuelAS.clip = refillFuelAC;
+		refillFuelAS.volume = refillFuelVolume;
+	}
 
     // Update is called once per frame
     void Update()
@@ -140,21 +166,26 @@ public class Player : ControllableObject
     /* Player and fuel station must be on the same team for the player to get fuel from the station*/
     private void GetFuelFromStation(FuelStation fuelStation) { 
         if (state == PlayerState.Empty && team == fuelStation.team)
-            state = PlayerState.HasFuel;
-    } 
+		{
+			state = PlayerState.HasFuel;
+			getFuelAS.Play();
+		}
+	} 
 
     // Handle give hay & take bale
     private void InteractOnceWithBarn(Barn barn)
     {
         if (state == PlayerState.HasHay && barn.state == BarnState.Empty && team == barn.team)
         {
+			hayInteractionAS.Play();
             barn.StartProcessingHay();
             state = PlayerState.Empty;
             gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
         }
         else if (state == PlayerState.Empty && barn.GetBale())
         {
-            state = PlayerState.HasBale;
+			hayInteractionAS.Play();
+			state = PlayerState.HasBale;
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
         }
     }
@@ -231,9 +262,9 @@ public class Player : ControllableObject
     {
         if (state == PlayerState.HasFuel)
         {
+			refillFuelAS.Play();
             state = PlayerState.Empty;
             tractor.RefillFuel();
-            Debug.Log("Refilled");
         } else if (state == PlayerState.Empty)
         {
             GetHayFromTractor(tractor);
@@ -243,6 +274,7 @@ public class Player : ControllableObject
     {
         if (tractor.GetHay())
         {
+			hayInteractionAS.Play();
             state = PlayerState.HasHay;
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
         }
