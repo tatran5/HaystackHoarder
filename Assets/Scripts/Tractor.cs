@@ -23,6 +23,8 @@ public class Tractor : ControllableObject
 
 	public TractorState state = TractorState.Empty;
 
+
+	// AUDIO SETUP STARTS ----------------
 	public AudioClip enterTractorAC;
 	public float enterTractorVolume;
 	AudioSource enterTractorAS;
@@ -34,6 +36,12 @@ public class Tractor : ControllableObject
 	public AudioClip movingTractorAC;
 	public float movingTractorVolume;
 	AudioSource movingTractorAS;
+
+	public AudioClip hayInteractionAC;
+	public float hayInteractionVolume;
+	AudioSource hayInteractionAS;
+
+	// AUDIO SETUP END ----------------
 
 	public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
     public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
@@ -58,16 +66,22 @@ public class Tractor : ControllableObject
 	void SetupSound()
 	{
 		enterTractorAS = gameObject.AddComponent<AudioSource>();
-		exitTractorAS = gameObject.AddComponent<AudioSource>();
-		movingTractorAS = gameObject.AddComponent<AudioSource>();
-
 		enterTractorAS.clip = enterTractorAC;
-		exitTractorAS.clip = exitTractorAC;
-		movingTractorAS.clip = movingTractorAC;
-
 		enterTractorAS.volume = enterTractorVolume;
+
+		exitTractorAS = gameObject.AddComponent<AudioSource>();
+		exitTractorAS.clip = exitTractorAC;
 		exitTractorAS.volume = exitTractorVolume;
+
+		movingTractorAS = gameObject.AddComponent<AudioSource>();
+		movingTractorAS.clip = movingTractorAC;
 		movingTractorAS.volume = movingTractorVolume;
+		movingTractorAS.loop = true;
+
+		hayInteractionAS = gameObject.AddComponent<AudioSource>();
+		hayInteractionAS.clip = hayInteractionAC;
+		hayInteractionAS.volume = hayInteractionVolume;
+		hayInteractionAS.loop = true;
 	}
 
     // Update is called once per frame
@@ -154,8 +168,10 @@ public class Tractor : ControllableObject
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i].gameObject.tag.Equals("Haystack"))
-                HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
-        }
+			{
+				HarvestHay(colliders[i].gameObject.GetComponent<Haystack>());
+			}
+		}
     }
      
     private void HarvestHay(Haystack haystack)
@@ -167,6 +183,7 @@ public class Tractor : ControllableObject
         {
             if (timeHarvestHay >= haystack.timeHarvestRequired)
             {
+				hayInteractionAS.Stop();
                 state = TractorState.HasHayAndPlayer;
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
 				timeHarvestHay = 0f;
@@ -176,7 +193,10 @@ public class Tractor : ControllableObject
 			}
             else
             {
-                timeHarvestHay += Time.fixedDeltaTime;
+				if (!hayInteractionAS.isPlaying)
+					hayInteractionAS.Play();
+				
+				timeHarvestHay += Time.fixedDeltaTime;
 				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = true;
 				timeHarvestRequired = haystack.timeHarvestRequired;
 			}
@@ -278,7 +298,6 @@ public class Tractor : ControllableObject
 			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
 		}
 		enterTractorAS.Play();
-		movingTractorAS.loop = true;
 		movingTractorAS.PlayDelayed(enterTractorAS.clip.length);
 	}
 

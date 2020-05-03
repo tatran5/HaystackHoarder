@@ -453,6 +453,8 @@ MonoBehaviour:
   exitTractorVolume: 0.05
   movingTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
   movingTractorVolume: 0.09
+  hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
+  hayInteractionVolume: 0.05
   testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
   T1: {fileID: 2100000, guid: 81cd370fb093d428fb093f3f8b5551c8, type: 2}
