@@ -136,15 +136,79 @@ public class Global : MonoBehaviour
 
     public void grid_setCellsTrue(int[] indices) {
         foreach (int i in indices) {
-            grid[i] = true;
+            if (i >= 0) {
+                grid[i] = true;
+            }
         }
     }
 
     public void grid_setCellsFalse(int[] indices)
     {
         foreach (int i in indices) {
-            grid[i] = false;
+            if (i >= 0)
+            {
+                grid[i] = false;
+            }
         }
+    }
+
+    // Considers a long rectangular object with its orientation
+    // and calculates its endpoints.
+    public Vector2[] GetEndpointsLongCube(GameObject obj, bool vertical)
+    {
+        // Assumes that the fence is either vertically or horizontally aligned
+        // with the grid.
+        float length = obj.gameObject.transform.localScale.x;
+
+        Vector2 center = new Vector2(obj.gameObject.transform.position.x,
+                                     obj.gameObject.transform.position.z);
+
+        Vector2 endpoint1 = Vector2.zero;
+        Vector2 endpoint2 = Vector2.zero;
+
+        if (vertical)
+        {
+            endpoint1 = center - new Vector2(0.0f, length / 2.0f);
+            endpoint2 = center + new Vector2(0.0f, length / 2.0f);
+        }
+        else
+        {
+            endpoint1 = center - new Vector2(length / 2.0f, 0.0f);
+            endpoint2 = center + new Vector2(length / 2.0f, 0.0f);
+        }
+
+        return new Vector2[] { endpoint1, endpoint2 };
+    }
+
+    List<int> GetIndicesLongCube(GameObject obj) {
+
+        Vector3 rotation = obj.gameObject.transform.eulerAngles;
+        bool vertical = Mathf.Approximately(rotation.y, 90.0f) ||
+                        Mathf.Approximately(rotation.y, 270.0f);
+
+        Vector2[] endpt = GetEndpointsLongCube(obj.gameObject, vertical);
+
+        Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpt[0]);
+        Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpt[1]);
+
+        List<int> indices = new List<int>();
+
+        if (vertical)
+        {
+            for (int z = endpCoords1.y; z <= endpCoords2.y; z++)
+            {
+                indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
+            }
+        }
+        else
+        {
+            for (int x = endpCoords1.x; x <= endpCoords2.x; x++)
+            {
+                indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
+            }
+        }
+
+        return indices;
     }
 
     // Start is called before the first frame update
@@ -161,6 +225,7 @@ public class Global : MonoBehaviour
         // Find all static environment elements and map them on the grid
 
         MapFences();
+        MapWalls();
         MapHaystacks();
         MapBuildings();
 
@@ -176,30 +241,17 @@ public class Global : MonoBehaviour
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
         foreach (Fence f in fences)
         {
-
-            Vector2[] endpt = f.GetEndpoints();
-
-            Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpt[0]);
-            Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpt[1]);
-
-            List<int> indices = new List<int>();
-
-            if (f.vertical)
-            {
-                for (int z = endpCoords1.y; z <= endpCoords2.y; z++)
-                {
-                    indices.Add(grid_getCellIndexOfCoords(new Vector2Int(endpCoords1.x, z)));
-                }
-            }
-            else
-            {
-                for (int x = endpCoords1.x; x <= endpCoords2.x; x++)
-                {
-                    indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
-                }
-            }
-
+            List<int> indices = GetIndicesLongCube(f.gameObject);
             f.SetOccupiedCells(indices);
+            grid_setCellsFalse(indices.ToArray());
+        }
+    }
+
+    void MapWalls() {
+        GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
+        foreach (GameObject w in walls)
+        {
+            List<int> indices = GetIndicesLongCube(w);
             grid_setCellsFalse(indices.ToArray());
         }
     }
@@ -236,13 +288,15 @@ public class Global : MonoBehaviour
     }
 
     private void UpdateScores() {
-        if (lastSecond - timeLeft < 0.02f)
+        if (lastSecond - timeLeft >= 1.0f)
         {
             lastSecond = timeLeft;
             scoreTickTimer += 1;
         }
 
         if (scoreTickTimer == scoreTickLength) {
+
+            scoreTickTimer = 0;
 
             for (int i = 0; i < animals.Count; i++)
             {
@@ -285,8 +339,6 @@ public class Global : MonoBehaviour
                     textScorePlayer2.text = "Player 2 Score: " + scorePlayer2;
                 }
             }
-
-            scoreTickTimer = 0;
         }
     }
 
