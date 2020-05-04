@@ -140,13 +140,22 @@ public class Player : ControllableObject
 			targetRotation = Quaternion.LookRotation(input);
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
-			animator.Play("Running");
+
+			if (state == PlayerState.Empty)
+				animator.Play("Running");
+			else
+				animator.Play("Carry");
 			transform.position += speed * input * Time.deltaTime;
 			return true;
 		}
-		else
+		else if (state == PlayerState.Empty)
+		{
 			animator.Play("Idle");
-			return false;
+		} else
+		{
+			animator.Play("CarryIdle");
+		}
+		return false;
 	}
 
 	public override void InteractOnce()
