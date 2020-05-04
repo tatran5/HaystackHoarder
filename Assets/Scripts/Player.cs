@@ -35,6 +35,7 @@ public class Player : ControllableObject
 
 	// OBJECTS HELD START HERE -------------------
 	public GameObject gasCanHeld;
+	public GameObject hayHeld;
 	// OBJECTS HELD END HERE -------------------
 
 	// TODO: Delete variables once finish testing
@@ -65,6 +66,7 @@ public class Player : ControllableObject
 	void SetupObjectHeld()
 	{
 		gasCanHeld.SetActive(false);
+		hayHeld.SetActive(false);
 	}
 	void SetupSound()
 	{
@@ -200,6 +202,7 @@ public class Player : ControllableObject
 			hayInteractionAS.Play();
             barn.StartProcessingHay();
             state = PlayerState.Empty;
+			hayHeld.SetActive(false);
             gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
         }
         else if (state == PlayerState.Empty && barn.GetBale())
@@ -297,6 +300,7 @@ public class Player : ControllableObject
         {
 			hayInteractionAS.Play();
             state = PlayerState.HasHay;
+			hayHeld.SetActive(true);
             gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
         }
     }
