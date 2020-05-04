@@ -29,33 +29,34 @@ public class PUN2_HaystackController : MonoBehaviourPun, IPunObservable
 	// Use this for initialization
 	void Start()
 	{
-		if (photonView.IsMine)
-		{
-			//Player is local
-			Haystack hay = (Haystack)localScripts[0];
-			hayAmountLeft = hay.hayAmountLeft;
-			hayAmountInitial = hay.hayAmountInitial;
+		//if (photonView.IsMine)
+		//{
+		//	//Player is local
 
-			foreach (GameObject h in Resources.FindObjectsOfTypeAll<GameObject>())
-			{
-				if (h.tag == "Haystack" && !h.activeSelf)
-				{
-					inactiveHay = h.GetComponent<PhotonView>().ViewID;
-				}
-			}
-		}
-		else
-		{
-			//Player is Remote, deactivate the scripts and object that should only be enabled for the local player
-			for (int i = 0; i < localScripts.Length; i++)
-			{
-				localScripts[i].enabled = false;
-			}
-			for (int i = 0; i < localObjects.Length; i++)
-			{
-				localObjects[i].SetActive(false);
-			}
-		}
+		//}
+		//else
+		//{
+		//	//Player is Remote, deactivate the scripts and object that should only be enabled for the local player
+		//	for (int i = 0; i < localScripts.Length; i++)
+		//	{
+		//		localScripts[i].enabled = false;
+		//	}
+		//	for (int i = 0; i < localObjects.Length; i++)
+		//	{
+		//		localObjects[i].SetActive(false);
+		//	}
+		//}
+		Haystack hay = (Haystack)localScripts[0];
+		hayAmountLeft = hay.hayAmountLeft;
+		hayAmountInitial = hay.hayAmountInitial;
+
+		//foreach (GameObject h in Resources.FindObjectsOfTypeAll<GameObject>())
+		//{
+		//	if (h.tag == "Haystack" && !h.activeSelf)
+		//	{
+		//		inactiveHay = h.GetComponent<PhotonView>().ViewID;
+		//	}
+		//}
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -66,16 +67,12 @@ public class PUN2_HaystackController : MonoBehaviourPun, IPunObservable
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
 			//Debug.Log("Setting " + photonView.ViewID + " to " + gameObject.activeSelf);
-			stream.SendNext(gameObject.activeSelf);
-			//stream.SendNext(hayAmountLeft);
 		}
 		else
 		{
 			//Network player, receive data
 			latestPos = (Vector3)stream.ReceiveNext();
 			latestRot = (Quaternion)stream.ReceiveNext();
-			gameObject.SetActive((bool)stream.ReceiveNext());
-			//hayAmountLeft = (int)stream.ReceiveNext();
 		}
 	}
 
@@ -85,51 +82,9 @@ public class PUN2_HaystackController : MonoBehaviourPun, IPunObservable
 		if (!photonView.IsMine)
 		{
 			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
+			transform.position = latestPos; // Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
+			transform.rotation = latestRot;// Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
 		}
-		else
-		{
-
-			if (hayAmountLeft == 0)
-			{
-				//Debug.Log("Hay is still 0");
-				//GameObject[] haystacks = Resources.FindObjectsOfTypeAll<GameObject>();
-				//int loopCount = 0;
-				//find the object in resources and then set it active dont use findview
-				
-
-
-				//while (true)
-				//{
-				//	GameObject chosenHaystack = haystacks[Random.Range(0, haystacks.Length - 1)];
-
-				//	if (chosenHaystack.tag == "Haystack" && !chosenHaystack.activeSelf)
-				//	{
-
-				//		//.SetActive(true);
-				//		chosenHaystack.GetComponent<PUN2_HaystackController>().hayAmountLeft = hayAmountInitial;
-				//		chosenHaystack.SetActive(true);
-				//		PhotonView p = chosenHaystack.GetComponent<PhotonView>();
-				//		if (p != null)
-				//		{
-				//			Debug.Log("heelloo " + p.ViewID);
-				//			p.RPC("SetActive", RpcTarget.All, p.ViewID, true);
-				//		}
-
-				//		//gameObject.SetActive(false);
-				//		hayAmountLeft = hayAmountInitial;
-				//		break;
-				//	}
-				//	if (loopCount >= haystacks.Length * haystacks.Length * 4)
-				//	{
-				//		Debug.Log("Haystack::decreaseHay() might run into infinite loop");
-				//		break;
-				//	}
-				//	loopCount++;
-				//}
-				}
-			}
 	}
 
     public void adjustStacks()
@@ -152,17 +107,6 @@ public class PUN2_HaystackController : MonoBehaviourPun, IPunObservable
 	{
         int ID = photonView.ViewID;
 		photonView.RPC("DecreaseHay", RpcTarget.AllViaServer, ID);
-	}
-
-	[PunRPC]
-	void SetActive(int viewID, bool active)
-	{
-		PhotonView target = PhotonView.Find(viewID);
-        if (target != null)
-		{
-			Debug.Log("Setting " + viewID + " to " + active);
-			target.gameObject.SetActive(active);
-		}
 	}
 
 	[PunRPC]

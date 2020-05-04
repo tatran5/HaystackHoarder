@@ -21,6 +21,9 @@ public class Fence : MonoBehaviour
 								// tracking pen fences. Ranges from 1 - 4.
 	public float totalTimeToBreak;
 	public float timeToBreak = 0f;
+	public float totalTimeToFix;
+	public float timeToFix = 0f;
+
 	public int team;
 
 	// Start is called before the first frame update
@@ -31,6 +34,7 @@ public class Fence : MonoBehaviour
 		breakTimer = 0;
 		breakTickLength = 300;
 		totalTimeToBreak = 0.8f;
+		totalTimeToFix = 0.8f;
 		Vector3 rotation = gameObject.transform.eulerAngles;
 		vertical = Mathf.Approximately(rotation.y, 90.0f) ||
 						Mathf.Approximately(rotation.y, 270.0f);

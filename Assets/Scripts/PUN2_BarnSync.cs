@@ -31,34 +31,9 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 	{
 		if (stream.IsWriting)
 		{
-			//We own this barn: send the others our data
-
-			// //0 = empty, 1 = HasBale, 2 = Processing
-   //         if (state == BarnState.Empty)
-			//{
-			//	stream.SendNext(0);
-			//} else if (state == BarnState.HasBale)
-			//{
-			//	stream.SendNext(1);
-			//} else
-			//{
-			//	stream.SendNext(2);
-			//}
 		}
 		else
 		{
-			////Network player, receive data
-			//float st = (int)stream.ReceiveNext();
-   //         if (st == 0)
-			//{
-			//	state = BarnState.Empty;
-			//} else if (st == 1)
-			//{
-			//	state = BarnState.HasBale;
-			//} else
-			//{
-			//	state = BarnState.Processing;
-			//}
 		}
 	}
 
@@ -77,6 +52,16 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 		} else
 		{
 			processedHay.SetActive(false);
+		}
+
+		Barn barn = (Barn) localScripts[0];
+
+		if (state == BarnState.Processing)
+		{
+			barn.progressBar.SetActive(true);
+		} else
+		{
+			barn.progressBar.SetActive(false);
 		}
     }
 

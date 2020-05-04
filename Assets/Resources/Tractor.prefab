@@ -422,6 +422,7 @@ MonoBehaviour:
   progressBar: {fileID: 0}
   harvestHay: 0
   team: 0
+  timeSincePlayerEnter: 0
   state: 3
   hayOnTractor: {fileID: 7786048468940748703}
 --- !u!114 &6228415393692850211

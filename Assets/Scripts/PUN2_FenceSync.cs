@@ -52,32 +52,32 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		if (stream.IsWriting)
 		{
 			//We own this player: send the others our data
-			stream.SendNext(transform.position);
-			stream.SendNext(transform.rotation);
+			//stream.SendNext(transform.position);
+			//stream.SendNext(transform.rotation);
 		}
 		else
 		{
 			//Network player, receive data
-			latestPos = (Vector3)stream.ReceiveNext();
-			latestRot = (Quaternion)stream.ReceiveNext();
+			//latestPos = (Vector3)stream.ReceiveNext();
+			//latestRot = (Quaternion)stream.ReceiveNext();
 		}
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-		if (!photonView.IsMine)
-		{
-			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
-			//gameObject.GetComponentInChildren<Renderer>().enabled = RendCollEnabled;
-			//gameObject.GetComponent<Collider>().enabled = RendCollEnabled;
-		}
-		else
-		{
+		//if (!photonView.IsMine)
+		//{
+		//	//Update remote player (smooth this, this looks good, at the cost of some accuracy)
+		//	//transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
+		//	//transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
+		//	//gameObject.GetComponentInChildren<Renderer>().enabled = RendCollEnabled;
+		//	//gameObject.GetComponent<Collider>().enabled = RendCollEnabled;
+		//}
+		//else
+		//{
 			//Debug.Log(breakMeter.IsActive());
-		}
+		//}
 		if (breakMeter.IsActive())
 		{
 			Fence f = (Fence)localScripts[0];
@@ -124,7 +124,7 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		PhotonView target = PhotonView.Find(viewID);
 		target.gameObject.GetComponentInChildren<Renderer>().enabled = false;
 		target.gameObject.GetComponent<Collider>().enabled = false;
-		Destroy(gameObject.GetComponent<Rigidbody>());
+		Destroy(target.gameObject.GetComponent<Rigidbody>());
 		broken = true;
 		Fence f = target.gameObject.GetComponent<Fence>();
 		f.broken = true;

@@ -19,6 +19,7 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	void Start()
     {
 		Animal animalScr = (Animal)localScripts[0];
+		feedMeter = animalScr.feedMeter;
 		SetupProgressBar();
 
 		if (photonView.IsMine)
@@ -84,19 +85,21 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 		if (!photonView.IsMine)
 		{
 			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
+			transform.position = latestPos; // Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
+			transform.rotation = latestRot; // Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
+											//Debug.Log("Chickie #2: " + feedMeter + "/" + happinessMeter.GetMaxValue());
 			happinessMeter.SetMaxValue(100);
 			happinessMeter.SetValue(feedMeter, 100);
-			//Debug.Log("Chickie #2: " + feedMeter + "/" + happinessMeter.GetMaxValue());
 		}
 		else
 		{
-			
 			Animal animalScr = (Animal)localScripts[0];
+			feedMeter = animalScr.feedMeter;
 			happinessMeter.SetMaxValue(100);
-			happinessMeter.SetValue(animalScr.feedMeter, 100);
+			happinessMeter.SetValue(feedMeter, 100);
 		}
+
+
 	}
 
 	public void callFeedAnimal(float amount)
@@ -110,5 +113,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 		Debug.Log("hello? add amount " + amount + " to animal " + viewID);
 		PhotonView target = PhotonView.Find(viewID);
 		target.gameObject.GetComponent<Animal>().feedMeter += amount;
+		feedMeter += amount;
 	}
 }

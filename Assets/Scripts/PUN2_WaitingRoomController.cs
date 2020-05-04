@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PUN2_WaitingRoomController : MonoBehaviourPunCallbacks
+public class PUN2_WaitingRoomController : MonoBehaviourPunCallbacks, IPunObservable
 {
 	Text txt;
     // Start is called before the first frame update
@@ -20,19 +20,24 @@ public class PUN2_WaitingRoomController : MonoBehaviourPunCallbacks
 		txt.text = "#Players = " + PhotonNetwork.PlayerList.Length;
 	}
 
-    public void onButtonClick()
+	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
+	}
+
+	public void onButtonClick()
+	{
+
 		int numP = PhotonNetwork.PlayerList.Length;
-		if (numP == 1)
-		{
-			PhotonNetwork.LoadLevel("2PlayerVS");
-		}
-		else if (numP == 2)
-		{
-			PhotonNetwork.LoadLevel("2PlayerVS");
-		}
+		//if (numP == 1)
+		//{
+		//	PhotonNetwork.LoadLevel("2PlayerVS");
+		//}
+		//else if (numP == 2)
+		//{
+		//	PhotonNetwork.LoadLevel("2PlayerVS");
+		//}
 		
-		//photonView.RPC("SwitchScenes", RpcTarget.All, );
+		photonView.RPC("SwitchScenes", RpcTarget.All, numP);
 	}
 
 	public override void OnJoinedRoom()
@@ -52,11 +57,11 @@ public class PUN2_WaitingRoomController : MonoBehaviourPunCallbacks
 	{
 		if (numP == 1)
 		{
-			PhotonNetwork.LoadLevel("SampleScene");
+			PhotonNetwork.LoadLevel("2PlayerVS");
 		}
 		else if (numP == 2)
 		{
-			PhotonNetwork.LoadLevel("SampleScene");
+			PhotonNetwork.LoadLevel("2PlayerVS");
 		}
 	}
 }
