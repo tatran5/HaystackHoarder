@@ -660,6 +660,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: gasCan
       objectReference: {fileID: 0}
+    - target: {fileID: 4571787695276436323, guid: 9af88fed1d0611145a89a351a9194faa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9af88fed1d0611145a89a351a9194faa, type: 3}
 --- !u!1 &1963243234435912081 stripped

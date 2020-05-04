@@ -175,27 +175,32 @@ public class Player : ControllableObject
         for (int i = 0; i < colliders.Length; i++)
         {
             GameObject collidedObject = colliders[i].gameObject;
-            if (collidedObject.tag.Equals("Tractor"))
-                InteractOnceWithTractor(collidedObject.GetComponent<Tractor>());
-            else if (collidedObject.tag.Equals("Barn"))
-                InteractOnceWithBarn(collidedObject.GetComponent<Barn>());
-            else if (collidedObject.tag.Equals("FuelStation"))
-                GetFuelFromStation(collidedObject.GetComponent<FuelStation>());
+			if ((collidedObject.tag.Equals("Tractor") && InteractOnceWithTractor(collidedObject.GetComponent<Tractor>())) ||
+				(collidedObject.tag.Equals("Barn") && InteractOnceWithBarn(collidedObject.GetComponent<Barn>())) ||
+				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())))
+			{
+				break;
+			}
         }
+		
+			// Drop whatever object that the player has in front of the player
+		
     }
 
     /* Player and fuel station must be on the same team for the player to get fuel from the station*/
-    private void GetFuelFromStation(FuelStation fuelStation) { 
+    private bool GetFuelFromStation(FuelStation fuelStation) { 
         if (state == PlayerState.Empty && team == fuelStation.team)
 		{
 			state = PlayerState.HasFuel;
 			getFuelAS.Play();
 			gasCanHeld.SetActive(true);
+			return true;
 		}
+		return false;
 	} 
 
     // Handle give hay & take bale
-    private void InteractOnceWithBarn(Barn barn)
+    private bool InteractOnceWithBarn(Barn barn)
     {
         if (state == PlayerState.HasHay && barn.state == BarnState.Empty && team == barn.team)
         {
@@ -203,14 +208,15 @@ public class Player : ControllableObject
             barn.StartProcessingHay();
             state = PlayerState.Empty;
 			hayHeld.SetActive(false);
-            gameObject.GetComponent<MeshRenderer>().material = testPlayerMaterial; // TODO: delete after finishing debugging with hasHay
+			return true;
         }
         else if (state == PlayerState.Empty && barn.GetBale())
         {
 			hayInteractionAS.Play();
 			state = PlayerState.HasBale;
-            gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
-        }
+			return true;
+		}
+		return false;
     }
    
     public override void InteractOverTime()
@@ -281,7 +287,7 @@ public class Player : ControllableObject
         }
     }
 
-    public void InteractOnceWithTractor(Tractor tractor)
+    public bool InteractOnceWithTractor(Tractor tractor)
     {
         if (state == PlayerState.HasFuel)
         {
@@ -289,20 +295,23 @@ public class Player : ControllableObject
             state = PlayerState.Empty;
             tractor.RefillFuel();
 			gasCanHeld.SetActive(false);
+			return true;
         } else if (state == PlayerState.Empty)
         {
-            GetHayFromTractor(tractor);
+            return GetHayFromTractor(tractor);
         }
+		return false;
     }
-    private void GetHayFromTractor(Tractor tractor)
+    private bool GetHayFromTractor(Tractor tractor)
     {
         if (tractor.GetHay())
         {
 			hayInteractionAS.Play();
             state = PlayerState.HasHay;
 			hayHeld.SetActive(true);
-            gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; // TODO: delete after finishing debugging with hasHay
+			return true; 
         }
+		return false;
     }
 
 	private void OnTriggerStay(Collider other)
