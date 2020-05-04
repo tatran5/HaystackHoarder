@@ -40,11 +40,8 @@ public class Tractor : ControllableObject
 	public AudioClip hayInteractionAC;
 	public float hayInteractionVolume;
 	AudioSource hayInteractionAS;
-
 	// AUDIO SETUP END ----------------
 
-	public Material testTractorMaterial; //TODO: delete this once finish debuggin has hay
-    public Material testHasHayMaterial; //TODO: delete this once finish debugging has hay
 	public Material T1;
 	public Material T2;
 	public Material T3;
@@ -188,7 +185,6 @@ public class Tractor : ControllableObject
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
 				timeHarvestHay = 0f;
                 haystack.DecreaseHay();
-                gameObject.GetComponent<MeshRenderer>().material = testHasHayMaterial; //TODO: delete this after finish debugging
 				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = false;
 			}
             else
@@ -275,7 +271,6 @@ public class Tractor : ControllableObject
         {
             state = TractorState.Empty;
 			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
-			gameObject.GetComponent<MeshRenderer>().material = testTractorMaterial;
             return true;
         }
         return false;
@@ -311,7 +306,7 @@ public class Tractor : ControllableObject
 		timeMove = timeMoveMax + 1;
 		Debug.Log("Removing fuel! " + timeMove);
 	}
-
+	
 	public bool HasFuel()
     {
         return timeMove < timeMoveMax;

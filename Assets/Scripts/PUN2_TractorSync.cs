@@ -23,9 +23,16 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 
 	public GameObject hayOnTractor;
 
+	// SOUND STARTS HERE ------------
+	public AudioClip depleteFuelAC;
+	public float depleteFuelVolume;
+	AudioSource depleteFuelAS;
+	//SOUND ENDS HERE ---------------
+
 	// Use this for initialization
 	void Start()
 	{
+		SetupSound();
 		if (photonView.IsMine)
 		{
 			//Player is local
@@ -64,6 +71,13 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 			}
 			SetupProgressBar();
 		}
+	}
+
+	void SetupSound()
+	{
+		depleteFuelAS = gameObject.AddComponent<AudioSource>();
+		depleteFuelAS.clip = depleteFuelAC;
+		depleteFuelAS.volume = depleteFuelVolume;
 	}
 
 	void SetupProgressBar()
@@ -195,7 +209,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		if (tractorState.state == TractorState.Empty || tractorState.state == TractorState.HasHayOnly)
 		{
 			tractorState.RemoveFuel();
-			
+			depleteFuelAS.Play();
 		}
 	}
 

@@ -424,6 +424,8 @@ MonoBehaviour:
   team: 0
   state: 3
   hayOnTractor: {fileID: 7786048468940748703}
+  depleteFuelAC: {fileID: 8300000, guid: 9f61268028e72834889f48a027ac6c64, type: 3}
+  depleteFuelVolume: 0.05
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,8 +457,6 @@ MonoBehaviour:
   movingTractorVolume: 0.09
   hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
   hayInteractionVolume: 0.05
-  testTractorMaterial: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}
-  testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
   T1: {fileID: 2100000, guid: 81cd370fb093d428fb093f3f8b5551c8, type: 2}
   T2: {fileID: 2100000, guid: f52deba99a6ee4fa2ae363b331877cf2, type: 2}
   T3: {fileID: 2100000, guid: 262adf1b2f97547abacd11082b86a792, type: 2}
