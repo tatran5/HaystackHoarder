@@ -47,5 +47,8 @@ public class Sheep : Animal
             }
         }
     }
-
+    public override AnimalType GetAnimalType()
+    {
+        return AnimalType.Sheep;
+    }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AnimalType {General, Chicken, Cow, Sheep}
+
 public class Animal : MonoBehaviour
 {
 	Global globalObj;
@@ -42,6 +44,10 @@ public class Animal : MonoBehaviour
 	bool selected = false;
 
 	List<Fence> fences;
+
+	public float epsilonDistanceOffset = 0.00001f;
+	public bool isFollowingPlayer = false;
+	public Player playerFollowing;
 
     /********************
      * MISC. HELPER FUNCTIONS
@@ -113,37 +119,52 @@ public class Animal : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		currentPos.x = gameObject.transform.position.x;
-		currentPos.y = gameObject.transform.position.z;
-
-		if (PositionEquality(targetPoint, currentPos))
+		if (isFollowingPlayer)
 		{
-			targetDirection = Vector3.zero;
+			transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
+				playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
+			transform.rotation = playerFollowing.transform.rotation;
 		}
-
-		if (penNumber > 0)
+		else 
 		{
-			checkFencesTimer += 1;
-			if (checkFencesTimer >= checkFencesTickLength)
+			currentPos.x = gameObject.transform.position.x;
+			currentPos.y = gameObject.transform.position.z;
+
+			if (PositionEquality(targetPoint, currentPos))
 			{
-				checkFencesTimer = 0;
-                    
-				int fenceIndex = CheckForEscape();
-				if (fenceIndex > 0)
+				targetDirection = Vector3.zero;
+			}
+
+			if (penNumber > 0)
+			{
+				checkFencesTimer += 1;
+				if (checkFencesTimer >= checkFencesTickLength)
 				{
-					GetEscapeDirection(fenceIndex);
-				}
-				else if (targetDirection == Vector3.zero)
-				{
-					//GetIdleDirection();
+					checkFencesTimer = 0;
+
+					int fenceIndex = CheckForEscape();
+					if (fenceIndex > 0)
+					{
+						GetEscapeDirection(fenceIndex);
+					}
+					else if (targetDirection == Vector3.zero)
+					{
+						//GetIdleDirection();s
+					}
 				}
 			}
-		}
-		else
-		{
-            GetWanderDirection();
-        }
-		gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+			else
+			{
+				GetWanderDirection();
+			}
+			gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+		} 
+	}
+	
+	public void SetFollowingPlayer(Player player)
+	{
+		isFollowingPlayer = true;
+		playerFollowing = player;
 	}
 
 	// If the animal collides with something dynamic (a constantly changing
@@ -292,5 +313,10 @@ public class Animal : MonoBehaviour
 		Debug.Log("FEEDING ANIMAL!!");
 		gameObject.GetComponent<PUN2_AnimalSync>().callFeedAnimal(25f);
 		feedTimer = 0;
+	}
+	
+	public virtual AnimalType GetAnimalType()
+	{
+		return AnimalType.General;
 	}
 }

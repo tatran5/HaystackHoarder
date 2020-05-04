@@ -64,4 +64,9 @@ public class Cow : Animal
             targetDirection = Vector3.zero;
         }
     }
+
+    public override AnimalType GetAnimalType()
+    {
+        return AnimalType.Cow;
+    }
 }

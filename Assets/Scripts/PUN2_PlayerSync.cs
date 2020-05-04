@@ -15,9 +15,16 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 
 	public static Vector3 epsilon = new Vector3(0.15f, 0.15f, 0.15f);
 
+	// AUDIO SETUP STARTS -------------
+	public AudioClip hayInteractionAC;
+	public float hayInteractionVolume;
+	AudioSource hayInteractionAS;
+	// AUDIO SETUP END ----------------
+
 	// Use this for initialization
 	void Start()
 	{
+		SetupSound();
 		Debug.Log("Name: " + PhotonNetwork.LocalPlayer.NickName);
 		if (photonView.IsMine)
 		{
@@ -49,6 +56,13 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 				localObjects[i].SetActive(false);
 			}
 		}
+	}
+
+	void SetupSound()
+	{
+		hayInteractionAS = gameObject.AddComponent<AudioSource>();
+		hayInteractionAS.clip = hayInteractionAC;
+		hayInteractionAS.volume = hayInteractionVolume;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

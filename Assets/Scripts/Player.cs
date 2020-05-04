@@ -177,13 +177,14 @@ public class Player : ControllableObject
             GameObject collidedObject = colliders[i].gameObject;
 			if ((collidedObject.tag.Equals("Tractor") && InteractOnceWithTractor(collidedObject.GetComponent<Tractor>())) ||
 				(collidedObject.tag.Equals("Barn") && InteractOnceWithBarn(collidedObject.GetComponent<Barn>())) ||
-				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())))
+				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())) ||
+				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())))
 			{
 				break;
 			}
         }
 		
-			// Drop whatever object that the player has in front of the player
+		// Drop whatever object that the player has in front of the player
 		
     }
 
@@ -218,7 +219,17 @@ public class Player : ControllableObject
 		}
 		return false;
     }
-   
+  
+	public bool InteractOnceWithAnimal(Animal animal)
+	{
+		if (state != PlayerState.HasBale) // if player holds bale, feed animal. Otherwise, bring animal back inside fences
+		{
+			animal.SetFollowingPlayer(this);
+			return true;
+		}
+		return false;
+	}
+
     public override void InteractOverTime()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position,
