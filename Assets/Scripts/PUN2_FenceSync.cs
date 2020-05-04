@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+//display fixing progress
+//make sure player 2 can fix
 public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 {
 	//List of the scripts that should only be active for the local player (ex. PlayerController, MouseLook etc.)
@@ -18,17 +20,12 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 	public ProgressBar breakMeter;
 	public bool beingBroken = false;
 
+	public bool beingFixed = false;
+
 	// Start is called before the first frame update
 	void Start()
     {
-		if (photonView.IsMine)
-		{
-			SetupBreakMeter();
-		}
-		else
-		{
-			SetupBreakMeter();
-		}
+		SetupBreakMeter();
 	}
 
 	void SetupBreakMeter()
@@ -43,57 +40,40 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 			canvasGO.transform.position.y * transform.localScale.y,
 			canvasGO.transform.position.z);
 		breakMeter = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-		//Debug.Log("Break Meter? " + breakMeter);
 		breakMeter.SetActive(false);
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
-		if (stream.IsWriting)
-		{
-			//We own this player: send the others our data
-			//stream.SendNext(transform.position);
-			//stream.SendNext(transform.rotation);
-		}
-		else
-		{
-			//Network player, receive data
-			//latestPos = (Vector3)stream.ReceiveNext();
-			//latestRot = (Quaternion)stream.ReceiveNext();
-		}
+
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-		//if (!photonView.IsMine)
-		//{
-		//	//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-		//	//transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-		//	//transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
-		//	//gameObject.GetComponentInChildren<Renderer>().enabled = RendCollEnabled;
-		//	//gameObject.GetComponent<Collider>().enabled = RendCollEnabled;
-		//}
-		//else
-		//{
-			//Debug.Log(breakMeter.IsActive());
-		//}
 		if (breakMeter.IsActive())
 		{
 			Fence f = (Fence)localScripts[0];
-			breakMeter.SetMaxValue(f.totalTimeToBreak);
-			breakMeter.SetValue(f.timeToBreak, f.totalTimeToBreak);
+			if (beingBroken)
+			{
+				breakMeter.SetMaxValue(f.totalTimeToBreak);
+				breakMeter.SetValue(f.timeToBreak, f.totalTimeToBreak);
+			}
+			if (beingFixed)
+			{
+				breakMeter.SetMaxValue(f.totalTimeToBreak);
+				breakMeter.SetValue(f.timeToFix, f.totalTimeToFix);
+			}
+			
 		}
-		if (beingBroken)
+		if (beingBroken || beingFixed)
 		{
 			Fence f = (Fence)localScripts[0];
 			breakMeter.SetActive(true);
-			//Debug.Log("Set to active");
 		}
 		else
 		{
 			breakMeter.SetActive(false);
-			//Debug.Log("Set to inactive");
 		}
 	}
 
@@ -112,7 +92,22 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		target.GetComponent<PUN2_FenceSync>().beingBroken = beingBroken;
 	}
 
-    public void Break()
+	public void updateFixStats(float timeToBreak, bool beingBroken)
+	{
+		int ID = photonView.ViewID;
+		photonView.RPC("updateFenceScriptFix", RpcTarget.AllViaServer, ID, timeToBreak, beingBroken);
+	}
+
+	[PunRPC]
+	public void updateFenceScriptFix(int viewID, float timeToFix, bool beingFixed)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		Fence f = target.GetComponent<Fence>();
+		f.timeToFix = timeToFix;
+		target.GetComponent<PUN2_FenceSync>().beingFixed = beingFixed;
+	}
+
+	public void Break()
 	{
 		int ID = photonView.ViewID;
 		photonView.RPC("BreakFence", RpcTarget.AllViaServer, ID);
@@ -128,7 +123,33 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		broken = true;
 		Fence f = target.gameObject.GetComponent<Fence>();
 		f.broken = true;
-		f.health = 0;
+		f.health = 1;
 		target.gameObject.GetComponent<PUN2_FenceSync>().beingBroken = false;
+	}
+
+	public void Fix(bool wasBroken)
+	{
+		int ID = photonView.ViewID;
+		photonView.RPC("FixFence", RpcTarget.AllViaServer, ID, wasBroken);
+	}
+
+	[PunRPC]
+	void FixFence(int viewID, bool wasBroken)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		broken = false;
+		Fence f = target.gameObject.GetComponent<Fence>();
+		f.broken = false;
+		f.health = 100.0f;
+		f.breakTimer = 0;
+
+		if (wasBroken)
+		{
+			target.gameObject.GetComponentInChildren<Renderer>().enabled = true;
+			target.gameObject.AddComponent<Rigidbody>();
+			target.gameObject.GetComponent<Collider>().enabled = true;
+			target.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+			target.gameObject.GetComponent<Rigidbody>().useGravity = false;
+		}
 	}
 }

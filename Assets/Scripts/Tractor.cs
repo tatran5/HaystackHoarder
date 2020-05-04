@@ -11,7 +11,6 @@ public class Tractor : ControllableObject
 
 	public GameObject playerPrefab;
     
-
     // Fields to prevent player enter and exit the tractor at the same time
     private float timeSincePlayerEnter = 0f;
     public static float timeOffsetPlayerEnter = 0.1f; 
@@ -45,44 +44,7 @@ public class Tractor : ControllableObject
     // Update is called once per frame
     void Update()
     {
-		
-		if (team == 1)
-		{
-			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1HasHay;
-			} else
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1;
-			}
-			if (!HasFuel())
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1Dead;
-			}
-		}
-		else if (team == 2)
-		{
-			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2HasHay;
-			} else
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2;
-			}
-			if (!HasFuel())
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2Dead;
-			}
-			timeMoveMax = 30f;
-		}
-		else
-		{
-			gameObject.GetComponent<MeshRenderer>().material = T3;
-		}
-
-        
-
-		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
+        if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
         {
             timeSincePlayerEnter += Time.deltaTime;
 
@@ -92,10 +54,6 @@ public class Tractor : ControllableObject
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
 			}
 
-			// The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
-			//if (Input.GetKeyDown(KeyCode.LeftShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter) //LINE MODIFIED BY EVIE
-			//	HandlePlayerExitTractor(); // This calls PlayerExitsTractor
-
 			// Handle collision with tractor
 			if (Input.GetKey(kbInteract))
             {
@@ -103,12 +61,9 @@ public class Tractor : ControllableObject
             }
             else
             {
-                //progressBar.gameObject.SetActive(false);
                 timeHarvestHay = 0f;
             }
         }
-		//progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
-		//Debug.Log("Value: " + (timeMoveMax - timeMove));
 	}
 
 	bool HandleTractorMovement()
@@ -265,7 +220,7 @@ public class Tractor : ControllableObject
 	public void RemoveFuel()
 	{
 		timeMove = timeMoveMax + 1;
-		Debug.Log("Removing fuel! " + timeMove);
+		gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
 	}
 
 	public bool HasFuel()

@@ -52,8 +52,6 @@ public class Player : ControllableObject
     {
 		HandlePlayerMovement();
 
-		checkForBrokenFence();
-
 		if (Input.GetKeyDown(kbEnterExitTractor))
 		{
 			EnterTractor();
@@ -63,18 +61,23 @@ public class Player : ControllableObject
 		} else if (Input.GetKey(kbInteract))
 		{
 			InteractOverTime();
+			checkForBrokenFence();
 		} else
 		{
             if (refFence)
 			{
 				refFence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
+				refFence.GetComponent<Fence>().timeToFix = 0f;
+                refFence.GetComponent<Fence>().fixing = false;
 				refFence = null;
 			}
 			if (performingAnAction)
 			{
 				performingAnAction = false;
 				//update thru rpc
-				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID, timeSinceCease, performingAnAction);
+				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID,
+                                                                                   timeSinceCease, performingAnAction);
 			}
 		}
 		timeSinceLastDisrupt += 1;
@@ -86,16 +89,13 @@ public class Player : ControllableObject
 		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 		if (input != Vector3.zero)
 		{
-			//Debug.Log("Movement input");
 			targetRotation = Quaternion.LookRotation(input);
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
-			// animator.Play("Move_L");
 			transform.position += speed * input * Time.deltaTime;
 			return true;
 		}
 		else
-			// animator.Play("Idle");
 			return false;
 	}
 
@@ -186,8 +186,6 @@ public class Player : ControllableObject
             if (fence.GetComponent<Fence>().timeToBreak >= fence.GetComponent<Fence>().totalTimeToBreak)
 			{
 				fence.GetComponent<Fence>().BreakFence();
-				//fence.GetComponent<Fence>().timeToBreak = 0;
-				//fence.GetComponent<PUN2_FenceSync>().beingBroken = false;
 				fence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
 			} else
 			{
@@ -202,24 +200,27 @@ public class Player : ControllableObject
 					//update cease/action
 					gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID, timeSinceCease, performingAnAction);
 				}
-				//Debug.Log("Interacting!!");
 			}
 		}
 	}
 
-    //we can finish this tomorrow...
     public void FixFence(GameObject fence)
 	{
-		Debug.Log("Hellloooo");
+		refFence = fence;
 		if (state == PlayerState.Empty)
 		{
 			if (fence.GetComponent<Fence>().timeToFix >= fence.GetComponent<Fence>().totalTimeToFix)
 			{
 				fence.GetComponent<Fence>().FixFence();
+				fence.GetComponent<Fence>().timeToFix = 0f;
+				fence.GetComponent<Fence>().fixing = false;
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
 			}
 			else
 			{
-				//fence.GetComponent<PUN2_FenceSync>().updateStats(fence.GetComponent<Fence>().timeToBreak + Time.fixedDeltaTime, true);
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(fence.GetComponent<Fence>().timeToFix + Time.fixedDeltaTime, true);
+				fence.GetComponent<Fence>().timeToFix += Time.fixedDeltaTime;
+				fence.GetComponent<Fence>().fixing = true;
 			}
 		}
 	}
@@ -236,10 +237,7 @@ public class Player : ControllableObject
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 				tractor.PlayerEnter();
-				//Destroy(gameObject);
 				gameObject.GetComponent<PUN2_PlayerSync>().destroy = true;
-				//Destroy(tractor);
-				//gameObject.GetComponent<MeshRenderer>().material = tractorColor;
 			}
         }
     }
@@ -269,20 +267,36 @@ public class Player : ControllableObject
 
     private void checkForBrokenFence()
 	{
-		//Debug.Log("Checking for broken fences...");
 		GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
         for (int i = 0; i < fences.Length; i++)
 		{
 			Fence fence = (Fence) fences[i].GetComponent<Fence>();
             if (fence.team == team)
 			{
-				//Debug.Log("Fence is on the same team...");
-				float dist = Vector3.Distance(transform.position, fences[i].transform.position);
-                if (dist < 1.5f && Input.GetKeyDown(kbInteract))
+				//need to get rotation vector of fence
+				float yAngle = fence.gameObject.transform.rotation.eulerAngles.y;
+                if (yAngle == 90) // check y range 
 				{
-					Debug.Log("And nearby...");
-					FixFence(fences[i]);
+					float dist = Vector2.Distance(new Vector2(transform.position.x, transform.position.y),
+                        new Vector2(fences[i].transform.position.x, fences[i].transform.position.y));
+					float playerZ = transform.position.z;
+					float fenceZ = fences[i].transform.position.z;
+					if (dist < 1.5f && (playerZ < (fenceZ + 5f) && playerZ > (fenceZ - 5f)))
+					{
+						FixFence(fences[i]);
+					}
+				} else //check x range
+				{
+					float dist = Vector2.Distance(new Vector2(transform.position.y, transform.position.z),
+						new Vector2(fences[i].transform.position.y, fences[i].transform.position.z));
+					float playerX = transform.position.x;
+					float fenceX = fences[i].transform.position.x;
+					if (dist < 1.5f && (playerX < (fenceX + 5f) && playerX > (fenceX - 5f)))
+					{
+						FixFence(fences[i]);
+					}
 				}
+				
 			}
 		}
 	}
@@ -306,7 +320,7 @@ public class Player : ControllableObject
 		if (dist < 1.5f && other.gameObject.tag == "Player" && timeSinceLastDisrupt >= maxTimeDisrupt
             && Input.GetKeyDown(kbInteract))
 		{
-			Debug.Log("CEASE AND DESIST!");
+			//Debug.Log("CEASE AND DESIST!");
 
 			PlayerState state = other.gameObject.GetComponent<Player>().state;
 
@@ -328,11 +342,6 @@ public class Player : ControllableObject
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(other.gameObject.GetComponent<PhotonView>().ViewID, 0,
                                                                                other.gameObject.GetComponent<Player>().performingAnAction);
 			timeSinceLastDisrupt = 0f;
-			//Player otherP = other.gameObject.GetComponent<Player>();
-			//if (otherP.state != PlayerState.Empty)
-			//{
-			//	state = otherP.state;
-			//}
 		}
 	}
 

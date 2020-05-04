@@ -20,7 +20,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	// Use this for initialization
 	void Start()
 	{
-		Debug.Log("Name: " + PhotonNetwork.LocalPlayer.NickName);
 		if (photonView.IsMine)
 		{
 			//Player is local
@@ -50,7 +49,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			{
 				localObjects[i].SetActive(false);
 			}
-            //disable non-local sphere colliders to distinguish who is attacking whom?
 		}
 	}
 
@@ -69,7 +67,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			latestPos = (Vector3)stream.ReceiveNext();
 			latestRot = (Quaternion)stream.ReceiveNext();
 			gameObject.SetActive((bool) stream.ReceiveNext());
-			//gameObject.GetComponent<MeshRenderer>().material.color = new Color(tempcolor.x, tempcolor.y, tempcolor.z, 1.0f);
 		}
 	}
 
@@ -79,8 +76,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		if (!photonView.IsMine)
 		{
 			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = latestPos; //Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = latestRot; //Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
+			transform.position = latestPos;
+			transform.rotation = latestRot;
 		}
 		else
 		{
@@ -104,11 +101,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 
 			if (destroy)
 			{
-				//GameObject lo = localObjects[0];
-				//localObjects[0] = null;
 				destroy = false;
 				photonView.RPC("DoDeath", RpcTarget.All);
-				//Destroy(this);
 			}
 
 			Player play = (Player)localScripts[0];
@@ -194,7 +188,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	void DoDeath()
 	{
-		Debug.Log("HE DIED");
 		gameObject.SetActive(false);
 	}
 

@@ -9,7 +9,7 @@ public class Fence : MonoBehaviour
 
 	public bool broken;
 	public float health;
-	int breakTimer;
+	public int breakTimer;
 	int breakTickLength;    // Controls how fast health deterioriates over time
 
 	public bool vertical;
@@ -24,11 +24,14 @@ public class Fence : MonoBehaviour
 	public float totalTimeToFix;
 	public float timeToFix = 0f;
 
+	public bool fixing;
+
 	public int team;
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		fixing = false;
 		broken = false;
 		//health = 100.0f;
 		breakTimer = 0;
@@ -46,7 +49,7 @@ public class Fence : MonoBehaviour
 	void Update()
 	{
 		breakTimer += 1;
-		if (breakTimer >= breakTickLength)
+		if (breakTimer >= breakTickLength && !broken)
 		{
 			breakTimer = 0;
 			health -= 1.0f;
@@ -67,13 +70,8 @@ public class Fence : MonoBehaviour
 
 	public void FixFence()
 	{
-		broken = false;
-		health = 100.0f;
-		breakTimer = 0;
 		globalObj.grid_setCellsFalse(occupiedCells.ToArray());
-		gameObject.GetComponentInChildren<Renderer>().enabled = true;
-		gameObject.AddComponent<Rigidbody>();
-		gameObject.GetComponent<Collider>().enabled = true;
+		gameObject.GetComponent<PUN2_FenceSync>().Fix(broken);
 	}
 
 	public void SetOccupiedCells(List<int> indices)

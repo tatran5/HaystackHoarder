@@ -17,35 +17,17 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
 	// Start is called before the first frame update
 	void Start()
     {
-		if (photonView.IsMine)
-		{
 
-		}
-		else
-		{
-
-		}
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
-		if (stream.IsWriting)
-		{
-		}
-		else
-		{
-		}
+		
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-        if (!photonView.IsMine)
-		{
-
-		} else
-		{
-		}
         if (state == BarnState.HasBale)
 		{
 			processedHay.SetActive(true);
@@ -91,7 +73,6 @@ public class PUN2_BarnSync : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void changeState(int viewID, int state)
 	{
-		Debug.Log("hello? change state to " + state + " for viewID " + viewID);
 		PhotonView target = PhotonView.Find(viewID);
         if (state == 0)
 		{

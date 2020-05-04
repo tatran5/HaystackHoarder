@@ -21,26 +21,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 		Animal animalScr = (Animal)localScripts[0];
 		feedMeter = animalScr.feedMeter;
 		SetupProgressBar();
-
-		if (photonView.IsMine)
-		{
-			
-			
-			Debug.Log(happinessMeter.GetMaxValue());
-		}
-		else
-		{
-			//Player is Remote, deactivate the scripts and object that should only be enabled for the local player
-			//for (int i = 0; i < localScripts.Length; i++)
-			//{
-			//	localScripts[i].enabled = false;
-			//}
-			//for (int i = 0; i < localObjects.Length; i++)
-			//{
-			//	localObjects[i].SetActive(false);
-			//}
-			//SetupProgressBar();
-		}
 	}
 
 	void SetupProgressBar()
@@ -56,8 +36,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 			canvasGO.transform.position.z);
 		happinessMeter = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
 		happinessMeter.SetMaxValue(100);
-		//progressBar.SetMaxValue(25);
-		//progressBar.SetActive(false);
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -84,10 +62,9 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	{
 		if (!photonView.IsMine)
 		{
-			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = latestPos; // Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = latestRot; // Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
-											//Debug.Log("Chickie #2: " + feedMeter + "/" + happinessMeter.GetMaxValue());
+			//Update remote player
+			transform.position = latestPos;
+			transform.rotation = latestRot;
 			happinessMeter.SetMaxValue(100);
 			happinessMeter.SetValue(feedMeter, 100);
 		}
@@ -98,8 +75,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 			happinessMeter.SetMaxValue(100);
 			happinessMeter.SetValue(feedMeter, 100);
 		}
-
-
 	}
 
 	public void callFeedAnimal(float amount)
@@ -110,7 +85,6 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void feedAnimal(int viewID, float amount)
 	{
-		Debug.Log("hello? add amount " + amount + " to animal " + viewID);
 		PhotonView target = PhotonView.Find(viewID);
 		target.gameObject.GetComponent<Animal>().feedMeter += amount;
 		feedMeter += amount;
