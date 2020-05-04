@@ -32,30 +32,29 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - BreakFence
+  - ceaseAndDesist
   - changeMaterial
+  - changePlayerActions
+  - changePlayerState
+  - changeState
+  - changeStats
   - ClickRpc
   - DecreaseHay
   - DestroyRpc
   - DestroySpaceship
-  - DoDeath
-  - Fire
-  - RespawnSpaceship
-  - SetActive
-  - SwitchScenes
-  - UpdatePlayerCount
-  - RemoveFuel
-  - StealBale
-  - changeState
-  - updateFenceScript
-  - feedAnimal
   - displayHay
-  - changeStats
-  - ceaseAndDesist
-  - stealHayBale
-  - changePlayerState
-  - changePlayerActions
+  - DoDeath
+  - feedAnimal
+  - Fire
   - FixFence
+  - RemoveFuel
+  - RespawnSpaceship
+  - StealBale
+  - stealHayBale
+  - SwitchScenes
+  - updateFenceScript
   - updateFenceScriptFix
+  - UpdatePlayerCount
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

@@ -6,7 +6,15 @@ using UnityEngine.UI;
 public class Global : MonoBehaviour
 {
 	public static float timeLeft = 420f; //7 minute
-	public Text textTimeLeft;
+    public Text textTimeLeft;
+
+    float lastSecond = 420f;
+    public int scoreTickTimer = 0;
+    public int scoreTickLength = 5;   // count points every five seconds.
+    public int scorePlayer1 = 0;
+    public int scorePlayer2 = 0;
+    public Text textScorePlayer1;
+    public Text textScorePlayer2;
 
 	/* Grid is represented by [row][column].
      * The cell (0, 0) is represented at the bottom left corner of the map,
@@ -22,6 +30,8 @@ public class Global : MonoBehaviour
 	Vector2 mapBottomLeftCorner; // world space position of the bottom left corner of cell (0, 0)
 	float cellLength;            // world space length of the side of one cell
 	List<bool> grid;
+
+    public List<Animal> animals;
 
 	/* ****************
      * GRID HELPER FUNCTIONS 
@@ -153,6 +163,13 @@ public class Global : MonoBehaviour
         MapFences();
         MapHaystacks();
         MapBuildings();
+
+        animals = new List<Animal>();
+
+        Animal[] animalArr = GameObject.FindObjectsOfType<Animal>();
+        foreach (Animal a in animalArr) {
+            animals.Add(a);
+        }
     }
 
     void MapFences() {
@@ -200,6 +217,7 @@ public class Global : MonoBehaviour
     void Update()
     {
         UpdateTimer();
+        UpdateScores();
     }
 
     // Return false if out of time
@@ -211,9 +229,65 @@ public class Global : MonoBehaviour
         
         float min = Mathf.Floor(timeLeft / 60);
         float sec = Mathf.RoundToInt(timeLeft % 60);
+
         string minStr = (min < 10 ? "0" : "") + min.ToString();
         string secStr = (sec < 10 ? "0" : "") + Mathf.RoundToInt(sec).ToString();
         textTimeLeft.text = minStr + ":" + secStr;
+    }
+
+    private void UpdateScores() {
+        if (lastSecond - timeLeft < 0.02f)
+        {
+            lastSecond = timeLeft;
+            scoreTickTimer += 1;
+        }
+
+        if (scoreTickTimer == scoreTickLength) {
+
+            for (int i = 0; i < animals.Count; i++)
+            {
+                int playerNumber = animals[i].penNumber;
+                float feedMeter = animals[i].feedMeter;
+
+                int points = 0;
+
+                // Determine score
+                if (feedMeter >= 90f)
+                {
+                    points = 10;
+                }
+                else if (feedMeter >= 70f)
+                {
+                    points = 8;
+                }
+                else if (feedMeter >= 50f)
+                {
+                    points = 6;
+                }
+                else if (feedMeter >= 30f)
+                {
+                    points = 4;
+                }
+                else if (feedMeter >= 10f)
+                {
+                    points = 2;
+                }
+
+                // Determine where score goes
+                if (playerNumber == 1)
+                {
+                    scorePlayer1 += points;
+                    textScorePlayer1.text = "Player 1 Score: " + scorePlayer1;
+                }
+                else if(playerNumber == 2)
+                {
+                    scorePlayer2 += points;
+                    textScorePlayer2.text = "Player 2 Score: " + scorePlayer2;
+                }
+            }
+
+            scoreTickTimer = 0;
+        }
     }
 
     // Use mapSize 14 x 8, gridSize 7 x 4, map center 0 , 0
