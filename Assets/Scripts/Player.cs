@@ -31,8 +31,11 @@ public class Player : ControllableObject
 	public AudioClip refillFuelAC;
 	public float refillFuelVolume;
 	AudioSource refillFuelAS;
-
 	// SOUND VARIABLES END HERE ------------------
+
+	// OBJECTS HELD START HERE -------------------
+	public GameObject gasCanHeld;
+	// OBJECTS HELD END HERE -------------------
 
 	// TODO: Delete variables once finish testing
 	private float testProgress = 0f;
@@ -55,9 +58,14 @@ public class Player : ControllableObject
 		animator = GetComponent<Animator>();
         progressBar.SetActive(false);
         speed = 4f;
+		SetupObjectHeld();
 		SetupSound();
     }
 	
+	void SetupObjectHeld()
+	{
+		gasCanHeld.SetActive(false);
+	}
 	void SetupSound()
 	{
 		hayInteractionAS = gameObject.AddComponent<AudioSource>();
@@ -180,6 +188,7 @@ public class Player : ControllableObject
 		{
 			state = PlayerState.HasFuel;
 			getFuelAS.Play();
+			gasCanHeld.SetActive(true);
 		}
 	} 
 
@@ -276,6 +285,7 @@ public class Player : ControllableObject
 			refillFuelAS.Play();
             state = PlayerState.Empty;
             tractor.RefillFuel();
+			gasCanHeld.SetActive(false);
         } else if (state == PlayerState.Empty)
         {
             GetHayFromTractor(tractor);
