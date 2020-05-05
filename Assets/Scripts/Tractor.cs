@@ -84,66 +84,27 @@ public class Tractor : ControllableObject
     // Update is called once per frame
     void Update()
     {
-		
-		if (team == 1)
-		{
-			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1HasHay;
-			} else
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1;
-			}
-			if (!HasFuel())
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T1Dead;
-			}
-		}
-		else if (team == 2)
-		{
-			if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2HasHay;
-			} else
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2;
-			}
-			if (!HasFuel())
-			{
-				gameObject.GetComponent<MeshRenderer>().material = T2Dead;
-			}
-			timeMoveMax = 30f;
-		}
-		else
-		{
-			gameObject.GetComponent<MeshRenderer>().material = T3;
-		}
-
-        
 
 		if (state == TractorState.HasPlayerOnly || state == TractorState.HasHayAndPlayer)
-        {
-            timeSincePlayerEnter += Time.deltaTime;
+		{
+			timeSincePlayerEnter += Time.deltaTime;
 
-            if (timeMove < timeMoveMax && HandleTractorMovement()) timeMove += Time.deltaTime;
+			if (timeMove < timeMoveMax && HandleTractorMovement())
+			{
+				timeMove += Time.deltaTime;
+				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
+			}
 
-            // The latter condition prevents player from instantly exit tractor upon entering due to keypress lag
-            if (Input.GetKeyDown(KeyCode.RightShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter) //LINE MODIFIED BY EVIE
-                HandlePlayerExitTractor(); // This calls PlayerExitsTractor
-
-            // Handle collision with tractor
-            if (Input.GetKey(kbInteract))
-            {
-                InteractOverTime();
-            }
-            else
-            {
-                //progressBar.gameObject.SetActive(false);
-                timeHarvestHay = 0f;
-            }
-        }
-		//progressBar.SetValue(timeMoveMax - timeMove, timeMoveMax);
-		//Debug.Log("Value: " + (timeMoveMax - timeMove));
+			// Handle collision with tractor
+			if (Input.GetKey(kbInteract))
+			{
+				InteractOverTime();
+			}
+			else
+			{
+				timeHarvestHay = 0f;
+			}
+		}
 	}
 
 	bool HandleTractorMovement()
@@ -185,7 +146,7 @@ public class Tractor : ControllableObject
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeState(3);
 				timeHarvestHay = 0f;
                 haystack.DecreaseHay();
-				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = false;
+				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
 			}
             else
             {
@@ -193,7 +154,7 @@ public class Tractor : ControllableObject
 					hayInteractionAS.Play();
 				
 				timeHarvestHay += Time.fixedDeltaTime;
-				gameObject.GetComponent<PUN2_TractorSync>().harvestHay = true;
+				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, true, timeHarvestHay);
 				timeHarvestRequired = haystack.timeHarvestRequired;
 			}
         }
@@ -216,42 +177,44 @@ public class Tractor : ControllableObject
 			0);
 		Vector3 offsetBoundary = Vector3.zero; // offset to avoid spawning a player that collides with this tractor
 		spawnedPlayer = false;
-		for (float x = -1; x < tractorScale.x + 1 && !spawnedPlayer; x++)
+		//for (float x = -1; x < tractorScale.x + 1 && !spawnedPlayer; x++)
+		//{
+		//	offsetBoundary.x = 0f;
+		//	if (x == -1) offsetBoundary.x = -epsilon.x;
+		//	else if (x == tractorScale.x) offsetBoundary.x = epsilon.x;
+
+		//	//for (float z = -1; z < tractorScale.z + 1 && !spawnedPlayer; z++)
+		//	//{
+		//		offsetBoundary.z = 0f;
+		//		if (z == -1) offsetBoundary.z = -epsilon.z;
+		//		else if (z == tractorScale.z) offsetBoundary.z = epsilon.z;
+
+		//		playerPos.x = transform.position.x + 2f;//+ offsetScale.x + offsetBoundary.x + x;
+		//												//playerPos.z = transform.position.z + offsetScale.z + offsetBoundary.z + z;
+
+		//		//if (!PlayerOverlapOthers(playerPos, transform.rotation))
+		//		//{
+		//		//Instantiate(playerPrefab, playerPos, transform.rotation);
+
+		//	//}
+		//}
+
+		spawnedPlayer = true;
+		timeSincePlayerEnter = 0f;
+		if (state == TractorState.HasHayAndPlayer)
 		{
-			offsetBoundary.x = 0f;
-			if (x == -1) offsetBoundary.x = -epsilon.x;
-			else if (x == tractorScale.x) offsetBoundary.x = epsilon.x;
-
-			for (float z = -1; z < tractorScale.z + 1 && !spawnedPlayer; z++)
-			{
-				offsetBoundary.z = 0f;
-				if (z == -1) offsetBoundary.z = -epsilon.z;
-				else if (z == tractorScale.z) offsetBoundary.z = epsilon.z;
-
-				playerPos.x = transform.position.x + 2f;//+ offsetScale.x + offsetBoundary.x + x;
-														//playerPos.z = transform.position.z + offsetScale.z + offsetBoundary.z + z;
-
-				//if (!PlayerOverlapOthers(playerPos, transform.rotation))
-				//{
-				//Instantiate(playerPrefab, playerPos, transform.rotation);
-				spawnedPlayer = true;
-				timeSincePlayerEnter = 0f;
-				exitTractorAS.Play();
-				movingTractorAS.Stop();
-				if (state == TractorState.HasHayAndPlayer)
-				{
-					state = TractorState.HasHayOnly;
-					gameObject.GetComponent<PUN2_TractorSync>().callChangeState(1);
-				} else
-				{
-					state = TractorState.Empty;
-					gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
-				}
-			}
+			state = TractorState.HasHayOnly;
+			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(1);
+		}
+		else
+		{
+			state = TractorState.Empty;
+			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
 		}
 
 		if (!spawnedPlayer)
 			Debug.Log("There's not enough space for player to get out off the tractor");
+
 	}
 
 	private bool PlayerOverlapOthers(Vector3 playerPos, Quaternion playerRot)
@@ -299,12 +262,13 @@ public class Tractor : ControllableObject
     public void RefillFuel()
     {
         timeMove = 0f;
-    }
+		gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
+	}
 
 	public void RemoveFuel()
 	{
 		timeMove = timeMoveMax + 1;
-		Debug.Log("Removing fuel! " + timeMove);
+		gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
 	}
 	
 	public bool HasFuel()

@@ -48,6 +48,14 @@ MonoBehaviour:
   - changeState
   - updateFenceScript
   - feedAnimal
+  - FixFence
+  - updateFenceScriptFix
+  - ceaseAndDesist
+  - changePlayerActions
+  - changePlayerState
+  - changeStats
+  - stealHayBale
+  - displayHay
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

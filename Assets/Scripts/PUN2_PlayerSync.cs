@@ -12,6 +12,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	Vector3 latestPos;
 	Quaternion latestRot;
 	public bool destroy = false;
+	public GameObject hayPossesion;
+	public GameObject fuelPossesion;
 
 	public static Vector3 epsilon = new Vector3(0.15f, 0.15f, 0.15f);
 
@@ -73,19 +75,13 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
 			stream.SendNext(gameObject.activeSelf);
-
-			Vector3 tempcolor = new Vector3(gameObject.GetComponent<MeshRenderer>().material.color.r, gameObject.GetComponent<MeshRenderer>().material.color.g, gameObject.GetComponent<MeshRenderer>().material.color.b);
-			stream.Serialize(ref tempcolor);
 		}
 		else
 		{
 			//Network player, receive data
 			latestPos = (Vector3)stream.ReceiveNext();
 			latestRot = (Quaternion)stream.ReceiveNext();
-			gameObject.SetActive((bool) stream.ReceiveNext());
-			Vector3 tempcolor = new Vector3(0.0f, 0.0f, 0.0f);
-			stream.Serialize(ref tempcolor);
-			gameObject.GetComponent<MeshRenderer>().material.color = new Color(tempcolor.x, tempcolor.y, tempcolor.z, 1.0f);
+			gameObject.SetActive((bool)stream.ReceiveNext());
 		}
 	}
 
@@ -120,11 +116,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 
 			if (destroy)
 			{
-				//GameObject lo = localObjects[0];
-				//localObjects[0] = null;
 				destroy = false;
 				photonView.RPC("DoDeath", RpcTarget.All);
-				//Destroy(this);
 			}
 
 			Player play = (Player)localScripts[0];
@@ -135,12 +128,83 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			}
 		}
 	}
+
+	public void callCease(int opponentID, int state)
+	{
+		photonView.RPC("ceaseAndDesist", RpcTarget.All, opponentID, state);
+	}
+
+	public void callChangePlayerState(int state)
+	{
+		photonView.RPC("changePlayerState", RpcTarget.All, photonView.ViewID, state);
+	}
+
+	public void callChangePlayerActions(int viewID, float timeSinceCease, bool action)
+	{
+		photonView.RPC("changePlayerActions", RpcTarget.All, viewID, timeSinceCease, action);
+	}
+
+	[PunRPC]
+	void changePlayerActions(int viewID, float timeSinceCease, bool action)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<Player>().performingAnAction = action;
+		target.gameObject.GetComponent<Player>().timeSinceCease = timeSinceCease;
+	}
+
+	[PunRPC]
+	void ceaseAndDesist(int opponentID, int state)
+	{
+		PhotonView target = PhotonView.Find(opponentID);
+		if (!target.gameObject.GetComponent<Player>().performingAnAction)
+		{
+			photonView.RPC("stealHayBale", RpcTarget.All, photonView.ViewID, opponentID, state);
+		}
+		else
+		{
+			target.gameObject.GetComponent<Player>().cease = true;
+		}
+	}
+
+	[PunRPC]
+	void stealHayBale(int viewID, int otherID, int oppState)
+	{
+		PhotonView me = PhotonView.Find(viewID);
+		PhotonView opponent = PhotonView.Find(otherID);
+		if (opponent.gameObject.GetComponent<Player>().state != PlayerState.Empty)
+		{
+			me.gameObject.GetComponent<Player>().state = opponent.gameObject.GetComponent<Player>().state;
+			opponent.gameObject.GetComponent<Player>().state = PlayerState.Empty;
+			photonView.RPC("changePlayerState", RpcTarget.All, opponent.gameObject.GetComponent<PhotonView>().ViewID, 0);
+			photonView.RPC("changePlayerState", RpcTarget.All, me.gameObject.GetComponent<PhotonView>().ViewID, oppState);
+		}
+	}
+
+	[PunRPC]
+	void changePlayerState(int viewID, int state)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		if (state == 0)
+		{
+			target.gameObject.GetComponent<Player>().state = PlayerState.Empty; //PlayerState.Empty
+		}
+		else if (state == 1)
+		{
+			target.gameObject.GetComponent<Player>().state = PlayerState.HasHay;//PlayerState.HasHay
+		}
+		else if (state == 2)
+		{
+			target.gameObject.GetComponent<Player>().state = PlayerState.HasBale;//PlayerState.HasBale
+		}
+		else if (state == 3)
+		{
+			target.gameObject.GetComponent<Player>().state = PlayerState.HasFuel;//PlayerState.HasFuel
+		}
+	}
+
 	[PunRPC]
 	void DoDeath()
 	{
-		Debug.Log("HE DIED");
 		gameObject.SetActive(false);
 	}
-
-
 }

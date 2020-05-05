@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 
 public enum PlayerState {HasHay, HasBale, HasFuel, Empty}
 
@@ -18,6 +18,12 @@ public class Player : ControllableObject
     public float rotationSpeed = 450;
     private Quaternion targetRotation;
     public Animator animator;
+
+	public float timeSinceLastDisrupt = 0f;
+	static float maxTimeDisrupt = 10f;
+
+	public float timeSinceCease = 0f;
+	static float maxCeaseTime = 200f;
 
 	// SOUND VARIABLES ------------------
 	public AudioClip hayInteractionAC;
@@ -58,6 +64,12 @@ public class Player : ControllableObject
 
 	GameObject refFence;
 
+	public SphereCollider animalTrigger;
+	public SphereCollider playerTrigger;
+
+	public bool cease = false;
+	public bool performingAnAction = false;
+
 	// Start is called before the first frame updates
 	void Start()
     {
@@ -91,60 +103,42 @@ public class Player : ControllableObject
     // Update is called once per frame
     void Update()
     {
-		if (team == 1)
+		HandlePlayerMovement();
+
+		if (Input.GetKeyDown(kbEnterExitTractor))
 		{
-			if (state == PlayerState.HasHay || state == PlayerState.HasBale)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P1HasHay;
-			}
-			else if (state == PlayerState.HasFuel)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P1HasFuel;
-			}
-			else
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P1;
-			}
+			EnterTractor();
 		}
-		else if (team == 2)
+		else if (Input.GetKeyDown(kbInteract))
 		{
-			if (state == PlayerState.HasHay || state == PlayerState.HasBale)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P2HasHay;
-			}
-			else if (state == PlayerState.HasFuel)
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P2HasFuel;
-			} else 
-			{
-				gameObject.GetComponent<MeshRenderer>().material = P2;
-			}
+			InteractOnce();
+		}
+		else if (Input.GetKey(kbInteract))
+		{
+			InteractOverTime();
+			checkForBrokenFence();
 		}
 		else
 		{
-			gameObject.GetComponent<MeshRenderer>().material = P3;
-		}
-
-		HandlePlayerMovement();
-
-        if (Input.GetKeyDown(kbEnterExitTractor))
-		{
-			EnterTractor();
-		} else if (Input.GetKeyDown(kbInteract))
-		{
-			InteractOnce();
-		} else if (Input.GetKey(kbInteract))
-		{
-			InteractOverTime();
-		} else
-		{
-            if (refFence)
+			if (refFence)
 			{
 				refFence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
+				refFence.GetComponent<Fence>().timeToFix = 0f;
+				refFence.GetComponent<Fence>().fixing = false;
 				refFence = null;
 			}
+			if (performingAnAction)
+			{
+				performingAnAction = false;
+				//update thru rpc
+				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID,
+																				   timeSinceCease, performingAnAction);
+			}
 		}
-    }
+		timeSinceLastDisrupt += 1;
+		timeSinceCease += 1;
+	}
 
 	bool HandlePlayerMovement()
 	{
@@ -230,7 +224,6 @@ public class Player : ControllableObject
 
 		if (objectSpawn != null)
 		{
-			Debug.Log("DROppING*");
 			// Perform box casting to decide whether to drop object held
 			Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
 			boxCenter.y = objectSpawn.transform.position.y;
@@ -239,7 +232,6 @@ public class Player : ControllableObject
 			if (!Physics.BoxCast(boxCenter, objectSpawn.transform.localScale, transform.forward,
 				transform.rotation, maxDistance))
 			{
-				Debug.Log("DROPPING!");
 				Vector3 position = transform.position +
 					(1f + epsilon.x) * transform.forward * 0.5f * (transform.localScale.z + objectSpawn.transform.localScale.z);
 				position.y = transform.position.y - transform.localScale.y / 2f + objectSpawn.transform.localScale.y / 2f;
@@ -251,7 +243,7 @@ public class Player : ControllableObject
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
 				state = PlayerState.Empty;
-
+				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 				return true;
 			}
 			else
@@ -269,6 +261,7 @@ public class Player : ControllableObject
 			state = PlayerState.HasFuel;
 			getFuelAS.Play();
 			gasCanHeld.SetActive(true);
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			return true;
 		}
 		return false;
@@ -281,6 +274,7 @@ public class Player : ControllableObject
 			state = PlayerState.HasHay;
 			hayHeld.SetActive(true);
 			Destroy(hayGO);
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			return true;
 		}
 		return false;
@@ -294,6 +288,7 @@ public class Player : ControllableObject
 			state = PlayerState.HasFuel;
 			gasCanHeld.SetActive(true);
 			Destroy(gasCanGO);
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			return true;
 		}
 		return false;
@@ -308,12 +303,14 @@ public class Player : ControllableObject
             barn.StartProcessingHay();
             state = PlayerState.Empty;
 			hayHeld.SetActive(false);
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			return true;
         }
         else if (state == PlayerState.Empty && barn.GetBale())
         {
 			hayInteractionAS.Play();
 			state = PlayerState.HasBale;
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
 			return true;
 		}
 		return false;
@@ -332,71 +329,105 @@ public class Player : ControllableObject
 
     public override void InteractOverTime()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position,
-                    transform.localScale + epsilon, transform.rotation);
-        for (int i = 0; i < colliders.Length; i++)
-        {
+		Collider[] colliders = Physics.OverlapBox(transform.position,
+						  transform.localScale + epsilon, transform.rotation);
+		for (int i = 0; i < colliders.Length; i++)
+		{
 			GameObject collidedObject = colliders[i].gameObject;
 			if (collidedObject.tag == "Fence")
 			{
 				PUN2_FenceSync sync = collidedObject.GetComponent<PUN2_FenceSync>();
-                if (sync.team != team)
+				if (sync.team != team)
 				{
-                    if (!sync.broken)
+					if (!sync.broken)
 					{
 						BreakFence(collidedObject);
+						if (!performingAnAction)
+						{
+							performingAnAction = true;
+							//update thru rpc
+							gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID, timeSinceCease, performingAnAction);
+						}
+					}
+					else
+					{
+						if (performingAnAction)
+						{
+							performingAnAction = false;
+							//update thru rpc
+							gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID, timeSinceCease, performingAnAction);
+						}
 					}
 				}
 			}
-        }
+		}
+	}
 
-    }
-
-    private void BreakFence(GameObject fence)
+	private void BreakFence(GameObject fence)
 	{
 		refFence = fence;
-        if (state == PlayerState.Empty)
+		if (state == PlayerState.Empty)
 		{
-            if (fence.GetComponent<Fence>().timeToBreak >= fence.GetComponent<Fence>().totalTimeToBreak)
+			if (fence.GetComponent<Fence>().timeToBreak >= fence.GetComponent<Fence>().totalTimeToBreak)
 			{
 				fence.GetComponent<Fence>().BreakFence();
-				//fence.GetComponent<Fence>().timeToBreak = 0;
-				//fence.GetComponent<PUN2_FenceSync>().beingBroken = false;
 				fence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
-			} else
+			}
+			else
 			{
-				//fence.GetComponent<Fence>().timeToBreak += Time.fixedDeltaTime;
-				//fence.GetComponent<PUN2_FenceSync>().beingBroken = true;
-				fence.GetComponent<PUN2_FenceSync>().updateStats(fence.GetComponent<Fence>().timeToBreak + Time.fixedDeltaTime, true);
-				//Debug.Log("Interacting!!");
+				if (timeSinceCease >= maxCeaseTime)
+				{
+					fence.GetComponent<PUN2_FenceSync>().updateStats(fence.GetComponent<Fence>().timeToBreak + Time.fixedDeltaTime, true);
+				}
+				else
+				{
+					fence.GetComponent<PUN2_FenceSync>().updateStats(0, false);
+					cease = false;
+					performingAnAction = false;
+					//update cease/action
+					gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(gameObject.GetComponent<PhotonView>().ViewID, timeSinceCease, performingAnAction);
+				}
 			}
 		}
 	}
 
     public void FixFence(GameObject fence)
 	{
-		Debug.Log("Hellloooo");
+		refFence = fence;
+		if (state == PlayerState.Empty)
+		{
+			if (fence.GetComponent<Fence>().timeToFix >= fence.GetComponent<Fence>().totalTimeToFix)
+			{
+				fence.GetComponent<Fence>().FixFence();
+				fence.GetComponent<Fence>().timeToFix = 0f;
+				fence.GetComponent<Fence>().fixing = false;
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
+			}
+			else
+			{
+				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(fence.GetComponent<Fence>().timeToFix + Time.fixedDeltaTime, true);
+				fence.GetComponent<Fence>().timeToFix += Time.fixedDeltaTime;
+				fence.GetComponent<Fence>().fixing = true;
+			}
+		}
 	}
 
 	private void EnterTractor()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position,
-                    transform.localScale + epsilon, transform.rotation);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
-            if (tractor && !tractor.HasPlayer() && tractor.team == team)
-            {
+		Collider[] colliders = Physics.OverlapBox(transform.position,
+				   transform.localScale + epsilon, transform.rotation);
+		for (int i = 0; i < colliders.Length; i++)
+		{
+			Tractor tractor = colliders[i].gameObject.GetComponent<Tractor>();
+			if (tractor && !tractor.HasPlayer() && tractor.team == team)
+			{
 				GetComponent<Rigidbody>().velocity = Vector3.zero;
-                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+				GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 				tractor.PlayerEnter();
-				//Destroy(gameObject);
 				gameObject.GetComponent<PUN2_PlayerSync>().destroy = true;
-				//Destroy(tractor);
-				//gameObject.GetComponent<MeshRenderer>().material = tractorColor;
 			}
-        }
-    }
+		}
+	}
 
     public bool InteractOnceWithTractor(Tractor tractor)
     {
@@ -404,7 +435,8 @@ public class Player : ControllableObject
         {
 			refillFuelAS.Play();
             state = PlayerState.Empty;
-            tractor.RefillFuel();
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
+			tractor.RefillFuel();
 			gasCanHeld.SetActive(false);
 			return true;
         } else if (state == PlayerState.Empty)
@@ -420,10 +452,48 @@ public class Player : ControllableObject
 			hayInteractionAS.Play();
             state = PlayerState.HasHay;
 			hayHeld.SetActive(true);
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			return true; 
         }
 		return false;
     }
+
+	private void checkForBrokenFence()
+	{
+		GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+		for (int i = 0; i < fences.Length; i++)
+		{
+			Fence fence = (Fence)fences[i].GetComponent<Fence>();
+			if (fence.team == team)
+			{
+				//need to get rotation vector of fence
+				float yAngle = fence.gameObject.transform.rotation.eulerAngles.y;
+				if (yAngle == 90) // check y range 
+				{
+					float dist = Vector2.Distance(new Vector2(transform.position.x, transform.position.y),
+						new Vector2(fences[i].transform.position.x, fences[i].transform.position.y));
+					float playerZ = transform.position.z;
+					float fenceZ = fences[i].transform.position.z;
+					if (dist < 1.5f && (playerZ < (fenceZ + 5f) && playerZ > (fenceZ - 5f)))
+					{
+						FixFence(fences[i]);
+					}
+				}
+				else //check x range
+				{
+					float dist = Vector2.Distance(new Vector2(transform.position.y, transform.position.z),
+						new Vector2(fences[i].transform.position.y, fences[i].transform.position.z));
+					float playerX = transform.position.x;
+					float fenceX = fences[i].transform.position.x;
+					if (dist < 1.5f && (playerX < (fenceX + 5f) && playerX > (fenceX - 5f)))
+					{
+						FixFence(fences[i]);
+					}
+				}
+
+			}
+		}
+	}
 
 	private void OnTriggerStay(Collider other)
 	{
@@ -433,8 +503,42 @@ public class Player : ControllableObject
 			if (state == PlayerState.HasBale && Input.GetKeyDown(kbInteract))
 			{
 				state = PlayerState.Empty;
+				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 				other.gameObject.GetComponent<Animal>().FeedAnimal();
 			}
+		}
+
+		//add time since last trigger to prevent multiple thefts
+
+		float dist = Vector3.Distance(transform.position, other.gameObject.transform.position);
+		if (dist < 1.5f && other.gameObject.tag == "Player" && timeSinceLastDisrupt >= maxTimeDisrupt
+			&& Input.GetKeyDown(kbInteract))
+		{
+			//Debug.Log("CEASE AND DESIST!");
+
+			PlayerState state = other.gameObject.GetComponent<Player>().state;
+
+
+			if (state == PlayerState.Empty)
+			{
+				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 0);
+			}
+			else if (state == PlayerState.HasHay)
+			{
+				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 1);
+			}
+			else if (state == PlayerState.HasBale)
+			{
+				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 2);
+			}
+			else
+			{
+				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 3);
+			}
+
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerActions(other.gameObject.GetComponent<PhotonView>().ViewID, 0,
+																			   other.gameObject.GetComponent<Player>().performingAnAction);
+			timeSinceLastDisrupt = 0f;
 		}
 	}
 

@@ -13,11 +13,14 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	Vector3 latestPos;
 	Quaternion latestRot;
 	float timeM;
-	float timeMax;
+	float timeMax = 25f;
 	public bool harvestHay;
 	float timeHarvest;
-	float harvestRequired;
+	float harvestRequired = 2f;
 	public float team = 0;
+
+	public float timeSincePlayerEnter = 0f;
+	public static float timeOffsetPlayerEnter = 0.2f;
 
 	public TractorState state = TractorState.Empty;
 
@@ -93,7 +96,6 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 			canvasGO.transform.position.z);
 		progressBar = canvasGO.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
 		progressBar.SetMaxValue(25);
-		//progressBar.SetActive(false);
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -106,11 +108,6 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 			stream.SendNext(transform.rotation);
 			Vector3 tempcolor = new Vector3(gameObject.GetComponent<MeshRenderer>().material.color.r, gameObject.GetComponent<MeshRenderer>().material.color.g, gameObject.GetComponent<MeshRenderer>().material.color.b);
 			stream.Serialize(ref tempcolor);
-			stream.SendNext(tractorState.timeMove);
-			stream.SendNext(tractorState.timeMoveMax);
-			stream.SendNext(harvestHay);
-			stream.SendNext(tractorState.timeHarvestHay);
-			stream.SendNext(tractorState.timeHarvestRequired);
 		}
 		else
 		{
@@ -120,52 +117,42 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 			Vector3 tempcolor = new Vector3(0.0f, 0.0f, 0.0f);
 			stream.Serialize(ref tempcolor);
 			gameObject.GetComponent<MeshRenderer>().material.color = new Color(tempcolor.x, tempcolor.y, tempcolor.z, 1.0f);
-			timeM = (float)stream.ReceiveNext();
-			timeMax = (float)stream.ReceiveNext();
-            harvestHay = (bool)stream.ReceiveNext();
-			timeHarvest = (float)stream.ReceiveNext();
-			harvestRequired = (float)stream.ReceiveNext();
 		}
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		//
-		//Debug.Log("Sending time move : " + tractorState.timeMove + " " + tractorState.timeMoveMax);
 		if (!photonView.IsMine)
 		{
-			//Tractor tractorState = (Tractor)localScripts[0];
-			//Update remote player (smooth this, this looks good, at the cost of some accuracy)
-			transform.position = Vector3.Lerp(transform.position, latestPos, Time.deltaTime * 5);
-			transform.rotation = Quaternion.Lerp(transform.rotation, latestRot, Time.deltaTime * 5);
-            if (harvestHay)
+			//Update remote player
+			transform.position = latestPos;
+			transform.rotation = latestRot;
+			if (harvestHay)
 			{
 				progressBar.SetMaxValue(harvestRequired);
 				progressBar.SetValue(timeHarvest, harvestRequired);
-			} else
+			}
+			else
 			{
 				progressBar.SetMaxValue(timeMax);
 				progressBar.SetValue(timeMax - timeM, timeMax);
 			}
-			//Debug.Log("View ID: " + photonView.ViewID + " " + timeM);
 		}
 		else
 		{
 			Tractor tractorState = (Tractor)localScripts[0];
-            if (harvestHay)
+			if (harvestHay)
 			{
 				progressBar.SetMaxValue(tractorState.timeHarvestRequired);
 				progressBar.SetValue(tractorState.timeHarvestHay, tractorState.timeHarvestRequired);
-				Debug.Log("Amnt: " + tractorState.timeHarvestHay + " Max: " + tractorState.timeHarvestRequired);
-			} else
+			}
+			else
 			{
 				progressBar.SetMaxValue(tractorState.timeMoveMax);
 				progressBar.SetValue(tractorState.timeMoveMax - tractorState.timeMove, tractorState.timeMoveMax);
 			}
-
-			//Debug.Log("Fill: " + (tractorState.timeMoveMax - tractorState.timeMove) + " Max: " + tractorState.timeMoveMax);
-			if (Input.GetKey(KeyCode.RightShift))
+			if (Input.GetKey(KeyCode.LeftShift) && timeSincePlayerEnter >= timeOffsetPlayerEnter)
 			{
 				foreach (GameObject o in Resources.FindObjectsOfTypeAll<GameObject>())
 				{
@@ -176,40 +163,48 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 							//o.SetActive(true);
 							Tractor t = (Tractor)localScripts[0];
 							Player p = o.GetComponent<Player>();
-							if (p.team == t.team && t.spawnedPlayer)
+							if (p.team == t.team)
 							{
 								if (t.playerPos != null)
 								{
-									Debug.Log("Looking goood");
 									Vector3 newPos = t.gameObject.transform.position;
 									o.transform.position = new Vector3(newPos.x + 2f, newPos.y, newPos.z);
 								}
 								o.SetActive(true);
+								timeSincePlayerEnter = 0.0f;
+
+								if (state == TractorState.HasHayAndPlayer)
+								{
+									callChangeState(1);
+								}
+								else
+								{
+									callChangeState(0);
+								}
 							}
 						}
 					}
 				}
 			}
-
-            if (state == TractorState.HasHayOnly || state == TractorState.HasHayAndPlayer)
+			if (state == TractorState.HasHayAndPlayer || state == TractorState.HasPlayerOnly)
 			{
-				hayOnTractor.SetActive(true);
-			} else
-			{
-				hayOnTractor.SetActive(false);
+				timeSincePlayerEnter += Time.deltaTime;
 			}
-
+			else
+			{
+				timeSincePlayerEnter = 0.0f;
+			}
 		}
 	}
 
-    public void damageTractor()
+	public void damageTractor()
 	{
-		//Debug.Log("We made it to this function! " + viewID + " in " + photonView.ViewID);
 		Tractor tractorState = (Tractor)localScripts[0];
 		if (tractorState.state == TractorState.Empty || tractorState.state == TractorState.HasHayOnly)
 		{
 			tractorState.RemoveFuel();
 			depleteFuelAS.Play();
+			callChangeStats(tractorState.timeMove, harvestHay, tractorState.timeHarvestRequired);
 		}
 	}
 
@@ -222,31 +217,55 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	{
 		photonView.RPC("changeState", RpcTarget.AllViaServer, photonView.ViewID, state);
 	}
+	public void callChangeStats(float timeM, bool harvestHay, float timeHarvest)
+	{
+		photonView.RPC("changeStats", RpcTarget.AllViaServer, photonView.ViewID, timeM, harvestHay, timeHarvest);
+	}
+
+	[PunRPC]
+	public void changeStats(int viewID, float timeM, bool harvestHay, float timeHarvest)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_TractorSync>().timeM = timeM;
+		target.gameObject.GetComponent<PUN2_TractorSync>().harvestHay = harvestHay;
+		target.gameObject.GetComponent<PUN2_TractorSync>().timeHarvest = timeHarvest;
+	}
 
 	[PunRPC]
 	public void changeState(int viewID, int state)
 	{
-		Debug.Log("hello? change state to " + state + " for viewID " + viewID);
 		PhotonView target = PhotonView.Find(viewID);
 		if (state == 0)
 		{
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.Empty;
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
 		}
 		else if (state == 1)
 		{
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayOnly;
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);
 		}
 		else if (state == 2)
 		{
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
-		} else
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
+		}
+		else
 		{
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);
 		}
+	}
+
+	[PunRPC]
+	public void displayHay(int viewID, bool active)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_TractorSync>().hayOnTractor.SetActive(active);
 	}
 
 	[PunRPC]
@@ -266,6 +285,5 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	{
 		PhotonView target = PhotonView.Find(viewID);
         target.gameObject.GetComponent<MeshRenderer>().material.color = new Color(rgb.x, rgb.y, rgb.z, 1.0f);
-
 	}
 }
