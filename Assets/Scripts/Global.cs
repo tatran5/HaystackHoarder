@@ -10,7 +10,7 @@ public class Global : MonoBehaviour
 
     float lastSecond = 420f;
     public int scoreTickTimer = 0;
-    public int scoreTickLength = 5;   // count points every five seconds.
+    public int scoreTickLength = 4;   // count points every four seconds.
     public int scorePlayer1 = 0;
     public int scorePlayer2 = 0;
     public Text textScorePlayer1;
@@ -153,8 +153,8 @@ public class Global : MonoBehaviour
     }
 
     // Considers a long rectangular object with its orientation
-    // and calculates its endpoints.
-    public Vector2[] GetEndpointsLongCube(GameObject obj, bool vertical)
+    // and calculates its world-space endpoints.
+    Vector2[] GetEndpointsRectangle(GameObject obj, bool vertical)
     {
         // Assumes that the fence is either vertically or horizontally aligned
         // with the grid.
@@ -180,13 +180,13 @@ public class Global : MonoBehaviour
         return new Vector2[] { endpoint1, endpoint2 };
     }
 
-    List<int> GetIndicesLongCube(GameObject obj) {
+    List<int> GetIndicesRectangle(GameObject obj) {
 
         Vector3 rotation = obj.gameObject.transform.eulerAngles;
         bool vertical = Mathf.Approximately(rotation.y, 90.0f) ||
                         Mathf.Approximately(rotation.y, 270.0f);
 
-        Vector2[] endpt = GetEndpointsLongCube(obj.gameObject, vertical);
+        Vector2[] endpt = GetEndpointsRectangle(obj.gameObject, vertical);
 
         Vector2Int endpCoords1 = grid_getCellCoordsOfPos(endpt[0]);
         Vector2Int endpCoords2 = grid_getCellCoordsOfPos(endpt[1]);
@@ -206,6 +206,42 @@ public class Global : MonoBehaviour
             {
                 indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, endpCoords1.y)));
             }
+        }
+
+        return indices;
+    }
+
+
+    // Considers a square object and calculates the world-space
+    // positions of its bottom left and top right corners.
+    Vector2[] GetCornersSquare(GameObject obj)
+    {
+        float xLength = obj.gameObject.transform.localScale.x;
+        float zLength = obj.gameObject.transform.localScale.z;
+
+        Vector2 center = new Vector2(obj.gameObject.transform.position.x,
+                                     obj.gameObject.transform.position.z);
+
+        Vector2 cornerBottomLeft = center - new Vector2(xLength / 2.0f, zLength / 2.0f);
+        Vector2 cornerTopRight = center + new Vector2(xLength / 2.0f, zLength / 2.0f);
+
+        return new Vector2[] { cornerBottomLeft, cornerTopRight };
+    }
+
+    List<int> GetIndicesSquare(GameObject obj) {
+        Vector2[] corners = GetCornersSquare(obj);
+
+        List<int> indices = new List<int>();
+
+        Vector2Int cornerCoords1 = grid_getCellCoordsOfPos(corners[0]);
+        Vector2Int cornerCoords2 = grid_getCellCoordsOfPos(corners[1]);
+
+        for (int x = cornerCoords1.x; x <= cornerCoords2.x; x++)
+        {
+            for (int z = cornerCoords1.y; z <= cornerCoords2.y; z++)
+             {
+                indices.Add(grid_getCellIndexOfCoords(new Vector2Int(x, z)));
+             }
         }
 
         return indices;
@@ -231,8 +267,8 @@ public class Global : MonoBehaviour
 
         animals = new List<Animal>();
 
-        Animal[] animalArr = GameObject.FindObjectsOfType<Animal>();
-        foreach (Animal a in animalArr) {
+        Animal[] animalArray = GameObject.FindObjectsOfType<Animal>();
+        foreach (Animal a in animalArray) {
             animals.Add(a);
         }
     }
@@ -241,7 +277,7 @@ public class Global : MonoBehaviour
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
         foreach (Fence f in fences)
         {
-            List<int> indices = GetIndicesLongCube(f.gameObject);
+            List<int> indices = GetIndicesRectangle(f.gameObject);
             f.SetOccupiedCells(indices);
             grid_setCellsFalse(indices.ToArray());
         }
@@ -251,18 +287,34 @@ public class Global : MonoBehaviour
         GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
         foreach (GameObject w in walls)
         {
-            List<int> indices = GetIndicesLongCube(w);
+            List<int> indices = GetIndicesRectangle(w);
             grid_setCellsFalse(indices.ToArray());
         }
     }
 
     void MapHaystacks() {
-        Haystack[] haystackArray = GameObject.FindObjectsOfType<Haystack>();
-
+        Haystack[] haystacks = GameObject.FindObjectsOfType<Haystack>();
+        foreach (Haystack h in haystacks)
+        {
+            List<int> indices = GetIndicesSquare(h.gameObject);
+            grid_setCellsFalse(indices.ToArray());
+        }
     }
 
     void MapBuildings() {
+        Barn[] barns = GameObject.FindObjectsOfType<Barn>();
+        foreach (Barn b in barns)
+        {
+            List<int> indices = GetIndicesSquare(b.gameObject);
+            grid_setCellsFalse(indices.ToArray());
+        }
 
+        FuelStation[] stations = GameObject.FindObjectsOfType<FuelStation>();
+        foreach (FuelStation fs in stations)
+        {
+            List<int> indices = GetIndicesSquare(fs.gameObject);
+            grid_setCellsFalse(indices.ToArray());
+        }
     }
 
     // Update is called once per frame
@@ -308,23 +360,23 @@ public class Global : MonoBehaviour
                 // Determine score
                 if (feedMeter >= 90f)
                 {
-                    points = 10;
+                    points = 25;
                 }
                 else if (feedMeter >= 70f)
                 {
-                    points = 8;
+                    points = 20;
                 }
                 else if (feedMeter >= 50f)
                 {
-                    points = 6;
+                    points = 15;
                 }
                 else if (feedMeter >= 30f)
                 {
-                    points = 4;
+                    points = 10;
                 }
                 else if (feedMeter >= 10f)
                 {
-                    points = 2;
+                    points = 5;
                 }
 
                 // Determine where score goes

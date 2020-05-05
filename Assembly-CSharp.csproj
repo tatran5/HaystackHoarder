@@ -94,7 +94,9 @@
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\Tractor.cs" />
      <Compile Include="Assets\Scripts\UI\Billboard.cs" />
+     <Compile Include="Assets\Scripts\UI\ButtonController.cs" />
      <Compile Include="Assets\Scripts\UI\ProgressBar.cs" />
+     <Compile Include="Assets\Scripts\UI\TitleScript.cs" />
      <Compile Include="Assets\Scripts\UI\WaitingRoomButton.cs" />
      <None Include="Assets\Meshes\Farmer\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
      <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
