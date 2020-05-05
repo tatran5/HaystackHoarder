@@ -11,6 +11,8 @@ TagManager:
   - FuelStation
   - Animal
   - Fence
+  - GasCan
+  - Hay
   layers:
   - Default
   - TransparentFX

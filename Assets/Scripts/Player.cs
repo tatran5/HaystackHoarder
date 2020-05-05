@@ -36,6 +36,11 @@ public class Player : ControllableObject
 	public GameObject gasCanHeld;
 	public GameObject hayHeld;
 
+	// OBJECTS SPAWNING -------------------
+	public GameObject gasCanSpawn;
+	public GameObject haySpawn;
+	public GameObject baleSpawn;
+
 	public Animal animalFollowing = null;
 
 	// TODO: Delete variables once finish testing
@@ -179,7 +184,9 @@ public class Player : ControllableObject
 			if ((collidedObject.tag.Equals("Tractor") && InteractOnceWithTractor(collidedObject.GetComponent<Tractor>())) ||
 				(collidedObject.tag.Equals("Barn") && InteractOnceWithBarn(collidedObject.GetComponent<Barn>())) ||
 				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())) ||
-				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())))
+				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())) ||
+				(collidedObject.tag.Equals("Hay") && InteractOnceWithHay(collidedObject)) ||
+				(collidedObject.tag.Equals("GasCan") && InteractOnceWithGasCan(collidedObject)))
 			{
 				interacted = true;
 				break;
@@ -209,10 +216,51 @@ public class Player : ControllableObject
 				}
 			} else if (state != PlayerState.Empty)
 			{
-
+				DropObjectHeld();
 			}
 		}
     }
+
+	public bool DropObjectHeld()
+	{
+		GameObject objectSpawn = null;
+		if (state == PlayerState.HasFuel) objectSpawn = gasCanSpawn;
+		else if (state == PlayerState.HasHay) objectSpawn = haySpawn;
+		else if (state == PlayerState.HasBale) Debug.Log("NEED TO DO DROP BALE");
+
+		if (objectSpawn != null)
+		{
+			Debug.Log("DROppING*");
+			// Perform box casting to decide whether to drop object held
+			Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
+			boxCenter.y = objectSpawn.transform.position.y;
+
+			float maxDistance = objectSpawn.transform.localScale.z * 0.5f * (1 + epsilon.z);
+			if (!Physics.BoxCast(boxCenter, objectSpawn.transform.localScale, transform.forward,
+				transform.rotation, maxDistance))
+			{
+				Debug.Log("DROPPING!");
+				Vector3 position = transform.position +
+					(1f + epsilon.x) * transform.forward * 0.5f * (transform.localScale.z + objectSpawn.transform.localScale.z);
+				position.y = transform.position.y - transform.localScale.y / 2f + objectSpawn.transform.localScale.y / 2f;
+				GameObject.Instantiate(objectSpawn, position, transform.rotation);
+
+				if (state == PlayerState.HasFuel) gasCanHeld.SetActive(false);
+				else if (state == PlayerState.HasHay) hayHeld.SetActive(false);
+				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
+				else Debug.Log("Player::DropObject: Uh oh problem");
+
+				state = PlayerState.Empty;
+
+				return true;
+			}
+			else
+			{
+				Debug.Log("Cannot drop object here because there's an obstacle");
+			}
+		}
+		return false;
+	}
 
     /* Player and fuel station must be on the same team for the player to get fuel from the station*/
     private bool GetFuelFromStation(FuelStation fuelStation) { 
@@ -225,6 +273,31 @@ public class Player : ControllableObject
 		}
 		return false;
 	} 
+
+	private bool InteractOnceWithHay(GameObject hayGO)
+	{
+		if (state == PlayerState.Empty)
+		{
+			state = PlayerState.HasHay;
+			hayHeld.SetActive(true);
+			Destroy(hayGO);
+			return true;
+		}
+		return false;
+	}
+
+	private bool InteractOnceWithGasCan(GameObject gasCanGO)
+	{
+
+		if (state == PlayerState.Empty)
+		{
+			state = PlayerState.HasFuel;
+			gasCanHeld.SetActive(true);
+			Destroy(gasCanGO);
+			return true;
+		}
+		return false;
+	}
 
     // Handle give hay & take bale
     private bool InteractOnceWithBarn(Barn barn)

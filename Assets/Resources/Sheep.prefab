@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4027718266504466823}
   m_Layer: 0
   m_Name: Sheep
-  m_TagString: Untagged
+  m_TagString: Animal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,6 +134,9 @@ MonoBehaviour:
   currentPos: {x: 0, y: 0}
   normal: {fileID: 2100000, guid: d5b08af45b43ff847a531c6ba80fff8d, type: 2}
   highlighted: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
+  epsilonDistanceOffset: 0.00001
+  isFollowingPlayer: 0
+  playerFollowing: {fileID: 0}
 --- !u!1001 &431079359200503604
 PrefabInstance:
   m_ObjectHideFlags: 0
