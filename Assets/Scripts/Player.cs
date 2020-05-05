@@ -37,10 +37,6 @@ public class Player : ControllableObject
 	public AudioClip refillFuelAC;
 	public float refillFuelVolume;
 	AudioSource refillFuelAS;
-	
-	// OBJECTS HELD -------------------
-	public GameObject gasCanHeld;
-	public GameObject hayHeld;
 
 	// OBJECTS SPAWNING -------------------
 	public GameObject gasCanSpawn;
@@ -76,15 +72,9 @@ public class Player : ControllableObject
 		animator = GetComponent<Animator>();
         progressBar.SetActive(false);
         speed = 4f;
-		SetupObjectHeld();
 		SetupSound();
     }
 	
-	void SetupObjectHeld()
-	{
-		gasCanHeld.SetActive(false);
-		hayHeld.SetActive(false);
-	}
 	void SetupSound()
 	{
 		hayInteractionAS = gameObject.AddComponent<AudioSource>();
@@ -237,8 +227,8 @@ public class Player : ControllableObject
 				position.y = transform.position.y - transform.localScale.y / 2f + objectSpawn.transform.localScale.y / 2f;
 				GameObject.Instantiate(objectSpawn, position, transform.rotation);
 
-				if (state == PlayerState.HasFuel) gasCanHeld.SetActive(false);
-				else if (state == PlayerState.HasHay) hayHeld.SetActive(false);
+				if (state == PlayerState.HasFuel) Debug.Log("TODO::DROP FUEL");
+				else if (state == PlayerState.HasHay) Debug.Log("TODO::DROP HAY");
 				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
@@ -260,7 +250,6 @@ public class Player : ControllableObject
 		{
 			state = PlayerState.HasFuel;
 			getFuelAS.Play();
-			gasCanHeld.SetActive(true);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			return true;
 		}
@@ -272,7 +261,6 @@ public class Player : ControllableObject
 		if (state == PlayerState.Empty)
 		{
 			state = PlayerState.HasHay;
-			hayHeld.SetActive(true);
 			Destroy(hayGO);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			return true;
@@ -286,7 +274,6 @@ public class Player : ControllableObject
 		if (state == PlayerState.Empty)
 		{
 			state = PlayerState.HasFuel;
-			gasCanHeld.SetActive(true);
 			Destroy(gasCanGO);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			return true;
@@ -302,7 +289,6 @@ public class Player : ControllableObject
 			hayInteractionAS.Play();
             barn.StartProcessingHay();
             state = PlayerState.Empty;
-			hayHeld.SetActive(false);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			return true;
         }
@@ -437,7 +423,6 @@ public class Player : ControllableObject
             state = PlayerState.Empty;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			tractor.RefillFuel();
-			gasCanHeld.SetActive(false);
 			return true;
         } else if (state == PlayerState.Empty)
         {
@@ -451,7 +436,6 @@ public class Player : ControllableObject
         {
 			hayInteractionAS.Play();
             state = PlayerState.HasHay;
-			hayHeld.SetActive(true);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			return true; 
         }

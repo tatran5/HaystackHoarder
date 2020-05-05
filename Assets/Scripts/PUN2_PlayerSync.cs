@@ -23,6 +23,11 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	AudioSource hayInteractionAS;
 	// AUDIO SETUP END ----------------
 
+	// OBJECT HOLDING SETUP -----------
+	public GameObject hayHeld;
+	public GameObject fuelHeld;
+	public GameObject baleHeld;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -187,19 +192,46 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		if (state == 0)
 		{
 			target.gameObject.GetComponent<Player>().state = PlayerState.Empty; //PlayerState.Empty
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
+			photonView.RPC("displayBale", RpcTarget.AllViaServer, viewID, false);
+			photonView.RPC("displayFuel", RpcTarget.AllViaServer, viewID, false);
 		}
 		else if (state == 1)
 		{
 			target.gameObject.GetComponent<Player>().state = PlayerState.HasHay;//PlayerState.HasHay
+			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);
 		}
 		else if (state == 2)
 		{
 			target.gameObject.GetComponent<Player>().state = PlayerState.HasBale;//PlayerState.HasBale
+			photonView.RPC("displayBale", RpcTarget.AllViaServer, viewID, true);
 		}
 		else if (state == 3)
 		{
 			target.gameObject.GetComponent<Player>().state = PlayerState.HasFuel;//PlayerState.HasFuel
+			photonView.RPC("displayFuel", RpcTarget.AllViaServer, viewID, true);
 		}
+	}
+
+	[PunRPC]
+	public void displayBale(int viewID, bool active)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_PlayerSync>().baleHeld.SetActive(active);
+	}
+
+	[PunRPC]
+	public void displayHay(int viewID, bool active)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_PlayerSync>().hayHeld.SetActive(active);
+	}
+
+	[PunRPC]
+	public void displayFuel(int viewID, bool active)
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<PUN2_PlayerSync>().fuelHeld.SetActive(active);
 	}
 
 	[PunRPC]
