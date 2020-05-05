@@ -5,18 +5,35 @@ using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
-	public static float timeLeft = 420f; //7 minute
+    public Image endScreenImage;
+    public Text[] endScreenFixedText;
+
+    public static float timeLeft = 10f; //7 minute
     public Text textTimeLeft;
 
     float lastSecond = 420f;
-    public int scoreTickTimer = 0;
-    public int scoreTickLength = 4;   // count points every four seconds.
-    public int scorePlayer1 = 0;
-    public int scorePlayer2 = 0;
-    public Text textScorePlayer1;
-    public Text textScorePlayer2;
+    int scoreTickTimer = 0;
+    int scoreTickLength = 4;   // count points every four seconds.
+    int timeScorePlayer1 = 0;
+    int timeScorePlayer2 = 0;
+    public Text textTimeScorePlayer1;
+    public Text textTimeScorePlayer2;
 
-	/* Grid is represented by [row][column].
+    public Text textControls;
+
+    public Text textTimeFinalScorePlayer1;
+    public Text textTimeFinalScorePlayer2;
+    public Text textBonusScorePlayer1;
+    public Text textBonusScorePlayer2;
+    
+    public Text textTotalScorePlayer1;
+    public Text textTotalScorePlayer2;
+
+    public Text textWinner;
+
+    bool gameEnd = false;
+
+    /* Grid is represented by [row][column].
      * The cell (0, 0) is represented at the bottom left corner of the map,
      * with the (width - 1, height -1) cell at the top right corner.
      * A cell mapGrid[i][j] can be accessed by doing mapGrid[gridSize.x * i + j]
@@ -24,7 +41,7 @@ public class Global : MonoBehaviour
      * This also assumes that the given map size dimensions are perfectly proportional
      * to the grid's size, such that the cells are square. */
 
-	public Vector2 mapSize;      // world space length of environment
+    public Vector2 mapSize;      // world space length of environment
 	public Vector2Int gridSize;  // the number of cells along each side of the grid mapped to the environment
 	public Vector2 mapCenter;    // world space position of the map's center
 	Vector2 mapBottomLeftCorner; // world space position of the bottom left corner of cell (0, 0)
@@ -134,9 +151,11 @@ public class Global : MonoBehaviour
         return farthestIndex;
     }
 
-    public void grid_setCellsTrue(int[] indices) {
+    public void grid_setCellsTrue(int[] indices)
+    {
         foreach (int i in indices) {
-            if (i >= 0) {
+            if (i >= 0)
+            {
                 grid[i] = true;
             }
         }
@@ -271,6 +290,8 @@ public class Global : MonoBehaviour
         foreach (Animal a in animalArray) {
             animals.Add(a);
         }
+
+        ToggleGameText();
     }
 
     void MapFences() {
@@ -329,7 +350,12 @@ public class Global : MonoBehaviour
     {
         timeLeft -= Time.deltaTime;
 
-        if (timeLeft <= 0) textTimeLeft.text = "00:00";
+        if (timeLeft <= 0) {
+            textTimeLeft.text = "00:00";
+            if (!gameEnd) {
+                EndGame();
+            }
+        }
         
         float min = Mathf.Floor(timeLeft / 60);
         float sec = Mathf.RoundToInt(timeLeft % 60);
@@ -380,48 +406,135 @@ public class Global : MonoBehaviour
                 }
 
                 // Determine where score goes
-                if (playerNumber == 1)
-                {
-                    scorePlayer1 += points;
-                    textScorePlayer1.text = "Player 1 Score: " + scorePlayer1;
-                }
-                else if(playerNumber == 2)
-                {
-                    scorePlayer2 += points;
-                    textScorePlayer2.text = "Player 2 Score: " + scorePlayer2;
+                switch (playerNumber) {
+                    case 1:
+                        timeScorePlayer1 += points;
+                        textTimeScorePlayer1.text = "Player 1 Score: " + timeScorePlayer1;
+                        break;
+                    case 2:
+                        timeScorePlayer2 += points;
+                        textTimeScorePlayer2.text = "Player 2 Score: " + timeScorePlayer2;
+                        break;
                 }
             }
         }
     }
 
-    // Use mapSize 14 x 8, gridSize 7 x 4, map center 0 , 0
-    private void Test() {
-        /* Test print statements*/
-        Debug.Log(mapBottomLeftCorner);
-        Debug.Log(cellLength);
-        Debug.Log("Cell coords of index 25: should be (4, 3), got " + grid_getCoordsOfCellIndex(25));
-        Debug.Log("Cell index of coords (5, 2): should be 19, got " + grid_getCellIndexOfCoords(new Vector2Int(5, 2)));
-        Debug.Log("Cell coords of position (-5.5, -0.5): should be (0, 1), got " + grid_getCellCoordsOfPos(new Vector2(-5.5f, -0.5f)));
-        Debug.Log("Cell coords of position (1.2, 1): should be (4, 2), got" + grid_getCellCoordsOfPos(new Vector2(1.2f, 1.0f)));
-        Debug.Log("Cell coords of position (-3.1, 3): should be 22, got " + grid_getCellIndexOfPos(new Vector2(-3.1f, 3.0f)));
-        Debug.Log("Cell coords of position (4.2, -1.04): should be 12, got " + grid_getCellIndexOfPos(new Vector2(4.2f, -1.04f)));
-        Debug.Log("Center of cell 17: " + grid_getCenterOfCell(17));
-        Debug.Log("Raycast from (0.0, 1.0) in direction (-1.0, 0.0): " + grid_raycastFromPoint(new Vector2(0.0f, 1.0f),
-                                                                                              new Vector2(-1.0f, 0.0f)));
-        Debug.Log("Raycast from (-6.5, -1.0) in direction (1.0, 0.0): " + grid_raycastFromPoint(new Vector2(-6.5f, -1.0f),
-                                                                                              new Vector2(1.0f, 0.0f)));
-        Debug.Log("Raycast from (-4.5, 3.0) in direction (0.0, 1.0): " + grid_raycastFromPoint(new Vector2(-4.5f, 3.0f),
-                                                                                              new Vector2(0.0f, 1.0f)));
-        Debug.Log("Raycast from (-4.0, 3.0) in direction (1.0, -1.0): " + grid_raycastFromPoint(new Vector2(-4.0f, 3.0f),
-                                                                                              new Vector2(1.0f, -1.0f)));
-        grid[9] = false;
-        grid[10] = false;
+    private void EndGame() {
+        gameEnd = true;
+        ToggleEndText();
+        CalculateScores();
+    }
 
-        Debug.Log("Raycast from (-6.5, -1.0) in direction (1.0, 0.0) with blockage: "
-                    + grid_raycastFromPoint(new Vector2(-6.5f, -1.0f), new Vector2(1.0f, 0.0f)));
+    private void CalculateScores()
+    {
+        int timeFinalScore1 = timeScorePlayer1;
+        int timeFinalScore2 = timeScorePlayer2;
+        textTimeFinalScorePlayer1.text = timeFinalScore1.ToString();
+        textTimeFinalScorePlayer2.text = timeFinalScore2.ToString();
 
-        Debug.Log("Raycast from (-4.0, 3.0) in direction (1.0, -1.0) with blockage: "
-                    + grid_raycastFromPoint(new Vector2(-4.0f, 3.0f), new Vector2(1.0f, -1.0f)));
+        int bonusScorePlayer1 = 0;
+        int bonusScorePlayer2 = 0;
+
+        // calculates bonus score
+        for (int i = 0; i < animals.Count; i++)
+        {
+            int playerNumber = animals[i].penNumber;
+            float feedMeter = animals[i].feedMeter;
+
+            int points = 0;
+
+            // Determine score
+            if (feedMeter >= 90f)
+            {
+                points = 60;
+            }
+            else if (feedMeter >= 70f)
+            {
+                points = 40;
+            }
+            else if (feedMeter >= 50f)
+            {
+                points = 20;
+            }
+
+            // Determine where score goes
+            switch (playerNumber)
+            {
+                case 1:
+                    bonusScorePlayer1 += points;
+                    break;
+                case 2:
+                    bonusScorePlayer2 += points;
+                    break;
+            }
+        }
+        
+        textBonusScorePlayer1.text = bonusScorePlayer1.ToString();
+        textBonusScorePlayer2.text = bonusScorePlayer2.ToString();
+
+        int finalScorePlayer1 = timeFinalScore1 + bonusScorePlayer1;
+        int finalScorePlayer2 = timeFinalScore2 + bonusScorePlayer2;
+
+        textTotalScorePlayer1.text = finalScorePlayer1.ToString();
+        textTotalScorePlayer2.text = finalScorePlayer2.ToString();
+
+        if (finalScorePlayer1 > finalScorePlayer2)
+        {
+            textWinner.text = "Player 1 wins!";
+        }
+        else if (finalScorePlayer2 > finalScorePlayer1)
+        {
+            textWinner.text = "Player 2 wins!";
+        }
+        else {
+            textWinner.text = "It's a tie!";
+        }
+
+    }
+
+    private void ToggleGameText()
+    {
+        textTimeScorePlayer1.enabled = true;
+        textTimeScorePlayer2.enabled = true;
+        textTimeLeft.enabled = true;
+        textControls.enabled = true;
+
+        foreach (Text t in endScreenFixedText) {
+            t.enabled = false;
+        }
+        
+        textTimeFinalScorePlayer1.enabled = false;
+        textTimeFinalScorePlayer2.enabled = false;
+        textBonusScorePlayer1.enabled = false;
+        textBonusScorePlayer2.enabled = false;
+        textTotalScorePlayer1.enabled = false;
+        textTotalScorePlayer2.enabled = false;
+        textWinner.enabled = false;
+
+        endScreenImage.enabled = false;
+    }
+
+    private void ToggleEndText() {
+        textTimeScorePlayer1.enabled = false;
+        textTimeScorePlayer2.enabled = false;
+        textTimeLeft.enabled = false;
+        textControls.enabled = false;
+
+        foreach (Text t in endScreenFixedText)
+        {
+            t.enabled = true;
+        }
+
+        textTimeFinalScorePlayer1.enabled = true;
+        textTimeFinalScorePlayer2.enabled = true;
+        textBonusScorePlayer1.enabled = true;
+        textBonusScorePlayer2.enabled = true;
+        textTotalScorePlayer1.enabled = true;
+        textTotalScorePlayer2.enabled = true;
+        textWinner.enabled = true;
+
+        endScreenImage.enabled = true;
     }
 }
 

@@ -63,9 +63,9 @@ public class Animal : MonoBehaviour
 		gameObject.GetComponent<MeshRenderer>().material = normal;
 		globalObj = GameObject.Find("GlobalObject").GetComponent<Global>();
 
-		feedMeter = 65.0f;
+		feedMeter = 50.0f;
 
-		feedTickLength = 200;
+		feedTickLength = 150;
 		checkFencesTickLength = 35;
 
 		feedTimer = 0;

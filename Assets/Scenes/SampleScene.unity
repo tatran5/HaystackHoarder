@@ -322,6 +322,11 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 7161541833001216739, guid: 5b1459a6a10f1dc42b894dc7a8b48654,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b1459a6a10f1dc42b894dc7a8b48654, type: 3}
 --- !u!1 &705507993
@@ -492,6 +497,11 @@ PrefabInstance:
         type: 3}
       propertyPath: viewIdField
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161541833001216739, guid: 5b1459a6a10f1dc42b894dc7a8b48654,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b1459a6a10f1dc42b894dc7a8b48654, type: 3}
@@ -867,6 +877,11 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7161541833001216739, guid: 5b1459a6a10f1dc42b894dc7a8b48654,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b1459a6a10f1dc42b894dc7a8b48654, type: 3}
 --- !u!1001 &1212831271
@@ -939,6 +954,11 @@ PrefabInstance:
     - target: {fileID: 6762156937891866054, guid: 4a80253a1bdebdd4eb4eb1d14bc8ffd3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255080785857466262, guid: 4a80253a1bdebdd4eb4eb1d14bc8ffd3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1069,6 +1089,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1485692553411859133, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
+        type: 3}
+      propertyPath: viewIdField
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1623598160873145503, guid: 78ec54eee4bc53f43b29f4e2cae37b98,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1199,6 +1224,76 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 471883747142307480, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Text
+      value: Time's up!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847728153806258738, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: GameScorePlayer2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2756875936568352976, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 362
+      objectReference: {fileID: 0}
+    - target: {fileID: 2987185713864092383, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194986217384263862, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Controls
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248512424331678243, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248512424331678243, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -312
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248512424331678243, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406827644849060048, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Text
+      value: Points From Time Fed
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406827644849060048, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6254733548645539046, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: GameScorePlayer1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763496041244279657, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: TimeLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 7557765900569412545, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: TimePointsTitle1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260894581228606246, guid: ab1012ae6d8d398409f79e848f255d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: TimeUp
+      objectReference: {fileID: 0}
     - target: {fileID: 8865213389816684388, guid: ab1012ae6d8d398409f79e848f255d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1411,6 +1506,11 @@ PrefabInstance:
         type: 3}
       propertyPath: viewIdField
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161541833001216739, guid: 5b1459a6a10f1dc42b894dc7a8b48654,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b1459a6a10f1dc42b894dc7a8b48654, type: 3}
