@@ -485,6 +485,7 @@ MonoBehaviour:
   refillFuelVolume: 0.05
   gasCanHeld: {fileID: 1963243234435912081}
   hayHeld: {fileID: 9106025884320755806}
+  animalFollowing: {fileID: 0}
   testHasHayMaterial: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
   testPlayerMaterial: {fileID: 2100000, guid: 565a7ebc3e0fe2f4cb28b94107497a50, type: 2}
   tractorColor: {fileID: 2100000, guid: 5b48453d64f717d4295b16ec1423bccb, type: 2}

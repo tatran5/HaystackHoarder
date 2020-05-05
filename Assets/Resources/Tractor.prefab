@@ -441,7 +441,7 @@ MonoBehaviour:
   speed: 7
   team: 0
   timeMoveMax: 5
-  turnSpeed: 80
+  turnSpeed: 200
   playerPrefab: {fileID: 2073338333761812175, guid: 6d00710b193b89d41bd3325268d9bf18,
     type: 3}
   timeMove: 0

@@ -115,17 +115,17 @@ public class Animal : MonoBehaviour
 			Color curr = gameObject.GetComponent<MeshRenderer>().material.color;
 			gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter/50f) * curr.r, (feedMeter / 50f) * curr.g, (feedMeter / 50f) * curr.b, 1.0f));
 		}
-	}
 
-	void FixedUpdate()
-	{
+
 		if (isFollowingPlayer)
 		{
+			float positionY = transform.position.y;
 			transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
 				playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
+			transform.position = new Vector3(transform.position.x, positionY, transform.position.z);
 			transform.rotation = playerFollowing.transform.rotation;
 		}
-		else 
+		else
 		{
 			currentPos.x = gameObject.transform.position.x;
 			currentPos.y = gameObject.transform.position.z;
@@ -158,13 +158,68 @@ public class Animal : MonoBehaviour
 				GetWanderDirection();
 			}
 			gameObject.transform.position += targetDirection * speed * Time.deltaTime;
-		} 
+		}
+	}
+
+	void FixedUpdate()
+	{
+		//if (isFollowingPlayer)
+		//{
+		//	float positionY = 2;
+		//	transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
+		//		playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
+		//	Debug.Log(positionY);
+		//	transform.position.Set(transform.position.x, positionY, transform.position.z);
+		//	transform.rotation = playerFollowing.transform.rotation;
+		//}
+		//else 
+		//{
+		//	currentPos.x = gameObject.transform.position.x;
+		//	currentPos.y = gameObject.transform.position.z;
+
+		//	if (PositionEquality(targetPoint, currentPos))
+		//	{
+		//		targetDirection = Vector3.zero;
+		//	}
+
+		//	if (penNumber > 0)
+		//	{
+		//		checkFencesTimer += 1;
+		//		if (checkFencesTimer >= checkFencesTickLength)
+		//		{
+		//			checkFencesTimer = 0;
+
+		//			int fenceIndex = CheckForEscape();
+		//			if (fenceIndex > 0)
+		//			{
+		//				GetEscapeDirection(fenceIndex);
+		//			}
+		//			else if (targetDirection == Vector3.zero)
+		//			{
+		//				//GetIdleDirection();s
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		GetWanderDirection();
+		//	}
+		//	gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+		//} 
 	}
 	
 	public void SetFollowingPlayer(Player player)
 	{
 		isFollowingPlayer = true;
 		playerFollowing = player;
+	}
+
+	public void SetStopFollowingPlayer()
+	{
+		Transform pTrans = playerFollowing.transform;
+		isFollowingPlayer = false;
+		transform.position = pTrans.position + (1f + epsilonDistanceOffset) * pTrans.forward *
+			0.5f * (transform.localScale.z + pTrans.localScale.z);
 	}
 
 	// If the animal collides with something dynamic (a constantly changing

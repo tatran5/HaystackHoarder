@@ -19,7 +19,7 @@ public class Player : ControllableObject
     private Quaternion targetRotation;
     public Animator animator;
 
-	// SOUND VARIABLES START HERE ------------------
+	// SOUND VARIABLES ------------------
 	public AudioClip hayInteractionAC;
 	public float hayInteractionVolume;
 	AudioSource hayInteractionAS;
@@ -31,12 +31,12 @@ public class Player : ControllableObject
 	public AudioClip refillFuelAC;
 	public float refillFuelVolume;
 	AudioSource refillFuelAS;
-	// SOUND VARIABLES END HERE ------------------
-
-	// OBJECTS HELD START HERE -------------------
+	
+	// OBJECTS HELD -------------------
 	public GameObject gasCanHeld;
 	public GameObject hayHeld;
-	// OBJECTS HELD END HERE -------------------
+
+	public Animal animalFollowing = null;
 
 	// TODO: Delete variables once finish testing
 	private float testProgress = 0f;
@@ -53,7 +53,7 @@ public class Player : ControllableObject
 
 	GameObject refFence;
 
-	// Start is called before the first frame update
+	// Start is called before the first frame updates
 	void Start()
     {
 		animator = GetComponent<Animator>();
@@ -170,6 +170,7 @@ public class Player : ControllableObject
 
 	public override void InteractOnce()
     {
+		bool interacted = false;
         Collider[] colliders = Physics.OverlapBox(transform.position,
         transform.localScale + epsilon, transform.rotation);
         for (int i = 0; i < colliders.Length; i++)
@@ -180,12 +181,37 @@ public class Player : ControllableObject
 				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())) ||
 				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())))
 			{
+				interacted = true;
 				break;
 			}
         }
-		
-		// Drop whatever object that the player has in front of the player
-		
+
+		// If the player has not interacted with any other object, 
+		// drop whatever object that the player has in front of the player
+		if (!interacted)
+		{
+			if (animalFollowing != null)
+			{
+				// Perform box casting to decide whether to drop animal
+				Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
+				boxCenter.y = animalFollowing.transform.position.y;
+
+				float maxDistance = animalFollowing.transform.localScale.z * 0.5f * (1 + epsilon.z);
+				if (!Physics.BoxCast(boxCenter, animalFollowing.transform.localScale, transform.forward,
+					transform.rotation, maxDistance))
+				{
+					animalFollowing.SetStopFollowingPlayer();
+					animalFollowing = null;
+				}
+				else
+				{
+					Debug.Log("Cannot drop animal here because there's an obstacle");
+				}
+			} else if (state != PlayerState.Empty)
+			{
+
+			}
+		}
     }
 
     /* Player and fuel station must be on the same team for the player to get fuel from the station*/
@@ -222,9 +248,10 @@ public class Player : ControllableObject
   
 	public bool InteractOnceWithAnimal(Animal animal)
 	{
-		if (state != PlayerState.HasBale) // if player holds bale, feed animal. Otherwise, bring animal back inside fences
+		if (state != PlayerState.HasBale && animalFollowing ==null) // if player holds bale, feed animal. Otherwise, bring animal back inside fences
 		{
-			animal.SetFollowingPlayer(this);
+			animalFollowing = animal;
+			animalFollowing.SetFollowingPlayer(this);
 			return true;
 		}
 		return false;
