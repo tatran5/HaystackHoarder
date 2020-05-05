@@ -115,6 +115,11 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 					{
 						tract.callRemoveFuel(collidedObject.GetComponent<PhotonView>().ViewID);
 					}
+				} else if (collidedObject.tag == "Player")
+				{
+					PUN2_PlayerSync otherPlayerS = (PUN2_PlayerSync)collidedObject.GetComponent<PUN2_PlayerSync>();
+					Player otherPlayer = (Player)gameObject.GetComponent<Player>();
+					Debug.Log("STOP PLAYER HAVIVNG ANIMAL FOLLOWING SOMEHOW");
 				}
 
 			}

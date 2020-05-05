@@ -499,8 +499,8 @@ public class Player : ControllableObject
 			&& Input.GetKeyDown(kbInteract))
 		{
 			//Debug.Log("CEASE AND DESIST!");
-
-			PlayerState state = other.gameObject.GetComponent<Player>().state;
+			Player otherPlayer = other.gameObject.GetComponent<Player>();
+			PlayerState state = otherPlayer.state;
 
 
 			if (state == PlayerState.Empty)
@@ -515,7 +515,7 @@ public class Player : ControllableObject
 			{
 				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 2);
 			}
-			else
+			else 
 			{
 				gameObject.GetComponent<PUN2_PlayerSync>().callCease(other.gameObject.GetComponent<PhotonView>().ViewID, 3);
 			}
