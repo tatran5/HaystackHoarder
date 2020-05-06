@@ -106,6 +106,10 @@ public class Animal : MonoBehaviour
 		if (feedTimer >= feedTickLength)
 		{
 			feedMeter -= 1.0f;
+            if (feedMeter < 0f)
+			{
+				feedMeter = 0f;
+			}
 			feedTimer = 0;
 		}
 
@@ -117,7 +121,7 @@ public class Animal : MonoBehaviour
 		}
 
 
-		if (isFollowingPlayer)
+		if (isFollowingPlayer && playerFollowing != null)
 		{
 			float positionY = transform.position.y;
 			transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
@@ -212,14 +216,19 @@ public class Animal : MonoBehaviour
 	{
 		isFollowingPlayer = true;
 		playerFollowing = player;
+		Debug.Log("Picking up chickies");
 	}
 
 	public void SetStopFollowingPlayer()
 	{
+		Debug.Log("in stop following player...");
 		Transform pTrans = playerFollowing.transform;
 		isFollowingPlayer = false;
+		playerFollowing = null;
+		Debug.Log("hello?? playerFollowing is " + (playerFollowing == null));
 		transform.position = pTrans.position + (1f + epsilonDistanceOffset) * pTrans.forward *
 			0.5f * (transform.localScale.z + pTrans.localScale.z);
+		Debug.Log("placing the chickies");
 	}
 
 	// If the animal collides with something dynamic (a constantly changing
