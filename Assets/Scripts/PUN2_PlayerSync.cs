@@ -139,7 +139,9 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		}
 	}
 
-	public void callStopAnimalFollowing() { }
+	public void callStopAnimalFollowingOther(int playerID) {
+		photonView.RPC("stopAnimalFollowingOther", RpcTarget.All, playerID);
+	}
 
 	public void callCease(int opponentID, int state)
 	{
@@ -154,6 +156,14 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public void callChangePlayerActions(int viewID, float timeSinceCease, bool action)
 	{
 		photonView.RPC("changePlayerActions", RpcTarget.All, viewID, timeSinceCease, action);
+	}
+
+	[PunRPC]
+	void stopAnimalFollowingOther(int playerID)
+	{
+		PhotonView targetPlayer = PhotonView.Find(playerID);
+		targetPlayer.gameObject.GetComponent<Player>().animalFollowing.isFollowingPlayer = false;
+		targetPlayer.gameObject.GetComponent<Player>().animalFollowing = null;
 	}
 
 	[PunRPC]

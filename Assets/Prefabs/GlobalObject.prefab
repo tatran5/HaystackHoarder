@@ -1736,7 +1736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundAC: {fileID: 8300000, guid: 4b3add4ef07b0604796bccf0ccd4ca61, type: 3}
-  backgroundVolume: 0.04
+  backgroundVolume: 0.005
   endScreenImage: {fileID: 7496745384883718930}
   endScreenFixedText:
   - {fileID: 471883747142307480}
@@ -1746,6 +1746,7 @@ MonoBehaviour:
   - {fileID: 2664256725401981257}
   - {fileID: 7960253196572439848}
   - {fileID: 5476066862457469173}
+  timeLeft: 420
   textTimeLeft: {fileID: 6763496041244279659}
   textTimeScorePlayer1: {fileID: 5781809136914593355}
   textTimeScorePlayer2: {fileID: 8976516828204580124}

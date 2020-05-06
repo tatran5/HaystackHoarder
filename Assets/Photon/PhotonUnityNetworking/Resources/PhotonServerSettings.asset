@@ -58,6 +58,8 @@ MonoBehaviour:
   - displayHay
   - displayFuel
   - displayBale
+  - stopAnimalFollowing
+  - stopAnimalFollowingOther
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

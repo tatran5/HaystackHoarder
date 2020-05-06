@@ -12,7 +12,7 @@ public class Global : MonoBehaviour
     public Image endScreenImage;
     public Text[] endScreenFixedText;
 
-    public static float timeLeft = 10f; //7 minute
+    public float timeLeft = 420f; //7 minute
     public Text textTimeLeft;
 
     float lastSecond = 420f;

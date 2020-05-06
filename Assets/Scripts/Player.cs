@@ -257,9 +257,15 @@ public class Player : ControllableObject
 		return false;
 	} 
 
-	private bool InteractOnceWithPlayer(GameObject collidedObject)
+	private bool InteractOnceWithPlayer(GameObject otherPlayerGO)
 	{
-		Player otherPlayer = collidedObject.GetComponent<Player>();
+		Player otherPlayer = otherPlayerGO.GetComponent<Player>();
+		if (otherPlayer.animalFollowing != null)
+		{
+			otherPlayer.animalFollowing.isFollowingPlayer = false;
+			otherPlayer.animalFollowing = null;
+			return true;
+		}
 
 		return false;
 	}
