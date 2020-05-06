@@ -303,17 +303,27 @@ PrefabInstance:
     - target: {fileID: 2756875936568352976, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 416
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5853858758956291893, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 416
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6763496041244279658, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 416
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763496042353822138, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 6763496042353822138, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8865213389816684388, guid: 1c9ab7f1a47c11c44bd6d8ea7a42d07e,
         type: 3}

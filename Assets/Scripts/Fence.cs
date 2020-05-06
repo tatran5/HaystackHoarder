@@ -17,7 +17,7 @@ public class Fence : MonoBehaviour
 												// that this fence occupies, which
 												// s calculated in Global's Start().
 
-	public int penNumber;       // Corresponds with player number, used for
+	public int team;       // Corresponds with player number, used for
 								// tracking pen fences. Ranges from 1 - 4.
 	public float totalTimeToBreak;
 	public float timeToBreak = 0f;
@@ -25,8 +25,6 @@ public class Fence : MonoBehaviour
 	public float timeToFix = 0f;
 
 	public bool fixing;
-
-	public int team;
 
 	// Start is called before the first frame update
 	void Start()
@@ -66,13 +64,25 @@ public class Fence : MonoBehaviour
 		broken = true;
 		globalObj.grid_setCellsTrue(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Break();
+        for (int i = 1; i <= 3; i++) {
+            GameObject mesh = gameObject.transform.GetChild(i).gameObject;
+            MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
+            mr.enabled = false;
+        }
 	}
 
 	public void FixFence()
 	{
+        broken = false;
 		globalObj.grid_setCellsFalse(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Fix(broken);
-	}
+        for (int i = 1; i < 3; i++)
+        {
+            GameObject mesh = gameObject.transform.GetChild(i).gameObject;
+            MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
+            mr.enabled = true;
+        }
+    }
 
 	public void SetOccupiedCells(List<int> indices)
 	{
@@ -103,4 +113,83 @@ public class Fence : MonoBehaviour
 
 		return new Vector2[] { endpoint1, endpoint2 };
 	}
+}
+
+public class Pen {
+    public int teamNumber;
+    public List<Fence> fences;
+    Vector2 minCorner; // bottom left
+    Vector2 maxCorner; // top right
+
+    // not enough time to do this, but ideally would
+    // calculate automatically
+    public void CalculateCorners() {
+        Vector2 minValues = Vector2.zero;
+        Vector2 maxValues = Vector2.zero;
+
+        if (fences.Count == 0) {
+            return;
+        }
+
+
+        Vector2[] firstFenceEndpts = fences[0].GetEndpoints();
+        
+        minValues = firstFenceEndpts[0];
+        maxValues = firstFenceEndpts[1];
+
+        bool verticalFound = fences[0].vertical;
+
+        for (int i = 1; i < fences.Count; i++) {
+            if (fences[i].vertical && !verticalFound
+                || !fences[i].vertical && verticalFound) {
+                Vector2[] endpts = fences[i].GetEndpoints();
+
+                if (minValues.x > endpts[0].x)
+                {
+                    minValues.x = endpts[0].x;
+                }
+
+                if (maxValues.x < endpts[1].x)
+                {
+                    maxValues.x = endpts[1].x;
+                }
+
+                if (minValues.y > endpts[0].y)
+                {
+                    minValues.y = endpts[0].y;
+                }
+
+                if (maxValues.y < endpts[1].y)
+                {
+                    maxValues.y = endpts[1].y;
+                }
+            }
+        }
+        
+        minCorner = minValues;
+        maxCorner = maxValues;
+    }
+
+
+    // Assumes that these corner values have been calculated. 
+    public bool InsidePenArea(GameObject obj) {
+        Vector3 position3D = obj.transform.position;
+        Vector2 position2D = new Vector2(position3D.x, position3D.z);
+        return minCorner.x <= position2D.x && position2D.x <= maxCorner.x
+                && minCorner.y <= position2D.y && position2D.y <= maxCorner.y;
+    }
+
+    public bool FencesIntact() {
+        return GetBrokenFenceIndex() < 0;
+    }
+
+    // returns -1 if fence is intact;
+    public int GetBrokenFenceIndex() {
+        for (int i = 0; i < fences.Count; i++)
+        {
+            if (fences[i].broken) return i;
+        }
+
+        return -1;
+    }
 }

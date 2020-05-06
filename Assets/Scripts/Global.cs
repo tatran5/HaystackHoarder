@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
+    public int numPlayers = 2;
+
     public AudioClip backgroundAC;
     public float backgroundVolume;
     AudioSource backgroundAS;
@@ -23,6 +25,11 @@ public class Global : MonoBehaviour
     public Text textTimeScorePlayer1;
     public Text textTimeScorePlayer2;
 
+    int animalsPlayer1;
+    int animalsPlayer2;
+    public Text textAnimalsPlayer1;
+    public Text textAnimalsPlayer2;
+
     public Text textControls;
 
     public Text textTimeFinalScorePlayer1;
@@ -35,7 +42,7 @@ public class Global : MonoBehaviour
 
     public Text textWinner;
 
-    bool gameEnd = false;
+    bool gameEnd;
 
     /* Grid is represented by [row][column].
      * The cell (0, 0) is represented at the bottom left corner of the map,
@@ -53,6 +60,8 @@ public class Global : MonoBehaviour
     List<bool> grid;
 
     public List<Animal> animals;
+
+    Pen[] pens;
 
     /* ****************
      * GRID HELPER FUNCTIONS 
@@ -288,10 +297,17 @@ public class Global : MonoBehaviour
         backgroundAS.loop = true;
         backgroundAS.Play();
     }
+
+    public Pen GetPlayerPen(int number) {
+        return pens[number - 1];
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        gameEnd = false;
         SetupSound();
+
         grid = new List<bool>(gridSize.x * gridSize.y);
         for (int i = 0; i < gridSize.x * gridSize.y; i++)
         {
@@ -301,25 +317,43 @@ public class Global : MonoBehaviour
         cellLength = mapSize.x / (float)gridSize.x;
         mapBottomLeftCorner = mapCenter - 0.5f * mapSize;
 
+        pens = new Pen[] { new Pen(), new Pen() };
+
+        pens[0].teamNumber = 1;
+        pens[0].fences = new List<Fence>();
+        pens[1].teamNumber = 2;
+        pens[1].fences = new List<Fence>();
+
         // Find all static environment elements and map them on the grid
 
-        MapFences();
+        MapFencesAndPens();
         MapWalls();
-        MapHaystacks();
         MapBuildings();
 
         animals = new List<Animal>();
-
+        animalsPlayer1 = 0;
+        animalsPlayer2 = 0;
         Animal[] animalArray = GameObject.FindObjectsOfType<Animal>();
         foreach (Animal a in animalArray)
         {
             animals.Add(a);
+            switch (a.penNumber) {
+                case 1:
+                    animalsPlayer1 += 1;
+                    break;
+                case 2:
+                    animalsPlayer2 += 1;
+                    break;
+            }
         }
+
+        textAnimalsPlayer1.text = "Animals: " + animalsPlayer1;
+        textAnimalsPlayer2.text = "Animals: " + animalsPlayer2;
 
         ToggleGameText();
     }
 
-    void MapFences()
+    void MapFencesAndPens()
     {
         Fence[] fences = GameObject.FindObjectsOfType<Fence>();
         foreach (Fence f in fences)
@@ -327,7 +361,13 @@ public class Global : MonoBehaviour
             List<int> indices = GetIndicesRectangle(f.gameObject);
             f.SetOccupiedCells(indices);
             grid_setCellsFalse(indices.ToArray());
+            GetPlayerPen(f.team).fences.Add(f);
         }
+
+        foreach (Pen p in pens) {
+            p.CalculateCorners();
+        }
+
     }
 
     void MapWalls()
@@ -533,6 +573,8 @@ public class Global : MonoBehaviour
     {
         textTimeScorePlayer1.enabled = true;
         textTimeScorePlayer2.enabled = true;
+        textAnimalsPlayer1.enabled = true;
+        textAnimalsPlayer2.enabled = true;
         textTimeLeft.enabled = true;
         textControls.enabled = true;
 
@@ -556,6 +598,8 @@ public class Global : MonoBehaviour
     {
         textTimeScorePlayer1.enabled = false;
         textTimeScorePlayer2.enabled = false;
+        textAnimalsPlayer1.enabled = false;
+        textAnimalsPlayer2.enabled = false;
         textTimeLeft.enabled = false;
         textControls.enabled = false;
 
@@ -573,6 +617,35 @@ public class Global : MonoBehaviour
         textWinner.enabled = true;
 
         endScreenImage.enabled = true;
+    }
+
+    public void RemoveAnimal(int player) {
+        switch (player)
+        {
+            case 1:
+                animalsPlayer1 -= 1;
+                textAnimalsPlayer1.text = "Animals: " + animalsPlayer1;
+                break;
+            case 2:
+                animalsPlayer2 -= 1;
+                textAnimalsPlayer2.text = "Animals: " + animalsPlayer2;
+                break;
+        }
+    }
+
+    public void AddAnimal(int player)
+    {
+        switch (player)
+        {
+            case 1:
+                animalsPlayer1 += 1;
+                textAnimalsPlayer1.text = "Animals: " + animalsPlayer1;
+                break;
+            case 2:
+                animalsPlayer2 += 1;
+                textAnimalsPlayer2.text = "Animals: " + animalsPlayer2;
+                break;
+        }
     }
 }
 
