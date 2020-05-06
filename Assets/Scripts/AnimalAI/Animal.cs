@@ -23,9 +23,6 @@ public class Animal : MonoBehaviour
                                 // If the animal is running free, penNumber
                                 // will be set to 0.
 
-    int checkFencesTickLength;
-    int checkFencesTimer;
-
     int idleTimer;
     int idleMaxLength;
 
@@ -34,10 +31,8 @@ public class Animal : MonoBehaviour
 
     public Vector2 currentPos;
 
-    int stuckTimer;
-    int stuckTimerTicks;
-    int stuckTimerTickLength;
-    int stuckMaxTicks;
+    float stuckTimer;
+    float stuckTimerSeconds;
 
     public Material normal;
     public Material highlighted;
@@ -75,13 +70,8 @@ public class Animal : MonoBehaviour
         feedTimer = 0;
         feedTickSeconds = 2;
 
-        checkFencesTimer = 0;
-        checkFencesTickLength = 35;
-
         stuckTimer = 0;
-        stuckTimerTicks = 0;
-        stuckTimerTickLength = 100;
-        stuckMaxTicks = 3;
+        stuckTimerSeconds = 5;
 
         targetPoint = Vector2.zero;
         targetDirection = Vector3.zero;
@@ -132,30 +122,20 @@ public class Animal : MonoBehaviour
 
             if (penNumber > 0)
             {
-                checkFencesTimer += 1;
-                if (checkFencesTimer >= checkFencesTickLength)
+                int fenceIndex = CheckForEscape();
+                if (fenceIndex >= 0)
                 {
-                    checkFencesTimer = 0;
-
-                    int fenceIndex = CheckForEscape();
-                    if (fenceIndex >= 0)
-                    {
-                        GetEscapeDirection(fenceIndex);
-                    }
-                    else if (targetDirection == Vector3.zero)
-                    {
-                        //GetIdleDirection();
-                    }
+                    GetEscapeDirection(fenceIndex);
                 }
+                else if (targetDirection == Vector3.zero)
+                {
+                    //GetIdleDirection();
+                 }
+                
             }
             else
             {
-                checkFencesTimer += 1;
-                if (checkFencesTimer >= checkFencesTickLength)
-                {
-                    checkFencesTimer = 0;
-                    GetInsidePenStatus();
-                }
+                GetInsidePenStatus();
                 if (penNumber == 0)
                 {
                     GetWanderDirection();
@@ -212,14 +192,10 @@ public class Animal : MonoBehaviour
     {
         Collider collider = collision.collider;
         if (collider.gameObject.layer == 8) {
-            stuckTimer += 1;
-            if (stuckTimer >= stuckTimerTickLength)
+            stuckTimer += Time.deltaTime;
+            if (stuckTimer >= stuckTimerSeconds)
             {
-                stuckTimerTicks += 1;
-                if (stuckTimerTicks >= stuckMaxTicks)
-                {
-                    targetDirection = Vector3.zero;
-                }
+                targetDirection = Vector3.zero;
             }
         }
     }
@@ -230,7 +206,6 @@ public class Animal : MonoBehaviour
         if (collider.gameObject.layer == 8)
         {
             stuckTimer = 0;
-            stuckTimerTicks = 0;
         }
     }
 

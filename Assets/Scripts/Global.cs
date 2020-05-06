@@ -159,8 +159,6 @@ public class Global : MonoBehaviour
                 farthestPoint = p;
                 farthestIndex = index;
             } else {
-                Debug.Log(grid_getCoordsOfCellIndex(index));
-                Debug.Log("ok thats fair");
                 break;
             }
         }
@@ -180,7 +178,6 @@ public class Global : MonoBehaviour
             if (i >= 0)
             {
                 grid[i] = true;
-                Debug.Log(grid_getCoordsOfCellIndex(i));
             }
         }
     }
@@ -373,7 +370,6 @@ public class Global : MonoBehaviour
         foreach (Pen p in pens) {
             p.CalculateCorners();
         }
-
     }
 
     void MapWalls()
@@ -452,8 +448,9 @@ public class Global : MonoBehaviour
 
         if (scoreTickTimer == scoreTickLength)
         {
-
             scoreTickTimer = 0;
+            int hungryAnimalsP1 = 0;
+            int hungryAnimalsP2 = 0;
 
             for (int i = 0; i < animals.Count; i++)
             {
@@ -483,7 +480,18 @@ public class Global : MonoBehaviour
                 {
                     points = 5;
                 }
-
+                else if (feedMeter <= 0.1f){
+                    switch (playerNumber)
+                    {
+                        case 1:
+                            hungryAnimalsP1 += 1;
+                            break;
+                        case 2:
+                            hungryAnimalsP2 += 1;
+                            break;
+                    }
+                }
+                
                 // Determine where score goes
                 switch (playerNumber)
                 {
@@ -495,10 +503,22 @@ public class Global : MonoBehaviour
                         timeScorePlayer2 += points;
                         textTimeScorePlayer2.text = "Player 2 Score: " + timeScorePlayer2;
                         break;
-                }
+                    }
+            }
+
+            if (hungryAnimalsP1 == animalsPlayer1) {
+                timeScorePlayer1 -= 3;
+                textTimeScorePlayer1.text = "Player 1 Score: " + timeScorePlayer1;
+            }
+
+            if (hungryAnimalsP2 == animalsPlayer2)
+            {
+                timeScorePlayer2 -= 3;
+                textTimeScorePlayer2.text = "Player 2 Score: " + timeScorePlayer2;
             }
         }
     }
+    
 
     private void EndGame()
     {
