@@ -76,7 +76,7 @@ public class Fence : MonoBehaviour
         broken = false;
 		globalObj.grid_setCellsFalse(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Fix(broken);
-        for (int i = 1; i < 3; i++)
+        for (int i = 1; i <= 3; i++)
         {
             GameObject mesh = gameObject.transform.GetChild(i).gameObject;
             MeshRenderer mr = mesh.GetComponent<MeshRenderer>();

@@ -255,12 +255,7 @@ public class Animal : MonoBehaviour
     {
         Pen p = globalObj.GetPlayerPen(penNumber);
         int brokenFence = p.GetBrokenFenceIndex();
-        if (brokenFence >= 0)
-        {
-            return brokenFence;
-        }
-
-        return -1;
+        return brokenFence;
     }
 
     protected void GetEscapeDirection(int index)
@@ -275,7 +270,7 @@ public class Animal : MonoBehaviour
 
         float angleRange = Mathf.Acos(Vector2.Dot(u, v) / (u.magnitude * v.magnitude));
 
-        float angle = Random.Range(-angleRange / 3, angleRange / 3);
+        float angle = Random.Range(-angleRange / 4, angleRange / 4);
 
         Vector2 animalToFence = new Vector2(f.gameObject.transform.position.x,
                                               f.gameObject.transform.position.z)

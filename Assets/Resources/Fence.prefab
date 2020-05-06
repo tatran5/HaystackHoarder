@@ -124,13 +124,12 @@ MonoBehaviour:
   health: 100
   breakTimer: 0
   vertical: 0
-  penNumber: 1
+  team: 0
   totalTimeToBreak: 0
   timeToBreak: 0
   totalTimeToFix: 0
   timeToFix: 0
   fixing: 0
-  team: 0
 --- !u!114 &5145679156512276124
 MonoBehaviour:
   m_ObjectHideFlags: 0

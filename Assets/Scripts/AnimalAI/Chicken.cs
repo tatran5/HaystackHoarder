@@ -19,7 +19,7 @@ public class Chicken : Animal
 
         speed = 2.0f;
         weight = 1.0f;
-        detectionRadius = 2.0f;
+        detectionRadius = 0.5f;
 
     }
 

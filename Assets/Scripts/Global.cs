@@ -158,8 +158,11 @@ public class Global : MonoBehaviour
             {
                 farthestPoint = p;
                 farthestIndex = index;
+            } else {
+                Debug.Log(grid_getCoordsOfCellIndex(index));
+                Debug.Log("ok thats fair");
+                break;
             }
-            else break;
         }
 
         if (farthestIndex < 0 || grid_getCellIndexOfPos(origin) == farthestIndex)
@@ -177,9 +180,12 @@ public class Global : MonoBehaviour
             if (i >= 0)
             {
                 grid[i] = true;
+                Debug.Log(grid_getCoordsOfCellIndex(i));
             }
         }
     }
+
+    int[] indices = new int[] { 105, 145, 185, 225, 265, 305, 345 };
 
     public void grid_setCellsFalse(int[] indices)
     {
@@ -328,7 +334,7 @@ public class Global : MonoBehaviour
 
         MapFencesAndPens();
         MapWalls();
-        MapBuildings();
+        //MapBuildings();
 
         animals = new List<Animal>();
         animalsPlayer1 = 0;
