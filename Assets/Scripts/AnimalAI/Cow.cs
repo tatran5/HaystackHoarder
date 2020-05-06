@@ -20,7 +20,7 @@ public class Cow : Animal
 
         speed = 1.0f;
         weight = 4.0f;
-        
+
         detectionRadius = 8.0f;
     }
 
@@ -47,7 +47,8 @@ public class Cow : Animal
     void GetRunAwayDirection(GameObject[] players)
     {
         Vector2 average = Vector2.zero;
-        for (int i = 0; i < players.Length; i++) {
+        for (int i = 0; i < players.Length; i++)
+        {
             Vector2 playerToAnimal = currentPos - new Vector2(players[i].transform.position.x,
                                                               players[i].transform.position.z);
             average += playerToAnimal;
@@ -63,10 +64,5 @@ public class Cow : Animal
         {
             targetDirection = Vector3.zero;
         }
-    }
-
-    public override AnimalType GetAnimalType()
-    {
-        return AnimalType.Cow;
     }
 }

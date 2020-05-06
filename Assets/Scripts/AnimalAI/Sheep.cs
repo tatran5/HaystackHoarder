@@ -29,7 +29,8 @@ public class Sheep : Animal
         if (targetDirection == Vector3.zero)
         {
             restTimer += 1;
-            if (restTimer >= restMaxTicks) {
+            if (restTimer >= restMaxTicks)
+            {
                 Vector2 currentPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
                 float wanderX = Random.Range(-1.0f, 1.0f);
                 float wanderZ = Random.Range(-1.0f, 1.0f);
@@ -41,14 +42,12 @@ public class Sheep : Animal
                 {
                     targetDirection = Vector3.zero;
                 }
-                else {
+                else
+                {
                     restTimer = 0;
                 }
             }
         }
     }
-    public override AnimalType GetAnimalType()
-    {
-        return AnimalType.Sheep;
-    }
+
 }

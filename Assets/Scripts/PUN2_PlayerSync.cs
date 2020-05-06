@@ -37,10 +37,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		{
 			//Player is local
 			Player p = (Player)gameObject.GetComponent<Player>();
-            if (PhotonNetwork.LocalPlayer.NickName == "Player 1")
+			if (PhotonNetwork.LocalPlayer.NickName == "Player 1")
 			{
 				p.team = 1;
-			    gameObject.transform.position = GameObject.Find("P1SpawnPoint").transform.position;
+				gameObject.transform.position = GameObject.Find("P1SpawnPoint").transform.position;
 			} else if (PhotonNetwork.LocalPlayer.NickName == "Player 2")
 			{
 				p.team = 2;
@@ -107,7 +107,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			{
 				GameObject collidedObject = colliders[i].gameObject;
 
-                if (collidedObject.tag == "Tractor")
+				if (collidedObject.tag == "Tractor")
 				{
 					PUN2_TractorSync tract = (PUN2_TractorSync)collidedObject.GetComponent<PUN2_TractorSync>();
 					Player p = (Player)gameObject.GetComponent<Player>();
@@ -138,6 +138,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			}
 		}
 	}
+
+	public void callStopAnimalFollowing() { }
 
 	public void callCease(int opponentID, int state)
 	{
@@ -244,4 +246,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	{
 		gameObject.SetActive(false);
 	}
+
+
 }

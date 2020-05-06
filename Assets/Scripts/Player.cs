@@ -170,7 +170,8 @@ public class Player : ControllableObject
 				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())) ||
 				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())) ||
 				(collidedObject.tag.Equals("Hay") && InteractOnceWithHay(collidedObject)) ||
-				(collidedObject.tag.Equals("GasCan") && InteractOnceWithGasCan(collidedObject)))
+				(collidedObject.tag.Equals("GasCan") && InteractOnceWithGasCan(collidedObject)) ||
+				(collidedObject.tag.Equals("Player") && InteractOnceWithPlayer(collidedObject)))
 			{
 				interacted = true;
 				break;
@@ -256,6 +257,13 @@ public class Player : ControllableObject
 		return false;
 	} 
 
+	private bool InteractOnceWithPlayer(GameObject collidedObject)
+	{
+		Player otherPlayer = collidedObject.GetComponent<Player>();
+
+		return false;
+	}
+		
 	private bool InteractOnceWithHay(GameObject hayGO)
 	{
 		if (state == PlayerState.Empty)
