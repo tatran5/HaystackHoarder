@@ -9,8 +9,9 @@ public class Fence : MonoBehaviour
 
 	public bool broken;
 	public float health;
-	public int breakTimer;
-	int breakTickLength;    // Controls how fast health deterioriates over time
+    public float maxHealth;
+    public float breakTimer;
+	float breakTickSeconds;    // Controls how fast health deterioriates over time
 
 	public bool vertical;
 	List<int> occupiedCells = new List<int>();  // Saves the indices of the cells
@@ -32,9 +33,10 @@ public class Fence : MonoBehaviour
 	{
 		fixing = false;
 		broken = false;
-		//health = 100.0f;
-		breakTimer = 0;
-		breakTickLength = 300;
+        maxHealth = 80.0f;
+        health = Random.Range(maxHealth - maxHealth / 10, maxHealth);
+        breakTimer = 0;
+        breakTickSeconds = 1f;
 		totalTimeToBreak = 0.8f;
 		totalTimeToFix = 0.8f;
 		Vector3 rotation = gameObject.transform.eulerAngles;
@@ -47,8 +49,8 @@ public class Fence : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		breakTimer += 1;
-		if (breakTimer >= breakTickLength && !broken)
+        breakTimer += Time.deltaTime;
+		if (breakTimer >= breakTickSeconds && !broken)
 		{
 			breakTimer = 0;
 			health -= 1.0f;
@@ -65,23 +67,12 @@ public class Fence : MonoBehaviour
 		broken = true;
 		globalObj.grid_setCellsTrue(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Break();
-        //for (int i = 1; i <= 3; i++) {
-        //    GameObject mesh = gameObject.transform.GetChild(i).gameObject;
-        //    MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
-        //    mr.enabled = false;
-        //}
 	}
 
 	public void FixFence()
 	{
 		globalObj.grid_setCellsFalse(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Fix(broken);
-		//for (int i = 1; i <= 3; i++)
-		//{
-		//    GameObject mesh = gameObject.transform.GetChild(i).gameObject;
-		//    MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
-		//    mr.enabled = true;
-		//}
 	}
 
 	public void SetOccupiedCells(List<int> indices)

@@ -89,4 +89,16 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 		target.gameObject.GetComponent<Animal>().feedMeter += amount;
 		feedMeter += amount;
 	}
+
+    public void callUpdatePenNumber(int number)
+    {
+        photonView.RPC("updatePenNumber", RpcTarget.AllViaServer, photonView.ViewID, number);
+    }
+
+    [PunRPC]
+    public void updatePenNumber(int viewID, int number)
+    {
+        PhotonView target = PhotonView.Find(viewID);
+        target.gameObject.GetComponent<Animal>().penNumber = number;
+    }
 }

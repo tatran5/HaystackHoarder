@@ -334,7 +334,7 @@ public class Global : MonoBehaviour
 
         MapFencesAndPens();
         MapWalls();
-        //MapBuildings();
+        MapBuildings();
 
         animals = new List<Animal>();
         animalsPlayer1 = 0;

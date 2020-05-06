@@ -87,7 +87,7 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 			tatteredFence.SetActive(false);
 			brokenFence.SetActive(true);
 		}
-		else if (fence.health < 20.0f)
+		else if (fence.health < fence.maxHealth / 5)
 		{
 			healthyFence.SetActive(false);
 			tatteredFence.SetActive(true);
@@ -163,7 +163,7 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		broken = false;
 		Fence f = target.gameObject.GetComponent<Fence>();
 		f.breakTimer = 0;
-		f.health = 60.0f;
+		f.health = f.maxHealth;
 		f.broken = false;
 
 		if (wasBroken)

@@ -10,9 +10,10 @@ public class Animal : MonoBehaviour
 
     // Variables related to the feed meter that depletes with time
     public float feedMeter;
-    public int feedTickLength;  // How mHuch time it takes to deplete meter by one.
+    public float maxFeedMeter;
+    public float feedTickSeconds;  // How much time it takes to deplete meter by one.
                                 // Altered per animal, can also be altered to affect difficulty.
-    int feedTimer;              // Pairs with previous variable, updates with Update()
+    float feedTimer;              // Pairs with previous variable, updates with Update()
 
     public float weight;        // Varies per animal
     public float speed;         // Speed at which the animal runs
@@ -67,14 +68,16 @@ public class Animal : MonoBehaviour
         gameObject.GetComponent<MeshRenderer>().material = normal;
         globalObj = GameObject.Find("GlobalObject").GetComponent<Global>();
 
-        feedMeter = 50.0f;
+        maxFeedMeter = 100.0f;
+        feedMeter = Random.Range(maxFeedMeter / 2, 3 * maxFeedMeter / 4);
 
-        feedTickLength = 150;
-        checkFencesTickLength = 35;
 
         feedTimer = 0;
+        feedTickSeconds = 2;
+
         checkFencesTimer = 0;
-        
+        checkFencesTickLength = 35;
+
         stuckTimer = 0;
         stuckTimerTicks = 0;
         stuckTimerTickLength = 100;
@@ -90,8 +93,8 @@ public class Animal : MonoBehaviour
     void Update()
     {
         // Update feed Meter
-        feedTimer += 1;
-        if (feedTimer >= feedTickLength)
+        feedTimer += Time.deltaTime;
+        if (feedTimer >= feedTickSeconds)
         {
             feedMeter -= 1.0f;
             if (feedMeter < 0f)
@@ -170,7 +173,9 @@ public class Animal : MonoBehaviour
     {
         isFollowingPlayer = true;
         playerFollowing = player;
-		penNumber = 0;
+        globalObj.RemoveAnimal(penNumber);
+        penNumber = 0;
+        gameObject.GetComponent<PUN2_AnimalSync>().callUpdatePenNumber(penNumber);
     }
 
     public void SetStopFollowingPlayer()
@@ -297,6 +302,7 @@ public class Animal : MonoBehaviour
         else {
             globalObj.RemoveAnimal(penNumber);
             penNumber = 0;
+            gameObject.GetComponent<PUN2_AnimalSync>().callUpdatePenNumber(penNumber);
         }
 
     }
@@ -336,6 +342,7 @@ public class Animal : MonoBehaviour
             Pen p = globalObj.GetPlayerPen(i);
             if (p.FencesIntact() && p.InsidePenArea(gameObject)) {
                 penNumber = i;
+                gameObject.GetComponent<PUN2_AnimalSync>().callUpdatePenNumber(penNumber);
                 globalObj.AddAnimal(i);
                 targetDirection = Vector3.zero;
                 return;
@@ -346,7 +353,7 @@ public class Animal : MonoBehaviour
 	public void FeedAnimal()
 	{
 		Debug.Log("FEEDING ANIMAL!!");
-		gameObject.GetComponent<PUN2_AnimalSync>().callFeedAnimal(25f);
+		gameObject.GetComponent<PUN2_AnimalSync>().callFeedAnimal(50f);
 		feedTimer = 0;
 	}
 	
