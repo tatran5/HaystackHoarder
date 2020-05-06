@@ -74,7 +74,7 @@ public class Animal : MonoBehaviour
 
         feedTimer = 0;
         checkFencesTimer = 0;
-
+        
         stuckTimer = 0;
         stuckTimerTicks = 0;
         stuckTimerTickLength = 100;
@@ -85,48 +85,49 @@ public class Animal : MonoBehaviour
         
         currentPos = Vector2.zero;
     }
+    
+	// Update is called once per frame
+	void Update()
+	{
+		// Update feed Meter
+		feedTimer += 1;
+		if (feedTimer >= feedTickLength)
+		{
+			feedMeter -= 1.0f;
+            if (feedMeter < 0f)
+			{
+				feedMeter = 0f;
+			}
+			feedTimer = 0;
+		}
 
-    // Update is called once per frame
-    void Update()
-    {
-        // Update feed Meter
-        feedTimer += 1;
-        if (feedTimer >= feedTickLength)
-        {
-            feedMeter -= 1.0f;
-
-            if (feedMeter < 0f) {
-                feedMeter = 0f;
-            }
-            feedTimer = 0;
-        }
-
-        //slowly darken the color the lower the feed meter gets
+		//slowly darken the color the lower the feed meter gets
         if (!selected)
-        {
-            Color curr = gameObject.GetComponent<MeshRenderer>().material.color;
-            gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter / 50f) * curr.r, (feedMeter / 50f) * curr.g, (feedMeter / 50f) * curr.b, 1.0f));
-        }
+		{
+			Color curr = gameObject.GetComponent<MeshRenderer>().material.color;
+			gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter/50f) * curr.r, (feedMeter / 50f) * curr.g, (feedMeter / 50f) * curr.b, 1.0f));
+		}
 
-        if (isFollowingPlayer)
-        {
-            float positionY = transform.position.y;
-            transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
-                playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
-            transform.position = new Vector3(transform.position.x, positionY, transform.position.z);
-            transform.rotation = playerFollowing.transform.rotation;
-        }
-        else
-        {
-            currentPos.x = gameObject.transform.position.x;
-            currentPos.y = gameObject.transform.position.z;
 
-            if (PositionEquality(targetPoint, currentPos))
-            {
-                targetDirection = Vector3.zero;
-            }
+		if (isFollowingPlayer && playerFollowing != null)
+		{
+			float positionY = transform.position.y;
+			transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
+				playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
+			transform.position = new Vector3(transform.position.x, positionY, transform.position.z);
+			transform.rotation = playerFollowing.transform.rotation;
+		}
+		else
+		{
+			currentPos.x = gameObject.transform.position.x;
+			currentPos.y = gameObject.transform.position.z;
 
-            if (penNumber > 0)
+			if (PositionEquality(targetPoint, currentPos))
+			{
+				targetDirection = Vector3.zero;
+			}
+
+			if (penNumber > 0)
             {
                 checkFencesTimer += 1;
                 if (checkFencesTimer >= checkFencesTickLength)
@@ -154,10 +155,9 @@ public class Animal : MonoBehaviour
                 if (penNumber == 0) {
                     GetWanderDirection();
                 }
-            }
-            gameObject.transform.position += targetDirection * speed * Time.deltaTime;
-        }
-    }
+			gameObject.transform.position += targetDirection * speed * Time.deltaTime;
+		}
+	}
 
     void FixedUpdate()
     {
@@ -171,10 +171,14 @@ public class Animal : MonoBehaviour
 
     public void SetStopFollowingPlayer()
     {
+        Debug.Log("in stop following player...");
         Transform pTrans = playerFollowing.transform;
         isFollowingPlayer = false;
+        playerFollowing = null;
+        Debug.Log("hello?? playerFollowing is " + (playerFollowing == null));
         transform.position = pTrans.position + (1f + epsilonDistanceOffset) * pTrans.forward *
             0.5f * (transform.localScale.z + pTrans.localScale.z);
+        Debug.Log("placing the chickies");
     }
 
     // If the animal collides with something dynamic (a constantly changing

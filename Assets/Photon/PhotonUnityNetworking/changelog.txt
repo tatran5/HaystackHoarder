@@ -1,8 +1,10 @@
 PUN 2 Change Log
 
 
+v2.18.1 (30. April 2020)
+Fixed: String serialization issue in the Photon3Unity3d.dll (v4.1.4.0). Updated to Photon3Unity3d.dll (v4.1.4.1).
 v2.18 (28. April 2020)
-Fixed: Support for Unity 2019.3. As Unity 2020 is still beta, there may be more import / build issues. Please report via mail. 
+Fixed: Support for Unity 2019.3. As Unity 2020 is still beta, there may be more import / build issues. Please report via mail.
 Note: We noticed upgrading projects may create more than one PhotonServerSettings file. If your AppId seems gone, look up these files and keep the one with settings.
 Fixed: Asteroid Demo bullet instantation uses the position sent via the rpc, instead of the current local position.
 Updated: Nicer format for the countdown utility script to avoid floating points.

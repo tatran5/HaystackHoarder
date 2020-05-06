@@ -25,6 +25,9 @@ public class Player : ControllableObject
 	public float timeSinceCease = 0f;
 	static float maxCeaseTime = 200f;
 
+	public float timeSincePickingUp = 0f;
+	static float pickUpOffset = 0.2f;
+
 	// SOUND VARIABLES ------------------
 	public AudioClip hayInteractionAC;
 	public float hayInteractionVolume;
@@ -128,6 +131,15 @@ public class Player : ControllableObject
 		}
 		timeSinceLastDisrupt += 1;
 		timeSinceCease += 1;
+
+		if (animalFollowing != null)
+		{
+			timeSincePickingUp += Time.deltaTime;
+		}
+		else
+		{
+			timeSincePickingUp = 0.0f;
+		}
 	}
 
 	bool HandlePlayerMovement()
@@ -160,11 +172,11 @@ public class Player : ControllableObject
 	public override void InteractOnce()
     {
 		bool interacted = false;
-        Collider[] colliders = Physics.OverlapBox(transform.position,
-        transform.localScale + epsilon, transform.rotation);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            GameObject collidedObject = colliders[i].gameObject;
+		Collider[] colliders = Physics.OverlapBox(transform.position,
+		transform.localScale + epsilon, transform.rotation);
+		for (int i = 0; i < colliders.Length; i++)
+		{
+			GameObject collidedObject = colliders[i].gameObject;
 			if ((collidedObject.tag.Equals("Tractor") && InteractOnceWithTractor(collidedObject.GetComponent<Tractor>())) ||
 				(collidedObject.tag.Equals("Barn") && InteractOnceWithBarn(collidedObject.GetComponent<Barn>())) ||
 				(collidedObject.tag.Equals("FuelStation") && GetFuelFromStation(collidedObject.GetComponent<FuelStation>())) ||
@@ -176,35 +188,35 @@ public class Player : ControllableObject
 				interacted = true;
 				break;
 			}
-        }
+		}
 
+		Debug.Log("interacted: " + interacted);
 		// If the player has not interacted with any other object, 
 		// drop whatever object that the player has in front of the player
-		if (!interacted)
+		//if (!interacted)
+		//{
+		if (animalFollowing != null && timeSincePickingUp >= pickUpOffset) //timeSincePlayerEnter >= timeOffsetPlayerEnter
 		{
-			if (animalFollowing != null)
-			{
-				// Perform box casting to decide whether to drop animal
-				Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
-				boxCenter.y = animalFollowing.transform.position.y;
+			// Perform box casting to decide whether to drop animal
+			Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
+			boxCenter.y = animalFollowing.transform.position.y;
 
-				float maxDistance = animalFollowing.transform.localScale.z * 0.5f * (1 + epsilon.z);
-				if (!Physics.BoxCast(boxCenter, animalFollowing.transform.localScale, transform.forward,
-					transform.rotation, maxDistance))
-				{
-					animalFollowing.SetStopFollowingPlayer();
-					animalFollowing = null;
-				}
-				else
-				{
-					Debug.Log("Cannot drop animal here because there's an obstacle");
-				}
-			} else if (state != PlayerState.Empty)
+			float maxDistance = animalFollowing.transform.localScale.z * 0.5f * (1 + epsilon.z);
+			if (!Physics.BoxCast(boxCenter, animalFollowing.transform.localScale, transform.forward,
+				transform.rotation, maxDistance))
 			{
-				DropObjectHeld();
+				gameObject.GetComponent<PUN2_PlayerSync>().callPlaceAnimal(animalFollowing.gameObject.GetComponent<PhotonView>().ViewID);
 			}
+			else
+			{
+				Debug.Log("Cannot drop animal here because there's an obstacle");
+			}
+		} else if (state != PlayerState.Empty)
+		{
+			//DropObjectHeld();
 		}
-    }
+		//}
+	}
 
 	public bool DropObjectHeld()
 	{
@@ -260,13 +272,14 @@ public class Player : ControllableObject
 	private bool InteractOnceWithPlayer(GameObject otherPlayerGO)
 	{
 		Player otherPlayer = otherPlayerGO.GetComponent<Player>();
-		if (otherPlayer.animalFollowing != null)
+        if (team != otherPlayer.team)
 		{
-			otherPlayer.animalFollowing.isFollowingPlayer = false;
-			otherPlayer.animalFollowing = null;
-			return true;
+			if (otherPlayer.animalFollowing != null)
+			{
+				otherPlayerGO.GetComponent<PUN2_PlayerSync>().callPlaceAnimal(animalFollowing.gameObject.GetComponent<PhotonView>().ViewID);
+				return true;
+			}
 		}
-
 		return false;
 	}
 		
@@ -321,7 +334,7 @@ public class Player : ControllableObject
 		if (state != PlayerState.HasBale && animalFollowing ==null) // if player holds bale, feed animal. Otherwise, bring animal back inside fences
 		{
 			animalFollowing = animal;
-			animalFollowing.SetFollowingPlayer(this);
+			gameObject.GetComponent<PUN2_PlayerSync>().callFollowAnimal(animal.gameObject.GetComponent<PhotonView>().ViewID);
 			return true;
 		}
 		return false;
@@ -365,6 +378,10 @@ public class Player : ControllableObject
 
 	private void BreakFence(GameObject fence)
 	{
+		if (state != PlayerState.Empty)
+		{
+			return;
+		}
 		refFence = fence;
 		if (state == PlayerState.Empty)
 		{
@@ -458,6 +475,10 @@ public class Player : ControllableObject
 
 	private void checkForBrokenFence()
 	{
+        if (state != PlayerState.Empty)
+		{
+			return;
+		}
 		GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
 		for (int i = 0; i < fences.Length; i++)
 		{
@@ -495,14 +516,31 @@ public class Player : ControllableObject
 
 	private void OnTriggerStay(Collider other)
 	{
-		if (other.gameObject.tag == "Animal")
+        if (state == PlayerState.HasBale)
 		{
-			other.gameObject.GetComponent<Animal>().Highlighted();
-			if (state == PlayerState.HasBale && Input.GetKeyDown(kbInteract))
+			Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4);
+
+			GameObject closestAnimal = null;
+			float closestDist = 1000f;
+			for (int i = 0; i < hitColliders.Length; i++)
+			{
+				Collider otherAnimal = hitColliders[i];
+				if (otherAnimal.gameObject.tag == "Animal")
+				{
+					float distance = Vector3.Distance(transform.position, otherAnimal.gameObject.transform.position);
+					if (distance < closestDist)
+					{
+						closestDist = distance;
+						closestAnimal = otherAnimal.gameObject;
+					}
+				}
+			}
+
+			if (closestAnimal != null && state == PlayerState.HasBale && Input.GetKeyDown(kbInteract))
 			{
 				state = PlayerState.Empty;
 				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-				other.gameObject.GetComponent<Animal>().FeedAnimal();
+				closestAnimal.gameObject.GetComponent<Animal>().FeedAnimal();
 			}
 		}
 

@@ -119,7 +119,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 				{
 					PUN2_PlayerSync otherPlayerS = (PUN2_PlayerSync)collidedObject.GetComponent<PUN2_PlayerSync>();
 					Player otherPlayer = (Player)gameObject.GetComponent<Player>();
-					Debug.Log("STOP PLAYER HAVIVNG ANIMAL FOLLOWING SOMEHOW");
+					//Debug.Log("STOP PLAYER HAVIVNG ANIMAL FOLLOWING SOMEHOW");
 				}
 
 			}
@@ -137,6 +137,32 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 				play.state = PlayerState.Empty;
 			}
 		}
+	}
+
+	public void callFollowAnimal(int viewID)
+	{
+		photonView.RPC("followAnimal", RpcTarget.AllViaServer, viewID);
+	}
+
+	[PunRPC]
+	public void followAnimal(int viewID) //viewID of animal
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		target.gameObject.GetComponent<Animal>().SetFollowingPlayer(this.gameObject.GetComponent<Player>());
+	}
+
+	public void callPlaceAnimal(int viewID)
+	{
+		photonView.RPC("placeAnimal", RpcTarget.AllViaServer, viewID);
+	}
+
+	[PunRPC]
+	public void placeAnimal(int viewID) //viewID of animal
+	{
+		PhotonView target = PhotonView.Find(viewID);
+		Debug.Log("in place animal...");
+		target.gameObject.GetComponent<Animal>().SetStopFollowingPlayer();
+		gameObject.GetComponent<Player>().animalFollowing = null;
 	}
 
 	public void callStopAnimalFollowingOther(int playerID) {

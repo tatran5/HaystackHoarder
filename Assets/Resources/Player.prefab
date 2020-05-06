@@ -480,6 +480,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   timeSinceLastDisrupt: 0
   timeSinceCease: 0
+  timeSincePickingUp: 0
   hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
   hayInteractionVolume: 0.05
   getFuelAC: {fileID: 8300000, guid: 9b90244cde3a3f84ab106814be39e316, type: 3}
