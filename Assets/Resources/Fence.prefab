@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   broken: 0
-  health: 100
+  health: 15
   breakTimer: 0
   vertical: 0
   team: 0
@@ -229,6 +229,9 @@ MonoBehaviour:
   breakMeter: {fileID: 0}
   beingBroken: 0
   beingFixed: 0
+  healthyFence: {fileID: 6647589654082303362}
+  tatteredFence: {fileID: 1102686928068876546}
+  brokenFence: {fileID: 4074297336035449223}
 --- !u!114 &1417587820185889036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1803,6 +1806,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc121be3f680634fbb8cab1fa2d47c8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b258f4b3ab0043aaa363f725bb3cc03, type: 3}
+--- !u!1 &4074297336035449223 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 3b258f4b3ab0043aaa363f725bb3cc03,
+    type: 3}
+  m_PrefabInstance: {fileID: 5452489987288842382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1067799581055544212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 3b258f4b3ab0043aaa363f725bb3cc03,
@@ -2000,6 +2009,12 @@ PrefabInstance:
 --- !u!4 &4113719623924706065 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 313fbd0045f944010919beae39e5fb1f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8965658594524282891}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1102686928068876546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 313fbd0045f944010919beae39e5fb1f,
     type: 3}
   m_PrefabInstance: {fileID: 8965658594524282891}
   m_PrefabAsset: {fileID: 0}

@@ -170,19 +170,24 @@ public class Animal : MonoBehaviour
     {
         isFollowingPlayer = true;
         playerFollowing = player;
+		penNumber = 0;
     }
 
     public void SetStopFollowingPlayer()
     {
         Debug.Log("in stop following player...");
-        Transform pTrans = playerFollowing.transform;
-        isFollowingPlayer = false;
-        playerFollowing = null;
-        Debug.Log("hello?? playerFollowing is " + (playerFollowing == null));
-        transform.position = pTrans.position + (1f + epsilonDistanceOffset) * pTrans.forward *
-            0.5f * (transform.localScale.z + pTrans.localScale.z);
-        Debug.Log("placing the chickies");
-    }
+        if (playerFollowing != null)
+		{
+			Transform pTrans = playerFollowing.transform;
+			isFollowingPlayer = false;
+			playerFollowing = null;
+			Debug.Log("hello?? playerFollowing is " + (playerFollowing == null));
+			transform.position = pTrans.position + (1f + epsilonDistanceOffset) * pTrans.forward *
+				0.5f * (transform.localScale.z + pTrans.localScale.z);
+			Debug.Log("placing the chickies");
+		}
+		GetInsidePenStatus();
+	}
 
     // If the animal collides with something dynamic (a constantly changing
     // position, like the player, tractor, and other animals), this should

@@ -26,6 +26,7 @@ public class Fence : MonoBehaviour
 
 	public bool fixing;
 
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -53,7 +54,7 @@ public class Fence : MonoBehaviour
 			health -= 1.0f;
 		}
 
-		if (health <= 0.1f)
+		if (health <= 0.1f && !broken)
 		{
 			BreakFence();
 		}
@@ -64,25 +65,24 @@ public class Fence : MonoBehaviour
 		broken = true;
 		globalObj.grid_setCellsTrue(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Break();
-        for (int i = 1; i <= 3; i++) {
-            GameObject mesh = gameObject.transform.GetChild(i).gameObject;
-            MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
-            mr.enabled = false;
-        }
+        //for (int i = 1; i <= 3; i++) {
+        //    GameObject mesh = gameObject.transform.GetChild(i).gameObject;
+        //    MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
+        //    mr.enabled = false;
+        //}
 	}
 
 	public void FixFence()
 	{
-        broken = false;
 		globalObj.grid_setCellsFalse(occupiedCells.ToArray());
 		gameObject.GetComponent<PUN2_FenceSync>().Fix(broken);
-        for (int i = 1; i <= 3; i++)
-        {
-            GameObject mesh = gameObject.transform.GetChild(i).gameObject;
-            MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
-            mr.enabled = true;
-        }
-    }
+		//for (int i = 1; i <= 3; i++)
+		//{
+		//    GameObject mesh = gameObject.transform.GetChild(i).gameObject;
+		//    MeshRenderer mr = mesh.GetComponent<MeshRenderer>();
+		//    mr.enabled = true;
+		//}
+	}
 
 	public void SetOccupiedCells(List<int> indices)
 	{

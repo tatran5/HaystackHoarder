@@ -585,4 +585,17 @@ public class Player : ControllableObject
 			other.gameObject.GetComponent<Animal>().Normal();
 		}
 	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+
+		if (collision.gameObject.tag == "Fence")
+		{
+            if (collision.gameObject.GetComponent<Fence>().team == team)
+			{
+				Physics.IgnoreCollision(collision.collider, gameObject.GetComponent<Collider>());
+			}
+		}
+
+	}
 }

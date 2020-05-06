@@ -22,6 +22,10 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 
 	public bool beingFixed = false;
 
+	public GameObject healthyFence;
+	public GameObject tatteredFence;
+	public GameObject brokenFence;
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -75,6 +79,25 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		{
 			breakMeter.SetActive(false);
 		}
+
+		Fence fence = (Fence)localScripts[0];
+        if (fence.health <= 0f)
+		{
+			healthyFence.SetActive(false);
+			tatteredFence.SetActive(false);
+			brokenFence.SetActive(true);
+		}
+		else if (fence.health < 20.0f)
+		{
+			healthyFence.SetActive(false);
+			tatteredFence.SetActive(true);
+			brokenFence.SetActive(false);
+		} else
+		{
+			healthyFence.SetActive(true);
+			tatteredFence.SetActive(false);
+			brokenFence.SetActive(false);
+		}
 	}
 
 	public void updateStats(float timeToBreak, bool beingBroken)
@@ -123,7 +146,7 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		broken = true;
 		Fence f = target.gameObject.GetComponent<Fence>();
 		f.broken = true;
-		f.health = 1;
+		f.health = 0;
 		target.gameObject.GetComponent<PUN2_FenceSync>().beingBroken = false;
 	}
 
@@ -139,9 +162,9 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		PhotonView target = PhotonView.Find(viewID);
 		broken = false;
 		Fence f = target.gameObject.GetComponent<Fence>();
-		f.broken = false;
-		f.health = 100.0f;
 		f.breakTimer = 0;
+		f.health = 60.0f;
+		f.broken = false;
 
 		if (wasBroken)
 		{
