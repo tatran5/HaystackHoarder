@@ -21,7 +21,7 @@ public class Cow : Animal
         speed = 1.0f;
         weight = 4.0f;
 
-        detectionRadius = 8.0f;
+        detectionRadius = 2.0f;
     }
 
     // Update is called once per frame

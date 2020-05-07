@@ -49,6 +49,8 @@ MonoBehaviour:
   - feedAnimal
   - Fire
   - FixFence
+  - followAnimal
+  - placeAnimal
   - RemoveFuel
   - RespawnSpaceship
   - StealBale
@@ -57,9 +59,9 @@ MonoBehaviour:
   - SwitchScenes
   - updateFenceScript
   - updateFenceScriptFix
+  - updateGameState
+  - updatePenNumber
   - UpdatePlayerCount
-  - followAnimal
-  - placeAnimal
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

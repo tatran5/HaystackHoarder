@@ -17,9 +17,9 @@ public class Chicken : Animal
     {
         InitializeBaseVariables();
 
-        speed = 2.0f;
+        speed = 2.5f;
         weight = 1.0f;
-        detectionRadius = 2.0f;
+        detectionRadius = 0.5f;
 
     }
 
