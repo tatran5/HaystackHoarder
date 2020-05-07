@@ -2,48 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AnimalType {General, Chicken, Cow, Sheep}
+public enum AnimalType { General, Chicken, Cow, Sheep }
 
 public class Animal : MonoBehaviour
 {
-    Global globalObj;
+	Global globalObj;
 
-    // Variables related to the feed meter that depletes with time
-    public float feedMeter;
-    public float maxFeedMeter;
-    public float feedTickSeconds;  // How much time it takes to deplete meter by one.
-                                // Altered per animal, can also be altered to affect difficulty.
-    float feedTimer;              // Pairs with previous variable, updates with Update()
+	// Variables related to the feed meter that depletes with time
+	public float feedMeter;
+	public float maxFeedMeter;
+	public float feedTickSeconds;  // How much time it takes to deplete meter by one.
+								   // Altered per animal, can also be altered to affect difficulty.
+	float feedTimer;              // Pairs with previous variable, updates with Update()
 
-    public float weight;        // Varies per animal
-    public float speed;         // Speed at which the animal runs
+	public float weight;        // Varies per animal
+	public float speed;         // Speed at which the animal runs
 
-    public int penNumber;       // Corresponds with player number, used for
-                                // tracking pen fences. Ranges from 1 - 4.
-                                // If the animal is running free, penNumber
-                                // will be set to 0.
+	public int penNumber;       // Corresponds with player number, used for
+								// tracking pen fences. Ranges from 1 - 4.
+								// If the animal is running free, penNumber
+								// will be set to 0.
 
     int idleTimer;
     int idleMaxLength;
 
-    public Vector2 targetPoint;
-    public Vector3 targetDirection;
+	public Vector2 targetPoint;
+	public Vector3 targetDirection;
 
-    public Vector2 currentPos;
+	public Vector2 currentPos;
 
     float stuckTimer;
     float stuckTimerSeconds;
 
-    public Material normal;
-    public Material highlighted;
+	public Material normal;
+	public Material highlighted;
 
-    bool selected = false;
+	bool selected = false;
 
-    public float epsilonDistanceOffset = 0.00001f;
-    public bool isFollowingPlayer = false;
-    public Player playerFollowing;
+	public float epsilonDistanceOffset = 0.00001f;
+	public bool isFollowingPlayer = false;
+	public Player playerFollowing;
 
-    /********************
+	/********************
      * MISC. HELPER FUNCTIONS
      ********************/
 
@@ -173,7 +173,7 @@ public class Animal : MonoBehaviour
 		}
 		GetInsidePenStatus();
 	}
-
+	
     // If the animal collides with something dynamic (a constantly changing
     // position, like the player, tractor, and other animals), this should
     // redirect it.
@@ -312,18 +312,24 @@ public class Animal : MonoBehaviour
 
     // Check if we're inside another player's pen; if so,
     // neutralize the target direction and change pen number.
-    void GetInsidePenStatus() {
-        for (int i = 1; i <= globalObj.numPlayers; i++) {
-            Pen p = globalObj.GetPlayerPen(i);
-            if (p.FencesIntact() && p.InsidePenArea(gameObject)) {
-                penNumber = i;
-                gameObject.GetComponent<PUN2_AnimalSync>().callUpdatePenNumber(penNumber);
-                globalObj.AddAnimal(i);
-                targetDirection = Vector3.zero;
-                return;
-            }
-        }
-    }
+    void GetInsidePenStatus()
+	{
+		if (!isFollowingPlayer)
+		{
+			for (int i = 1; i <= globalObj.numPlayers; i++)
+			{
+				Pen p = globalObj.GetPlayerPen(i);
+				if (p.FencesIntact() && p.InsidePenArea(gameObject))
+				{
+					penNumber = i;
+					gameObject.GetComponent<PUN2_AnimalSync>().callUpdatePenNumber(penNumber);
+					globalObj.AddAnimal(i);
+					targetDirection = Vector3.zero;
+					return;
+				}
+			}
+		}
+	}
 
 	public void FeedAnimal()
 	{
@@ -331,7 +337,7 @@ public class Animal : MonoBehaviour
 		gameObject.GetComponent<PUN2_AnimalSync>().callFeedAnimal(50f);
 		feedTimer = 0;
 	}
-	
+
 	public virtual AnimalType GetAnimalType()
 	{
 		return AnimalType.General;
