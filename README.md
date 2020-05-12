@@ -8,7 +8,7 @@ Haystack Hoarder puts your decision making, time management, and reaction speed 
 
 Feeding your animals is a four-step task! First, you must drive to the hayfields in your trusty tractor, which you must keep consistently fueled. Then, gather as much hay as possible with your tractor, bring it to the barn to be processed into feed, and give the food to the animals in your pens. 
 
-Watch out because other players are trying to gather hay for their animals too, and there are only a few haystacks shared between farms. Scramble to grab hay before the other players or sabotage their farms to slow down your competition. Steal their fuel, steal their hay, and even break down their fences to let their animals escape?but watch out for your own!
+Watch out because other players are trying to gather hay for their animals too, and there are only a few haystacks shared between farms. Scramble to grab hay before the other players or sabotage their farms to slow down your competition. Steal their fuel, steal their hay, and even break down their fences to let their animals escape, but watch out for your own!
 
 # Features
 
@@ -18,24 +18,24 @@ Watch out because other players are trying to gather hay for their animals too, 
 
 -Animal AI. Animals stay calm while in a pen. If a fence breaks, the animal will try to escape and will run away from players that move towards them. Chickens constantly move around the map and avoid players; sheep run as far away from the player as possible; and cows stay stationary as long as the player is not too close.
 
--UI system to display which player currently is the leader. It displays player's points; meters to show each animal?s happiness; how much fuel is in tractor; progress of turning hay into bale over the barn; progress of harvesting hay from haystacks; and progress of fixing and breaking fences.
+-UI system to display which player currently is the leader. It displays player's points; meters to show each animal's happiness; how much fuel is in tractor; progress of turning hay into bale over the barn; progress of harvesting hay from haystacks; and progress of fixing and breaking fences.
 
--Sound effects and animation for different player?s actions.
+-Sound effects and animation for different player's actions.
 
 -Additional player actions and sabotage methods are listed below.
 
 # How To Play
 
--Use WASD keys to ?move.
+-Use WASD keys to move.
 
--Use the left shift key to get ?in and out of the tractor?.
+-Use the left shift key to get in and out of the tractor.
 
--Hold space while in the tractor to ?harvest hay?.
+-Hold space while in the tractor to harvest hay.
 
 -Unload harvested hay from the tractor by pressing space and then press space to put it into the
-barn to? process hay into bale?.
+barn to process hay into bale.
 
-?-Bring the bale towards one of your animals and press space to ?feed animals.
+-Bring the bale towards one of your animals and press space to feed animals.
 
 ![](Images/Hay.png)
 
@@ -47,7 +47,7 @@ barn to? process hay into bale?.
 
 ![](Images/Fence.png)
 
--Approach an opponent's fence and hold space to ?break your opponent?s fences.
+-Approach an opponent's fence and hold space to break your opponent's fences.
 
 -Steal opponents' animals by breaking their fences and collecting their animals back to your pen.
 
