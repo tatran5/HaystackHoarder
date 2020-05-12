@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Tractor
+  - Barn
+  - Haystack
+  - FuelStation
+  - Animal
+  - Fence
+  - GasCan
+  - Hay
   layers:
   - Default
   - TransparentFX
@@ -13,8 +22,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Static
+  - Dynamic
   - 
   - 
   - 
