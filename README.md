@@ -1,51 +1,62 @@
-# HaystackHoarder
+# Haystack Hoarder
 
-Unity version used to create this project: 2019.2.13f1
+Made with Unity (2019.2.13f1) and Photon Networking. Inspired by Vincent Van Gogh's "Haystacks in Provence."
 
-### GLOBAL GRID SYSTEM
+![](Images/Title.png)
 
-The components in a level should be mapped to the grid system described below. Players and animals should be sized such that they take up one square unit of space. While their volume may intersect with other grid cells, their world position will correspond to one square at a time. Ideally, this system should be used for detecting collisions with STATIC components in the world, e.g. obstacles, farm structures, and fences (their location remains the same when they are destroyed / rebuilt).
+Haystack Hoarder puts your decision making, time management, and reaction speed to the test as you scramble to feed your hungry animals. Two to four players at a time are packed in one field, running back and forth between their farms and the haystacks in the middle field. Compete against others and wreak havoc on the other players' farms!
 
-##Setup
+Feeding your animals is a four-step task! First, you must drive to the hayfields in your trusty tractor, which you must keep consistently fueled. Then, gather as much hay as possible with your tractor, bring it to the barn to be processed into feed, and give the food to the animals in your pens. 
 
-The grid system represented by a one-dimensional array to conserve space. Because of this, cells are marked by a single number that represents the array index used to access its data. Each array element is a boolean that is `true` if the space is empty for characters to walk on, `false` otherwise. This maps out as follows:
+Watch out because other players are trying to gather hay for their animals too, and there are only a few haystacks shared between farms. Scramble to grab hay before the other players or sabotage their farms to slow down your competition. Steal their fuel, steal their hay, and even break down their fences to let their animals escape?but watch out for your own!
 
-![](grid.png)
+# Features
 
-A `width` by `height` grid will have `height` rows and `width` columns. The row, column, and cell numbers are all zero-indexed. Furthermore, coordinates are treated as (col number, row number). Therefore, the square numbered 4 in the above example is at (4, 0), and the square numbered 50 would be at (1, 7). This can be converted into the array index number using `width` * `row` + `col`, where `row` and `col` are the row and column numbers. 
+-Networking using Pun2 to create rooms to synchronize players. Once all players join a room, the owner of the room can start the session which loads the map and begins the match. Photon also tracks the state of players (holding an item or not), the animals' meters and what player they belong to, the health of each players' fences, and the state of haystacks, barns, and player tractors.
 
-Lastly, the grid system's worldspace dimensions must be specified by the map creators. The grid assumes that these dimensions will be proportional to the grid's size, such that the unit spaces on the grid are square. Then it can simply calculate the length of a cell's sides. The map center determines where the entire grid is located in world space.
+![](Images/TwoPlayer.png)
 
-##Helper Functions
-- **grid_getCellIndexOfCoords:** returns the index of the cell at the given coordinates
-- **grid_getCoordsOfCellIndex:** returns the (col, row) representation of the cell at the given index
-- **grid_getCellCoordsOfPos:** returns the (col, row) representation of the cell containing the given position
-- **grid_getCellIndexOfPos:** return the index of the cell containing the given position
-- **grid_getCenterOfCell:** return the position at the center of the cell at the given index
+-Animal AI. Animals stay calm while in a pen. If a fence breaks, the animal will try to escape and will run away from players that move towards them. Chickens constantly move around the map and avoid players; sheep run as far away from the player as possible; and cows stay stationary as long as the player is not too close.
 
-### Before implementing, if your implementation is related to user input, you might want to take a look at Controller class. This avoids the situation of changing input handling in many different classes when the key binded to an action needs to be changed.
+-UI system to display which player currently is the leader. It displays player's points; meters to show each animal?s happiness; how much fuel is in tractor; progress of turning hay into bale over the barn; progress of harvesting hay from haystacks; and progress of fixing and breaking fences.
 
-### Tractor
-#### Fields
-- Whether or not the tractor currently has hay.
-- Speed.
-- Fuel max.
-- Fuel depletion rate. 
-- Fuel left. A tractor cannot be moved if it's out of fuel.
+-Sound effects and animation for different player?s actions.
 
-#### How player interacts with tractor
-- Enter or exit the tractor using shift key
-- Pickup hay while in tractor by using space bar when the player is close to tractor
-- Pickup hay from the tractor by using space bar when the player is close to tractor
-- Fuel depletes whenever player  moves the tractor
+-Additional player actions and sabotage methods are listed below.
 
-### Haystack
-#### Fields: 
-- Number of times hay can be taken from haystack before haystack disappear (and hence spawn a new one.)
-- Amount of time to harvest per hay. Player needs to have no hay currently and collides with haystack while pressing appropriate key for a certain amount of time (field within Haystack) to harvest hay.
+# How To Play
 
-#### Scene setup: 
-When putting haystacks into scene, it is **important** to have some haystack [deactivate](https://docs.unity3d.com/Manual/DeactivatingGameObjects.html). When an active haystack runs out of hay, it will be set to be inactive, and try to randomly find an inactive haystack in the scene and set it to be active. If there's no haystack in the scene that is inactive, the program will run into an **infinite loop**
+-Use WASD keys to ?move.
 
-#### Potential changes
-- The player can harvest hay without actually colliding with the object (just need to be close enough?)
+-Use the left shift key to get ?in and out of the tractor?.
+
+-Hold space while in the tractor to ?harvest hay?.
+
+-Unload harvested hay from the tractor by pressing space and then press space to put it into the
+barn to? process hay into bale?.
+
+?-Bring the bale towards one of your animals and press space to ?feed animals.
+
+![](Images/Hay.png)
+
+-Approach your fuel station and press space to get a gas can. Bring it to your tractor and press space again to refill the tractor's fuel.
+
+-Keep animal's meter full by feeding them to get bonus points.
+
+-Fences break down over time. Move next to a fence and press space to fix the fence. If it breaks, your animals will try to escape. Approach them and press space to collect them and press space to release them into your pen.
+
+![](Images/Fence.png)
+
+-Approach an opponent's fence and hold space to ?break your opponent?s fences.
+
+-Steal opponents' animals by breaking their fences and collecting their animals back to your pen.
+
+-Approach an opponent's barn and press space to steal their hay or bale.
+
+-Approach an opponent's tractor and press space to drain their fuel.
+
+-Move to an opponent and press space to stop them from performing any sabotage methods.
+
+
+
+
