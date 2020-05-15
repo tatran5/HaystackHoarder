@@ -480,7 +480,9 @@ MonoBehaviour:
   animator: {fileID: 0}
   timeSinceLastDisrupt: 0
   timeSinceCease: 0
-  timeSincePickingUp: 0
+  timeSinceGotAnimal: 0
+  timeSincePickupObj: 0
+  pickupOffset: 0.2
   hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
   hayInteractionVolume: 0.05
   getFuelAC: {fileID: 8300000, guid: 9b90244cde3a3f84ab106814be39e316, type: 3}
@@ -530,6 +532,7 @@ MonoBehaviour:
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}
+  fuel: {fileID: 8263583993715659861, guid: 72d42fe0027b5bd46a0938414fbe4afd, type: 3}
 --- !u!54 &7431080714023693988
 Rigidbody:
   m_ObjectHideFlags: 0

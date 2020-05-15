@@ -21,12 +21,16 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public AudioClip hayInteractionAC;
 	public float hayInteractionVolume;
 	AudioSource hayInteractionAS;
-	// AUDIO SETUP END ----------------
 
 	// OBJECT HOLDING SETUP -----------
+	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
 	public GameObject fuelHeld;
 	public GameObject baleHeld;
+
+	// OBJECT SPAWN -------------------
+	// These are associated with objects to be spawn as player drops object
+	public GameObject fuel;
 
 	// Use this for initialization
 	void Start()
@@ -154,6 +158,17 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public void callPlaceAnimal(int viewID)
 	{
 		photonView.RPC("placeAnimal", RpcTarget.AllViaServer, viewID);
+	}
+
+	public void callDropFuel(Vector3 position)
+	{
+		photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
+	}
+
+	[PunRPC]
+	public void dropFuel(Vector3 position)
+	{
+		PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
 	}
 
 	[PunRPC]

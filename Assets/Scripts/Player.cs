@@ -25,8 +25,11 @@ public class Player : ControllableObject
 	public float timeSinceCease = 0f;
 	static float maxCeaseTime = 200f;
 
-	public float timeSincePickingUp = 0f;
-	static float pickUpOffset = 0.2f;
+	public float timeSinceGotAnimal = 0f;
+	static float gotAnimalOffset = 0.2f;
+
+	public float timeSincePickupObj = 0f;
+	public float pickupOffset = 0.2f;
 
 	// SOUND VARIABLES ------------------
 	public AudioClip hayInteractionAC;
@@ -132,14 +135,15 @@ public class Player : ControllableObject
 		timeSinceLastDisrupt += 1;
 		timeSinceCease += 1;
 
+		if (state != PlayerState.Empty)
+		{
+			timeSincePickupObj += Time.deltaTime;
+		}
+
 		if (animalFollowing != null)
-		{
-			timeSincePickingUp += Time.deltaTime;
-		}
+			timeSinceGotAnimal += Time.deltaTime;
 		else
-		{
-			timeSincePickingUp = 0.0f;
-		}
+			timeSinceGotAnimal = 0.0f;
 	}
 
 	bool HandlePlayerMovement()
@@ -191,11 +195,11 @@ public class Player : ControllableObject
 		}
 
 		Debug.Log("interacted: " + interacted);
-		// If the player has not interacted with any other object, 
+		// If the player a not interacted with any other object, 
 		// drop whatever object that the player has in front of the player
 		//if (!interacted)
 		//{
-		if (animalFollowing != null && timeSincePickingUp >= pickUpOffset) //timeSincePlayerEnter >= timeOffsetPlayerEnter
+		if (animalFollowing != null && timeSinceGotAnimal >= gotAnimalOffset) //timeSincePlayerEnter >= timeOffsetPlayerEnter
 		{
 			// Perform box casting to decide whether to drop animal
 			Vector3 boxCenter = transform.position + transform.forward * transform.localScale.z * 0.5f;
@@ -211,9 +215,9 @@ public class Player : ControllableObject
 			{
 				Debug.Log("Cannot drop animal here because there's an obstacle");
 			}
-		} else if (state != PlayerState.Empty)
+		} else if (state != PlayerState.Empty && timeSincePickupObj >= pickupOffset)
 		{
-			//DropObjectHeld();
+			DropObjectHeld();
 		}
 		//}
 	}
@@ -238,15 +242,18 @@ public class Player : ControllableObject
 				Vector3 position = transform.position +
 					(1f + epsilon.x) * transform.forward * 0.5f * (transform.localScale.z + objectSpawn.transform.localScale.z);
 				position.y = transform.position.y - transform.localScale.y / 2f + objectSpawn.transform.localScale.y / 2f;
-				GameObject.Instantiate(objectSpawn, position, transform.rotation);
-
-				if (state == PlayerState.HasFuel) Debug.Log("TODO::DROP FUEL");
+				
+				if (state == PlayerState.HasFuel)
+				{
+					Debug.Log("TODO::DROP FUEL");
+					GetComponent<PUN2_PlayerSync>().callDropFuel(position);
+					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
+				}
 				else if (state == PlayerState.HasHay) Debug.Log("TODO::DROP HAY");
 				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
 				state = PlayerState.Empty;
-				gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 				return true;
 			}
 			else
@@ -264,6 +271,7 @@ public class Player : ControllableObject
 			state = PlayerState.HasFuel;
 			getFuelAS.Play();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
+			timeSincePickupObj = 0f;
 			return true;
 		}
 		return false;
@@ -324,6 +332,7 @@ public class Player : ControllableObject
 			hayInteractionAS.Play();
 			state = PlayerState.HasBale;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
+			timeSincePickupObj = 0f;
 			return true;
 		}
 		return false;
@@ -468,6 +477,7 @@ public class Player : ControllableObject
 			hayInteractionAS.Play();
             state = PlayerState.HasHay;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
+			timeSincePickupObj = 0f;
 			return true; 
         }
 		return false;
