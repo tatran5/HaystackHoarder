@@ -307,7 +307,8 @@ public class Player : ControllableObject
 	{
 
 		if (state == PlayerState.Empty)
-		{
+		{ 
+			timeSincePickupObj = 0f;
 			state = PlayerState.HasFuel;
 			Destroy(gasCanGO);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);

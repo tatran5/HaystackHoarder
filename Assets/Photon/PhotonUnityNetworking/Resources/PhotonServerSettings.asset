@@ -46,6 +46,7 @@ MonoBehaviour:
   - displayFuel
   - displayHay
   - DoDeath
+  - dropFuel
   - feedAnimal
   - Fire
   - FixFence
@@ -62,7 +63,6 @@ MonoBehaviour:
   - updateGameState
   - updatePenNumber
   - UpdatePlayerCount
-  - dropFuel
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

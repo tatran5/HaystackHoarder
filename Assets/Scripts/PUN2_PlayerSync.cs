@@ -168,6 +168,18 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void dropFuel(Vector3 position)
 	{
+		GameObject[] droppedFuelGOs = GameObject.FindGameObjectsWithTag("GasCan");
+		for (int i = 0; i < droppedFuelGOs.Length; i++)
+		{
+			GameObject droppedFuelGO = droppedFuelGOs[i];
+			if (!droppedFuelGO.activeSelf)
+			{
+				droppedFuelGO.transform.position = position;
+				droppedFuelGO.SetActive(true);
+				Debug.Log("HUHUHAWUISDAUIUID");
+				return;
+			}
+		}
 		PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
 	}
 
