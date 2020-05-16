@@ -246,12 +246,12 @@ public class Player : ControllableObject
 				if (state == PlayerState.HasFuel)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-					GetComponent<PUN2_PlayerSync>().DropFuel(position);
+					GetComponent<PUN2_PlayerSync>().DropObject("GasCan", position);
 				}
 				else if (state == PlayerState.HasHay)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-					GetComponent<PUN2_PlayerSync>().DropHay(position);
+					GetComponent<PUN2_PlayerSync>().DropObject("Hay", position);
 				}
 
 				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
@@ -314,7 +314,7 @@ public class Player : ControllableObject
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasFuel;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
-			gasCanGO.GetComponent<PUN2_GasCanSync>().callMakeDisappear();
+			gasCanGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
 			return true;
 		}
 		return false;

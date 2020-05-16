@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class PUN2_GasCanSync : MonoBehaviourPun, IPunObservable
+public class PUN2_DroppableSync : MonoBehaviourPun, IPunObservable
 {
     // When the object is supposed to "disappear" (gas can is picked up),
     // it is in fact translated in the y direction with the distance set by

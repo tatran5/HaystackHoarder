@@ -31,6 +31,8 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	// OBJECT SPAWN -------------------
 	// These are associated with objects to be spawn as player drops object
 	public GameObject fuel;
+	public GameObject hay;
+	public GameObject bale;
 
 	// Use this for initialization
 	void Start()
@@ -160,41 +162,22 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("placeAnimal", RpcTarget.AllViaServer, viewID);
 	}
 
-	public void DropBale(Vector3 position)
-	{
 
-	}
-
-	public void DropHay(Vector3 position)
+	public void DropObject(string tag, Vector3 position)
 	{
-		// photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
-		GameObject[] hayGOs = GameObject.FindGameObjectsWithTag("Hay");
-		for (int i = 0; i < hayGOs.Length; i++)
+		GameObject[] sameTypeObjects = GameObject.FindGameObjectsWithTag(tag);
+		for (int i = 0; i < sameTypeObjects.Length; i++)
 		{
-			PUN2_GasCanSync hay = hayGOs[i].GetComponent<PUN2_GasCanSync>();
-			if (hay.disappear)
+			PUN2_DroppableSync curObj = sameTypeObjects[i].GetComponent<PUN2_DroppableSync>();
+			if (curObj.disappear)
 			{
-				//gasCan.callMakeAppear(position);
+				curObj.callMakeAppear(position);
 				return;
 			}
 		}
-		PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
-	}
-
-	public void DropFuel(Vector3 position)
-	{
-		// photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
-		GameObject[] gasCanGOs = GameObject.FindGameObjectsWithTag("GasCan");
-		for (int i = 0; i < gasCanGOs.Length; i++)
-		{
-			PUN2_GasCanSync gasCan = gasCanGOs[i].GetComponent<PUN2_GasCanSync>();
-			if (gasCan.disappear)
-			{
-				gasCan.callMakeAppear(position);
-				return;
-			}
-		}
-		PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
+		if (tag == "Hay") PhotonNetwork.Instantiate(hay.name, position, transform.rotation, 0);
+		else if (tag == "Bale") PhotonNetwork.Instantiate(bale.name, position, transform.rotation, 0);
+		else if (tag == "GasCan") PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
 	}
 
 	[PunRPC]

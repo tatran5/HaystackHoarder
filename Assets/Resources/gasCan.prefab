@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3465387774367642054}
   - component: {fileID: 2782232741056680520}
   - component: {fileID: -1109478848725358076}
-  - component: {fileID: 4688173177149274217}
+  - component: {fileID: -7556055061893123596}
   m_Layer: 0
   m_Name: gasCan
   m_TagString: GasCan
@@ -65,11 +65,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 4688173177149274217}
+  - {fileID: -7556055061893123596}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4688173177149274217
+--- !u!114 &-7556055061893123596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

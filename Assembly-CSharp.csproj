@@ -91,9 +91,9 @@
     <Compile Include="Assets\Scripts\Haystack.cs" />
     <Compile Include="Assets\Scripts\PUN2_AnimalSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_BarnSync.cs" />
+    <Compile Include="Assets\Scripts\PUN2_DroppableSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_FenceSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_GameLobby.cs" />
-    <Compile Include="Assets\Scripts\PUN2_GasCanSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_GlobalSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_HaystackController.cs" />
     <Compile Include="Assets\Scripts\PUN2_PlayerSync.cs" />
