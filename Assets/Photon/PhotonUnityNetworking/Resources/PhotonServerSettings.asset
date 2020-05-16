@@ -63,6 +63,7 @@ MonoBehaviour:
   - updateGameState
   - updatePenNumber
   - UpdatePlayerCount
+  - disappear
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

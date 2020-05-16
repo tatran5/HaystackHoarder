@@ -310,7 +310,7 @@ public class Player : ControllableObject
 		{ 
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasFuel;
-			Destroy(gasCanGO);
+			gasCanGO.GetComponent<PUN2_GasCanSync>().callDisappear();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			return true;
 		}

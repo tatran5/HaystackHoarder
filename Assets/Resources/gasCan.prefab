@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3465387774367642054}
   - component: {fileID: 2782232741056680520}
   - component: {fileID: -1109478848725358076}
+  - component: {fileID: 4688173177149274217}
   m_Layer: 0
   m_Name: gasCan
   m_TagString: GasCan
@@ -61,13 +62,25 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 4688173177149274217}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4688173177149274217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8263583993715659861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd65e5440fd34ed40bf62cdd1dfdb5f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6636392377080664383
 PrefabInstance:
   m_ObjectHideFlags: 0
