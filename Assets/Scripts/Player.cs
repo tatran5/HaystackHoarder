@@ -187,6 +187,7 @@ public class Player : ControllableObject
 				(collidedObject.tag.Equals("Animal") && InteractOnceWithAnimal(collidedObject.GetComponent<Animal>())) ||
 				(collidedObject.tag.Equals("Hay") && InteractOnceWithHay(collidedObject)) ||
 				(collidedObject.tag.Equals("GasCan") && InteractOnceWithGasCan(collidedObject)) ||
+				(collidedObject.tag.Equals("Bale") && InteractOnceWithBale(collidedObject)) ||
 				(collidedObject.tag.Equals("Player") && InteractOnceWithPlayer(collidedObject)))
 			{
 				interacted = true;
@@ -299,14 +300,27 @@ public class Player : ControllableObject
 	{
 		if (state == PlayerState.Empty)
 		{
+			timeSincePickupObj = 0f;
 			state = PlayerState.HasHay;
-			Destroy(hayGO);
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
+			hayGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
 			return true;
 		}
 		return false;
 	}
 
+	private bool InteractOnceWithBale(GameObject baleGO)
+	{
+		if (state == PlayerState.Empty)
+		{
+			timeSincePickupObj = 0f;
+			state = PlayerState.HasBale;
+			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
+			baleGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
+			return true;
+		}
+		return false;
+	}
 	private bool InteractOnceWithGasCan(GameObject gasCanGO)
 	{
 		if (state == PlayerState.Empty)
