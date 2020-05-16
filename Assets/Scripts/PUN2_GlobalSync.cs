@@ -5,15 +5,29 @@ using Photon.Pun;
 
 public class PUN2_GlobalSync : MonoBehaviourPun, IPunObservable
 {
-
+	
 	//List of the scripts that should only be active for the local player (ex. PlayerController, MouseLook etc.)
 	public MonoBehaviour[] localScripts;
 	//List of the GameObjects that should only be active for the local player (ex. Camera, AudioListener etc.)
 	public GameObject[] localObjects;
 
+	// AUDIO ----------------
+	public AudioClip backgroundAC;
+	public float backgroundVolume;
+	AudioSource backgroundAS;
+
 	// Start is called before the first frame update
 	void Start()
 	{
+		PlayBackgroundSound();
+	}
+
+	void PlayBackgroundSound() {
+		backgroundAS = gameObject.AddComponent<AudioSource>();
+		backgroundAS.clip = backgroundAC;
+		backgroundAS.volume = backgroundVolume;
+		backgroundAS.loop = true;
+		photonView.RPC("startBackgroundSong", RpcTarget.All);
 	}
 
 
@@ -47,5 +61,11 @@ public class PUN2_GlobalSync : MonoBehaviourPun, IPunObservable
 		localscript.timeLeft = timeLeft;
 
 		localscript.updateText();
+	}
+
+	[PunRPC]
+	public void startBackgroundSong()
+	{
+		backgroundAS.Play();
 	}
 }

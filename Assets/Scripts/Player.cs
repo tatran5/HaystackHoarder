@@ -228,7 +228,7 @@ public class Player : ControllableObject
 		GameObject objectSpawn = null;
 		if (state == PlayerState.HasFuel) objectSpawn = gasCanSpawn;
 		else if (state == PlayerState.HasHay) objectSpawn = haySpawn;
-		else if (state == PlayerState.HasBale) Debug.Log("NEED TO DO DROP BALE");
+		else if (state == PlayerState.HasBale) objectSpawn = baleSpawn;
 
 		if (objectSpawn != null)
 		{
@@ -254,8 +254,11 @@ public class Player : ControllableObject
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 					GetComponent<PUN2_PlayerSync>().DropObject("Hay", position);
 				}
-
-				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
+				else if (state == PlayerState.HasBale)
+				{
+					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
+					GetComponent<PUN2_PlayerSync>().DropObject("Bale", position);
+				}
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
 				state = PlayerState.Empty;

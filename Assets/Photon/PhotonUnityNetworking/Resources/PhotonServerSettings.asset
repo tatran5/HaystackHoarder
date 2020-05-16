@@ -66,6 +66,8 @@ MonoBehaviour:
   - disappear
   - makeDisappear
   - makeAppear
+  - StartBackgroundSong
+  - startBackgroundSong
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
