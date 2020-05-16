@@ -81,6 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd65e5440fd34ed40bf62cdd1dfdb5f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappear: 0
+  offsetDisappear: -5
 --- !u!1001 &6636392377080664383
 PrefabInstance:
   m_ObjectHideFlags: 0

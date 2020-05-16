@@ -13,6 +13,10 @@ TagManager:
   - Fence
   - GasCan
   - Hay
+  - Wall
+  - GasCanHeld
+  - HayHeld
+  - BaleHeld
   layers:
   - Default
   - TransparentFX

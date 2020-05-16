@@ -242,14 +242,18 @@ public class Player : ControllableObject
 				Vector3 position = transform.position +
 					(1f + epsilon.x) * transform.forward * 0.5f * (transform.localScale.z + objectSpawn.transform.localScale.z);
 				position.y = transform.position.y - transform.localScale.y / 2f + objectSpawn.transform.localScale.y / 2f;
-				
+
 				if (state == PlayerState.HasFuel)
 				{
-					Debug.Log("TODO::DROP FUEL");
-					GetComponent<PUN2_PlayerSync>().callDropFuel(position);
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
+					GetComponent<PUN2_PlayerSync>().DropFuel(position);
 				}
-				else if (state == PlayerState.HasHay) Debug.Log("TODO::DROP HAY");
+				else if (state == PlayerState.HasHay)
+				{
+					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
+					GetComponent<PUN2_PlayerSync>().DropHay(position);
+				}
+
 				else if (state == PlayerState.HasBale) Debug.Log("Player::TODO::DROP BALE!!!");
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
@@ -305,13 +309,12 @@ public class Player : ControllableObject
 
 	private bool InteractOnceWithGasCan(GameObject gasCanGO)
 	{
-
 		if (state == PlayerState.Empty)
 		{ 
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasFuel;
-			gasCanGO.GetComponent<PUN2_GasCanSync>().callDisappear();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
+			gasCanGO.GetComponent<PUN2_GasCanSync>().callMakeDisappear();
 			return true;
 		}
 		return false;

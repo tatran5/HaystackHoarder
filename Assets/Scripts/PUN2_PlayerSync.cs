@@ -160,23 +160,37 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("placeAnimal", RpcTarget.AllViaServer, viewID);
 	}
 
-	public void callDropFuel(Vector3 position)
+	public void DropBale(Vector3 position)
 	{
-		photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
+
 	}
 
-	[PunRPC]
-	public void dropFuel(Vector3 position)
+	public void DropHay(Vector3 position)
 	{
-		GameObject[] droppedFuelGOs = GameObject.FindGameObjectsWithTag("GasCan");
-		for (int i = 0; i < droppedFuelGOs.Length; i++)
+		// photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
+		GameObject[] hayGOs = GameObject.FindGameObjectsWithTag("Hay");
+		for (int i = 0; i < hayGOs.Length; i++)
 		{
-			GameObject droppedFuelGO = droppedFuelGOs[i];
-			if (!droppedFuelGO.activeSelf)
+			PUN2_GasCanSync hay = hayGOs[i].GetComponent<PUN2_GasCanSync>();
+			if (hay.disappear)
 			{
-				droppedFuelGO.transform.position = position;
-				droppedFuelGO.SetActive(true);
-				Debug.Log("HUHUHAWUISDAUIUID");
+				//gasCan.callMakeAppear(position);
+				return;
+			}
+		}
+		PhotonNetwork.Instantiate(fuel.name, position, transform.rotation, 0);
+	}
+
+	public void DropFuel(Vector3 position)
+	{
+		// photonView.RPC("dropFuel", RpcTarget.AllViaServer, position);
+		GameObject[] gasCanGOs = GameObject.FindGameObjectsWithTag("GasCan");
+		for (int i = 0; i < gasCanGOs.Length; i++)
+		{
+			PUN2_GasCanSync gasCan = gasCanGOs[i].GetComponent<PUN2_GasCanSync>();
+			if (gasCan.disappear)
+			{
+				gasCan.callMakeAppear(position);
 				return;
 			}
 		}
