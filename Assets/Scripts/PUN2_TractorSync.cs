@@ -247,27 +247,6 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("changeStats", RpcTarget.AllViaServer, photonView.ViewID, timeM, harvestHay, timeHarvest);
 	}
 
-	public void callPlayEnterSound()
-	{
-		photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
-	}
-
-	[PunRPC]
-	public void playEnterSound()
-	{
-		enterTractorAS.Play();
-		moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
-	}
-
-	[PunRPC]
-	public void playExitSound()
-	{
-		moveTractorAS.Stop();
-		exitTractorAS.Play();
-	}
-
-
-
 	[PunRPC]
 	public void changeStats(int viewID, float timeM, bool harvestHay, float timeHarvest)
 	{
@@ -285,7 +264,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		{
 			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasPlayerOnly)
 			{
-				photonView.RPC("playExitSound", RpcTarget.AllViaServer);
+				moveTractorAS.Stop();
+				exitTractorAS.Play();
 			}
 				target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.Empty;
@@ -299,7 +279,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 		else if (state == 2)
 		{
-			photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
+			enterTractorAS.Play();
+			moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
@@ -308,7 +289,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		{
 			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayOnly)
 			{
-				photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
+				enterTractorAS.Play();
+				moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
 			}
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;

@@ -25,7 +25,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: eu
+  DevRegion: us
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -46,14 +46,18 @@ MonoBehaviour:
   - displayFuel
   - displayHay
   - DoDeath
-  - dropFuel
   - feedAnimal
   - Fire
   - FixFence
   - followAnimal
+  - makeAppear
+  - makeDisappear
   - placeAnimal
+  - playEnterSound
+  - playExitSound
   - RemoveFuel
   - RespawnSpaceship
+  - startBackgroundSong
   - StealBale
   - stealHayBale
   - stopAnimalFollowingOther
@@ -63,14 +67,6 @@ MonoBehaviour:
   - updateGameState
   - updatePenNumber
   - UpdatePlayerCount
-  - disappear
-  - makeDisappear
-  - makeAppear
-  - StartBackgroundSong
-  - startBackgroundSong
-  - handleExitTractorSounds
-  - playEnterSound
-  - playExitSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
