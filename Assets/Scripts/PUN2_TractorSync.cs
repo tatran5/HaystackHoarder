@@ -32,16 +32,20 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	AudioSource depleteFuelAS;
 
 	public AudioClip enterTractorAC;
-	public float enterTractorVolume = 0.05f;
+	public float enterTractorVolume = 1f;
 	AudioSource enterTractorAS;
 
 	public AudioClip moveTractorAC;
-	public float moveTractorVolume = 0.05f;
+	public float moveTractorVolume = 1f;
 	AudioSource moveTractorAS;
 
 	public AudioClip exitTractorAC;
-	public float exitTractorVolume = 0.05f;
+	public float exitTractorVolume = 1f;
 	AudioSource exitTractorAS;
+
+	public AudioClip harvestHayAC;
+	public float harvestHayVolume = 1f;
+	AudioSource harvestHayAS;
 
 	// Use this for initialization
 	void Start()
@@ -105,6 +109,12 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		exitTractorAS = gameObject.AddComponent<AudioSource>();
 		exitTractorAS.clip = exitTractorAC;
 		exitTractorAS.volume = exitTractorVolume;
+
+		harvestHayAS = gameObject.AddComponent<AudioSource>();
+		harvestHayAS.clip = harvestHayAC;
+		harvestHayAS.volume = harvestHayVolume;
+		harvestHayAS.loop = true;
+
 	}
 
 	void SetupProgressBar()
@@ -247,6 +257,28 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("changeStats", RpcTarget.AllViaServer, photonView.ViewID, timeM, harvestHay, timeHarvest);
 	}
 
+	public void callPlayHarvestHaySound()
+	{
+		photonView.RPC("playHarvestHaySound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playHarvestHaySound()
+	{
+		harvestHayAS.Play();
+	}
+
+	public void callStopHarvestHaySound()
+	{
+		photonView.RPC("stopHarvestHaySound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void stopHarvestHaySound()
+	{
+		harvestHayAS.Stop();
+	}
+
 	[PunRPC]
 	public void changeStats(int viewID, float timeM, bool harvestHay, float timeHarvest)
 	{
@@ -273,6 +305,11 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 		else if (state == 1)
 		{
+			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayAndPlayer)
+			{
+				moveTractorAS.Stop();
+				exitTractorAS.Play();
+			}
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayOnly;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);

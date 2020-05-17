@@ -23,15 +23,6 @@ public class Tractor : ControllableObject
 
 	public TractorState state = TractorState.Empty;
 
-
-	public Material T1;
-	public Material T2;
-	public Material T3;
-	public Material T1HasHay;
-	public Material T2HasHay;
-	public Material T1Dead;
-	public Material T2Dead;
-
 	public Vector3 playerPos;
 
 	// Start is called before the first frame update
@@ -105,10 +96,14 @@ public class Tractor : ControllableObject
 				timeHarvestHay = 0f;
                 haystack.DecreaseHay();
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, false, timeHarvestHay);
+				gameObject.GetComponent<PUN2_TractorSync>().callStopHarvestHaySound();
 			}
             else
             {
-				
+				if (timeHarvestHay == 0)
+				{
+					gameObject.GetComponent<PUN2_TractorSync>().callPlayHarvestHaySound();
+				}
 				timeHarvestHay += Time.fixedDeltaTime;
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, true, timeHarvestHay);
 				timeHarvestRequired = haystack.timeHarvestRequired;
