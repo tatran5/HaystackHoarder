@@ -19,7 +19,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 
 	// AUDIO SETUP STARTS -------------
 	public AudioClip hayInteractionAC;
-	public float hayInteractionVolume;
+	public float hayInteractionVolume = 1f;
 	AudioSource hayInteractionAS;
 
 	// OBJECT HOLDING SETUP -----------
@@ -207,6 +207,17 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public void callChangePlayerActions(int viewID, float timeSinceCease, bool action)
 	{
 		photonView.RPC("changePlayerActions", RpcTarget.All, viewID, timeSinceCease, action);
+	}
+
+	public void callPlayHayInteractionSound()
+	{
+		photonView.RPC("playHayInteractionSound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playHayInteractionSound()
+	{
+		hayInteractionAS.Play();
 	}
 
 	[PunRPC]

@@ -113,8 +113,6 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		harvestHayAS = gameObject.AddComponent<AudioSource>();
 		harvestHayAS.clip = harvestHayAC;
 		harvestHayAS.volume = harvestHayVolume;
-		harvestHayAS.loop = true;
-
 	}
 
 	void SetupProgressBar()
@@ -257,8 +255,15 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("changeStats", RpcTarget.AllViaServer, photonView.ViewID, timeM, harvestHay, timeHarvest);
 	}
 
+	public void callPlayHarvestHaySoundContinuous()
+	{
+		harvestHayAS.loop = true;
+		photonView.RPC("playHarvestHaySound", RpcTarget.AllViaServer);
+	}
+
 	public void callPlayHarvestHaySound()
 	{
+		harvestHayAS.loop = false;
 		photonView.RPC("playHarvestHaySound", RpcTarget.AllViaServer);
 	}
 

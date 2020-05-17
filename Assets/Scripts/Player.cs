@@ -31,19 +31,6 @@ public class Player : ControllableObject
 	public float timeSincePickupObj = 0f;
 	public float pickupOffset = 0.2f;
 
-	// SOUND VARIABLES ------------------
-	public AudioClip hayInteractionAC;
-	public float hayInteractionVolume;
-	AudioSource hayInteractionAS;
-
-	public AudioClip getFuelAC;
-	public float getFuelVolume;
-	AudioSource getFuelAS;
-
-	public AudioClip refillFuelAC;
-	public float refillFuelVolume;
-	AudioSource refillFuelAS;
-
 	// OBJECTS SPAWNING -------------------
 	public GameObject gasCanSpawn;
 	public GameObject haySpawn;
@@ -51,18 +38,6 @@ public class Player : ControllableObject
 
 	public Animal animalFollowing = null;
 
-	// TODO: Delete variables once finish testing
-	private float testProgress = 0f;
-    public Material testHasHayMaterial;
-    public Material testPlayerMaterial;
-	public Material tractorColor;
-	public Material P1;
-	public Material P2;
-	public Material P3;
-	public Material P1HasHay;
-	public Material P2HasHay;
-	public Material P1HasFuel;
-	public Material P2HasFuel;
 
 	GameObject refFence;
 
@@ -78,23 +53,8 @@ public class Player : ControllableObject
 		animator = GetComponent<Animator>();
         progressBar.SetActive(false);
         speed = 4f;
-		SetupSound();
     }
-	
-	void SetupSound()
-	{
-		hayInteractionAS = gameObject.AddComponent<AudioSource>();
-		hayInteractionAS.clip = hayInteractionAC;
-		hayInteractionAS.volume = hayInteractionVolume;
 
-		getFuelAS = gameObject.AddComponent<AudioSource>();
-		getFuelAS.clip = getFuelAC;
-		getFuelAS.volume = getFuelVolume;
-
-		refillFuelAS = gameObject.AddComponent<AudioSource>();
-		refillFuelAS.clip = refillFuelAC;
-		refillFuelAS.volume = refillFuelVolume;
-	}
 
     // Update is called once per frame
     void Update()
@@ -195,7 +155,6 @@ public class Player : ControllableObject
 			}
 		}
 
-		Debug.Log("interacted: " + interacted);
 		// If the player a not interacted with any other object, 
 		// drop whatever object that the player has in front of the player
 		//if (!interacted)
@@ -277,7 +236,6 @@ public class Player : ControllableObject
         if (state == PlayerState.Empty && team == fuelStation.team)
 		{
 			state = PlayerState.HasFuel;
-			getFuelAS.Play();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			timeSincePickupObj = 0f;
 			return true;
@@ -342,15 +300,13 @@ public class Player : ControllableObject
     {
         if (state == PlayerState.HasHay && barn.state == BarnState.Empty && team == barn.team)
         {
-			hayInteractionAS.Play();
-            barn.StartProcessingHay();
+			barn.StartProcessingHay();
             state = PlayerState.Empty;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			return true;
         }
         else if (state == PlayerState.Empty && barn.GetBale())
         {
-			hayInteractionAS.Play();
 			state = PlayerState.HasBale;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
 			timeSincePickupObj = 0f;
@@ -480,7 +436,7 @@ public class Player : ControllableObject
     {
         if (state == PlayerState.HasFuel)
         {
-			refillFuelAS.Play();
+		//	refillFuelAS.Play();
             state = PlayerState.Empty;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			tractor.RefillFuel();
@@ -495,8 +451,8 @@ public class Player : ControllableObject
     {
         if (tractor.GetHay())
         {
-			hayInteractionAS.Play();
             state = PlayerState.HasHay;
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayHayInteractionSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			timeSincePickupObj = 0f;
 			return true; 

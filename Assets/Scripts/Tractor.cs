@@ -102,7 +102,7 @@ public class Tractor : ControllableObject
             {
 				if (timeHarvestHay == 0)
 				{
-					gameObject.GetComponent<PUN2_TractorSync>().callPlayHarvestHaySound();
+					gameObject.GetComponent<PUN2_TractorSync>().callPlayHarvestHaySoundContinuous();
 				}
 				timeHarvestHay += Time.fixedDeltaTime;
 				gameObject.GetComponent<PUN2_TractorSync>().callChangeStats(timeMove, true, timeHarvestHay);
@@ -185,7 +185,7 @@ public class Tractor : ControllableObject
         {
             state = TractorState.Empty;
 			gameObject.GetComponent<PUN2_TractorSync>().callChangeState(0);
-            return true;
+			return true;
         }
         return false;
     }
