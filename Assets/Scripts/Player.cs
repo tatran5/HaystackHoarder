@@ -206,18 +206,18 @@ public class Player : ControllableObject
 				if (state == PlayerState.HasFuel)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-					GetComponent<PUN2_PlayerSync>().DropObject("GasCan", position);
+					GetComponent<PUN2_PlayerSync>().DropObject("GasCan", position, transform.rotation);
 				}
 				else if (state == PlayerState.HasHay)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-					GetComponent<PUN2_PlayerSync>().DropObject("Hay", position);
+					GetComponent<PUN2_PlayerSync>().DropObject("Hay", position, transform.rotation);
 					gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 				}
 				else if (state == PlayerState.HasBale)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
-					GetComponent<PUN2_PlayerSync>().DropObject("Bale", position);
+					GetComponent<PUN2_PlayerSync>().DropObject("Bale", position, transform.rotation);
 					gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 				}
 				else Debug.Log("Player::DropObject: Uh oh problem");

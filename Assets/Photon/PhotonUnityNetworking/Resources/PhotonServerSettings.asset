@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 
+    AppIdRealtime: a648fd06-63f4-49ff-9520-1f35b3dbac48
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 
+    AppVersion: 0.9
     UseNameServer: 1
     FixedRegion: 
     Server: 
@@ -25,12 +25,51 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: us
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList: []
+  RpcList:
+  - BreakFence
+  - ceaseAndDesist
+  - changeMaterial
+  - changePlayerActions
+  - changePlayerState
+  - changeState
+  - changeStats
+  - ClickRpc
+  - DecreaseHay
+  - DestroyRpc
+  - DestroySpaceship
+  - displayBale
+  - displayFuel
+  - displayHay
+  - DoDeath
+  - feedAnimal
+  - Fire
+  - FixFence
+  - followAnimal
+  - makeAppear
+  - makeDisappear
+  - placeAnimal
+  - playGetFuelSound
+  - playHarvestHaySound
+  - playHayInteractionSound
+  - RemoveFuel
+  - RespawnSpaceship
+  - startBackgroundSong
+  - StealBale
+  - stealHayBale
+  - stopAnimalFollowingOther
+  - stopHarvestHaySound
+  - SwitchScenes
+  - updateFenceScript
+  - updateFenceScriptFix
+  - updateGameState
+  - updatePenNumber
+  - UpdatePlayerCount
+  - playRefillFuelSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

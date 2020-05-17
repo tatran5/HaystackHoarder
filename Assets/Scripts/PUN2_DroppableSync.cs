@@ -15,9 +15,9 @@ public class PUN2_DroppableSync : MonoBehaviourPun, IPunObservable
         photonView.RPC("makeDisappear", RpcTarget.AllViaServer);
     }
 
-    public void callMakeAppear(Vector3 position)
+    public void callMakeAppear(Vector3 position, Quaternion rotation)
     {
-        photonView.RPC("makeAppear", RpcTarget.AllViaServer, position);
+        photonView.RPC("makeAppear", RpcTarget.AllViaServer, position, rotation);
     }
 
     [PunRPC]
@@ -28,9 +28,10 @@ public class PUN2_DroppableSync : MonoBehaviourPun, IPunObservable
     }
 
     [PunRPC]
-    public void makeAppear(Vector3 position)
+    public void makeAppear(Vector3 position, Quaternion rotation)
     {
         disappear = false;
         gameObject.transform.position = position;
+        gameObject.transform.rotation = rotation;
     }        
 }

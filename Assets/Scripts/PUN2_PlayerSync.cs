@@ -180,7 +180,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	}
 
 
-	public void DropObject(string tag, Vector3 position)
+	public void DropObject(string tag, Vector3 position, Quaternion rotation)
 	{
 		GameObject[] sameTypeObjects = GameObject.FindGameObjectsWithTag(tag);
 		for (int i = 0; i < sameTypeObjects.Length; i++)
@@ -188,7 +188,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 			PUN2_DroppableSync curObj = sameTypeObjects[i].GetComponent<PUN2_DroppableSync>();
 			if (curObj.disappear)
 			{
-				curObj.callMakeAppear(position);
+				curObj.callMakeAppear(position, rotation);
 				return;
 			}
 		}
