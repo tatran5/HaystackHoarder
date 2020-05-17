@@ -38,6 +38,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public float pickupGasCanVolume = 1f;
 	AudioSource pickupGasCanAS;
 
+	public AudioClip depleteFuelAC;
+	public float depleteFuelVolume;
+	AudioSource depleteFuelAS;
+
 	// OBJECT HOLDING SETUP -----------
 	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
@@ -109,6 +113,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		pickupGasCanAS = gameObject.AddComponent<AudioSource>();
 		pickupGasCanAS.clip = pickupGasCanAC;
 		pickupGasCanAS.volume = pickupGasCanVolume;
+
+		depleteFuelAS = gameObject.AddComponent<AudioSource>();
+		depleteFuelAS.clip = depleteFuelAC;
+		depleteFuelAS.volume = depleteFuelVolume;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

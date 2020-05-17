@@ -53,9 +53,12 @@ MonoBehaviour:
   - makeAppear
   - makeDisappear
   - placeAnimal
+  - playDropGasCanSound
   - playGetFuelSound
   - playHarvestHaySound
   - playHayInteractionSound
+  - playPickupGasCanSound
+  - playRefillFuelSound
   - RemoveFuel
   - RespawnSpaceship
   - startBackgroundSong
@@ -69,7 +72,6 @@ MonoBehaviour:
   - updateGameState
   - updatePenNumber
   - UpdatePlayerCount
-  - playRefillFuelSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

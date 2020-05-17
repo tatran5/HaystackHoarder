@@ -521,6 +521,8 @@ MonoBehaviour:
   dropGasCanVolume: 1
   pickupGasCanAC: {fileID: 8300000, guid: 391a1bd1717fa194cb25e71a64439d2b, type: 3}
   pickupGasCanVolume: 1
+  depleteFuelAC: {fileID: 0}
+  depleteFuelVolume: 0
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}
