@@ -432,7 +432,7 @@ MonoBehaviour:
   moveTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
   moveTractorVolume: 1
   exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
-  exitTractorVolume: 1
+  exitTractorVolume: 0.5
   harvestHayAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
   harvestHayVolume: 1
 --- !u!114 &6228415393692850211
