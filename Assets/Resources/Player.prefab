@@ -513,6 +513,8 @@ MonoBehaviour:
   fuelPossesion: {fileID: 0}
   hayInteractionAC: {fileID: 8300000, guid: 900676283adcd794382cb37544e230b5, type: 3}
   hayInteractionVolume: 1
+  getFuelAC: {fileID: 8300000, guid: 9b90244cde3a3f84ab106814be39e316, type: 3}
+  getFuelVolume: 1
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}

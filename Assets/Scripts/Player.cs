@@ -239,6 +239,7 @@ public class Player : ControllableObject
 		{
 			state = PlayerState.HasFuel;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayGetFuelSound();
 			timeSincePickupObj = 0f;
 			return true;
 		}

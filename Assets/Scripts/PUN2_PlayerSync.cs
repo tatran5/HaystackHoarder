@@ -22,6 +22,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public float hayInteractionVolume = 1f;
 	AudioSource hayInteractionAS;
 
+	public AudioClip getFuelAC;
+	public float getFuelVolume = 1f;
+	AudioSource getFuelAS;
+
 	// OBJECT HOLDING SETUP -----------
 	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
@@ -77,6 +81,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		hayInteractionAS = gameObject.AddComponent<AudioSource>();
 		hayInteractionAS.clip = hayInteractionAC;
 		hayInteractionAS.volume = hayInteractionVolume;
+
+		getFuelAS = gameObject.AddComponent<AudioSource>();
+		getFuelAS.clip = getFuelAC;
+		getFuelAS.volume = getFuelVolume;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -214,6 +222,16 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("playHayInteractionSound", RpcTarget.AllViaServer);
 	}
 
+	public void callPlayGetFuelSound()
+	{
+		photonView.RPC("playGetFuelSound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playGetFuelSound()
+	{
+		getFuelAS.Play();
+	}
 
 	[PunRPC]
 	public void playHayInteractionSound()
