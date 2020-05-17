@@ -53,14 +53,15 @@ MonoBehaviour:
   - makeAppear
   - makeDisappear
   - placeAnimal
-  - playEnterSound
-  - playExitSound
+  - playHarvestHaySound
+  - playHayInteractionSound
   - RemoveFuel
   - RespawnSpaceship
   - startBackgroundSong
   - StealBale
   - stealHayBale
   - stopAnimalFollowingOther
+  - stopHarvestHaySound
   - SwitchScenes
   - updateFenceScript
   - updateFenceScriptFix

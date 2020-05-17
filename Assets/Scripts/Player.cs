@@ -212,11 +212,13 @@ public class Player : ControllableObject
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 					GetComponent<PUN2_PlayerSync>().DropObject("Hay", position);
+					gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 				}
 				else if (state == PlayerState.HasBale)
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 					GetComponent<PUN2_PlayerSync>().DropObject("Bale", position);
+					gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 				}
 				else Debug.Log("Player::DropObject: Uh oh problem");
 
@@ -263,6 +265,7 @@ public class Player : ControllableObject
 		{
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasHay;
+			gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(1);
 			hayGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
 			return true;
@@ -276,6 +279,7 @@ public class Player : ControllableObject
 		{
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasBale;
+			gameObject.GetComponent<PUN2_PlayerSync>().playHayInteractionSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
 			baleGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
 			return true;
@@ -302,12 +306,14 @@ public class Player : ControllableObject
         {
 			barn.StartProcessingHay();
             state = PlayerState.Empty;
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayHayInteractionSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			return true;
         }
         else if (state == PlayerState.Empty && barn.GetBale())
         {
 			state = PlayerState.HasBale;
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayHayInteractionSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(2);
 			timeSincePickupObj = 0f;
 			return true;

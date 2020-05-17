@@ -214,6 +214,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("playHayInteractionSound", RpcTarget.AllViaServer);
 	}
 
+
 	[PunRPC]
 	public void playHayInteractionSound()
 	{
