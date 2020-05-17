@@ -401,7 +401,7 @@ Transform:
   - {fileID: 9026475095784280981}
   - {fileID: 8629646708662389272}
   - {fileID: 9090613295175070931}
-  - {fileID: 1032415472362479141}
+  - {fileID: 4486825155701664639}
   - {fileID: 5782322792887700401}
   - {fileID: 1990213157553881828}
   m_Father: {fileID: 0}
@@ -530,7 +530,7 @@ MonoBehaviour:
   hayInteractionAC: {fileID: 0}
   hayInteractionVolume: 0
   hayHeld: {fileID: 11351482704388752}
-  fuelHeld: {fileID: 1032415472362477770}
+  fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}
   fuel: {fileID: 8263583993715659861, guid: 72d42fe0027b5bd46a0938414fbe4afd, type: 3}
   hay: {fileID: 932071178683565214, guid: c622e6f6e70a68c48b6c4f327ceede96, type: 3}
@@ -855,13 +855,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72d42fe0027b5bd46a0938414fbe4afd, type: 3}
---- !u!1 &1032415472362477770 stripped
+--- !u!1 &9006572236086103788 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8263583993715659861, guid: 72d42fe0027b5bd46a0938414fbe4afd,
     type: 3}
   m_PrefabInstance: {fileID: 1032415472362478265}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1032415472362479141 stripped
+--- !u!4 &4486825155701664639 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3465387774367642054, guid: 72d42fe0027b5bd46a0938414fbe4afd,
     type: 3}

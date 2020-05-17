@@ -1121,7 +1121,7 @@ MonoBehaviour:
   - {fileID: 8142035414879370513}
   localObjects: []
   backgroundAC: {fileID: 8300000, guid: 4b3add4ef07b0604796bccf0ccd4ca61, type: 3}
-  backgroundVolume: 0.05
+  backgroundVolume: 0
 --- !u!1 &5005510861204773672
 GameObject:
   m_ObjectHideFlags: 0

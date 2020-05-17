@@ -35,6 +35,14 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	public float enterTractorVolume = 0.05f;
 	AudioSource enterTractorAS;
 
+	public AudioClip moveTractorAC;
+	public float moveTractorVolume = 0.05f;
+	AudioSource moveTractorAS;
+
+	public AudioClip exitTractorAC;
+	public float exitTractorVolume = 0.05f;
+	AudioSource exitTractorAS;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -88,6 +96,15 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		enterTractorAS = gameObject.AddComponent<AudioSource>();
 		enterTractorAS.clip = enterTractorAC;
 		enterTractorAS.volume = enterTractorVolume;
+
+		moveTractorAS = gameObject.AddComponent<AudioSource>();
+		moveTractorAS.clip = moveTractorAC;
+		moveTractorAS.volume = moveTractorVolume;
+		moveTractorAS.loop = true;
+
+		exitTractorAS = gameObject.AddComponent<AudioSource>();
+		exitTractorAS.clip = exitTractorAC;
+		exitTractorAS.volume = exitTractorVolume;
 	}
 
 	void SetupProgressBar()
@@ -204,6 +221,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 	}
 
+
 	public void damageTractor()
 	{
 		Tractor tractorState = (Tractor)localScripts[0];
@@ -229,6 +247,27 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("changeStats", RpcTarget.AllViaServer, photonView.ViewID, timeM, harvestHay, timeHarvest);
 	}
 
+	public void callPlayEnterSound()
+	{
+		photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playEnterSound()
+	{
+		enterTractorAS.Play();
+		moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
+	}
+
+	[PunRPC]
+	public void playExitSound()
+	{
+		moveTractorAS.Stop();
+		exitTractorAS.Play();
+	}
+
+
+
 	[PunRPC]
 	public void changeStats(int viewID, float timeM, bool harvestHay, float timeHarvest)
 	{
@@ -244,7 +283,11 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		PhotonView target = PhotonView.Find(viewID);
 		if (state == 0)
 		{
-			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
+			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasPlayerOnly)
+			{
+				photonView.RPC("playExitSound", RpcTarget.AllViaServer);
+			}
+				target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.Empty;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
 		}
@@ -256,14 +299,17 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 		else if (state == 2)
 		{
-			enterTractorAS.Play();
+			photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
 		}
 		else
 		{
-			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayOnly) enterTractorAS.Play();
+			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayOnly)
+			{
+				photonView.RPC("playEnterSound", RpcTarget.AllViaServer);
+			}
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);

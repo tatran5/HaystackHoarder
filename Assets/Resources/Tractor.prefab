@@ -429,6 +429,10 @@ MonoBehaviour:
   depleteFuelVolume: 0.05
   enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
   enterTractorVolume: 1
+  moveTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
+  moveTractorVolume: 1
+  exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
+  exitTractorVolume: 0.3
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,14 +456,6 @@ MonoBehaviour:
   timeHarvestRequired: 0
   spawnedPlayer: 0
   state: 3
-  enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
-  enterTractorVolume: 0.05
-  exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
-  exitTractorVolume: 0.05
-  movingTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
-  movingTractorVolume: 0.09
-  hayInteractionAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
-  hayInteractionVolume: 0.05
   T1: {fileID: 2100000, guid: 81cd370fb093d428fb093f3f8b5551c8, type: 2}
   T2: {fileID: 2100000, guid: f52deba99a6ee4fa2ae363b331877cf2, type: 2}
   T3: {fileID: 2100000, guid: 262adf1b2f97547abacd11082b86a792, type: 2}
