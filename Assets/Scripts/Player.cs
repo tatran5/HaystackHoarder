@@ -443,8 +443,8 @@ public class Player : ControllableObject
     {
         if (state == PlayerState.HasFuel)
         {
-		//	refillFuelAS.Play();
-            state = PlayerState.Empty;
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayRefillFuelSound();
+			state = PlayerState.Empty;
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 			tractor.RefillFuel();
 			return true;

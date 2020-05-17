@@ -515,6 +515,8 @@ MonoBehaviour:
   hayInteractionVolume: 1
   getFuelAC: {fileID: 8300000, guid: 9b90244cde3a3f84ab106814be39e316, type: 3}
   getFuelVolume: 0.5
+  refillFuelAC: {fileID: 8300000, guid: 5b49be37b4a47b448895d5cce9167e2f, type: 3}
+  refillFuelVolume: 0.5
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}
