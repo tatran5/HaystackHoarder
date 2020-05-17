@@ -427,6 +427,8 @@ MonoBehaviour:
   hayOnTractor: {fileID: 7786048468940748703}
   depleteFuelAC: {fileID: 8300000, guid: 9f61268028e72834889f48a027ac6c64, type: 3}
   depleteFuelVolume: 0.05
+  enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
+  enterTractorVolume: 1
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +444,7 @@ MonoBehaviour:
   speed: 7
   team: 0
   timeMoveMax: 5
-  turnSpeed: 200
+  turnSpeed: 150
   playerPrefab: {fileID: 2073338333761812175, guid: 6d00710b193b89d41bd3325268d9bf18,
     type: 3}
   timeMove: 0

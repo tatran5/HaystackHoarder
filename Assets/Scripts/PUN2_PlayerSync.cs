@@ -34,6 +34,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public GameObject hay;
 	public GameObject bale;
 
+
 	// Use this for initialization
 	void Start()
 	{
@@ -306,6 +307,4 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	{
 		gameObject.SetActive(false);
 	}
-
-
 }

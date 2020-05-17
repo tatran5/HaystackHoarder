@@ -30,7 +30,10 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	public AudioClip depleteFuelAC;
 	public float depleteFuelVolume;
 	AudioSource depleteFuelAS;
-	//SOUND ENDS HERE ---------------
+
+	public AudioClip enterTractorAC;
+	public float enterTractorVolume = 0.05f;
+	AudioSource enterTractorAS;
 
 	// Use this for initialization
 	void Start()
@@ -81,6 +84,10 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		depleteFuelAS = gameObject.AddComponent<AudioSource>();
 		depleteFuelAS.clip = depleteFuelAC;
 		depleteFuelAS.volume = depleteFuelVolume;
+
+		enterTractorAS = gameObject.AddComponent<AudioSource>();
+		enterTractorAS.clip = enterTractorAC;
+		enterTractorAS.volume = enterTractorVolume;
 	}
 
 	void SetupProgressBar()
@@ -249,12 +256,14 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 		else if (state == 2)
 		{
+			enterTractorAS.Play();
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
 		}
 		else
 		{
+			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayOnly) enterTractorAS.Play();
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, true);
