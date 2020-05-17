@@ -517,6 +517,10 @@ MonoBehaviour:
   getFuelVolume: 0.5
   refillFuelAC: {fileID: 8300000, guid: 5b49be37b4a47b448895d5cce9167e2f, type: 3}
   refillFuelVolume: 0.5
+  dropGasCanAC: {fileID: 8300000, guid: 710792519b0c2624dbdb931edae448ee, type: 3}
+  dropGasCanVolume: 1
+  pickupGasCanAC: {fileID: 8300000, guid: 391a1bd1717fa194cb25e71a64439d2b, type: 3}
+  pickupGasCanVolume: 1
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}

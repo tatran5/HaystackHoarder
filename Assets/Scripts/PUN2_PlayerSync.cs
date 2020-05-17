@@ -30,6 +30,14 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public float refillFuelVolume = 1f;
 	AudioSource refillFuelAS;
 
+	public AudioClip dropGasCanAC;
+	public float dropGasCanVolume = 1f;
+	AudioSource dropGasCanAS;
+
+	public AudioClip pickupGasCanAC;
+	public float pickupGasCanVolume = 1f;
+	AudioSource pickupGasCanAS;
+
 	// OBJECT HOLDING SETUP -----------
 	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
@@ -93,6 +101,14 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		refillFuelAS = gameObject.AddComponent<AudioSource>();
 		refillFuelAS.clip = refillFuelAC;
 		refillFuelAS.volume = refillFuelVolume;
+
+		dropGasCanAS = gameObject.AddComponent<AudioSource>();
+		dropGasCanAS.clip = dropGasCanAC;
+		dropGasCanAS.volume = dropGasCanVolume;
+
+		pickupGasCanAS = gameObject.AddComponent<AudioSource>();
+		pickupGasCanAS.clip = pickupGasCanAC;
+		pickupGasCanAS.volume = pickupGasCanVolume;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -238,6 +254,28 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public void callPlayRefillFuelSound()
 	{
 		photonView.RPC("playRefillFuelSound", RpcTarget.AllViaServer);
+	}
+
+	public void callPlayPickupGasCanSound()
+	{
+		photonView.RPC("playPickupGasCanSound", RpcTarget.AllViaServer);
+	}
+
+	public void callPlayDropGasCanSound()
+	{
+		photonView.RPC("playDropGasCanSound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playDropGasCanSound()
+	{
+		dropGasCanAS.Play();
+	}
+
+	[PunRPC]
+	public void playPickupGasCanSound()
+	{
+		pickupGasCanAS.Play();
 	}
 
 	[PunRPC]

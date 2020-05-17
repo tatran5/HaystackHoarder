@@ -207,6 +207,7 @@ public class Player : ControllableObject
 				{
 					GetComponent<PUN2_PlayerSync>().callChangePlayerState(0);
 					GetComponent<PUN2_PlayerSync>().DropObject("GasCan", position, transform.rotation);
+					GetComponent<PUN2_PlayerSync>().callPlayDropGasCanSound();
 				}
 				else if (state == PlayerState.HasHay)
 				{
@@ -293,6 +294,7 @@ public class Player : ControllableObject
 		{ 
 			timeSincePickupObj = 0f;
 			state = PlayerState.HasFuel;
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayPickupGasCanSound();
 			gameObject.GetComponent<PUN2_PlayerSync>().callChangePlayerState(3);
 			gasCanGO.GetComponent<PUN2_DroppableSync>().callMakeDisappear();
 			return true;
