@@ -42,6 +42,10 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public float depleteFuelVolume;
 	AudioSource depleteFuelAS;
 
+	public AudioClip fixFenceAC;
+	public float fixFenceVolume;
+	AudioSource fixFenceAS;
+
 	// OBJECT HOLDING SETUP -----------
 	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
@@ -117,6 +121,11 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		depleteFuelAS = gameObject.AddComponent<AudioSource>();
 		depleteFuelAS.clip = depleteFuelAC;
 		depleteFuelAS.volume = depleteFuelVolume;
+
+		fixFenceAS = gameObject.AddComponent<AudioSource>();
+		fixFenceAS.clip = fixFenceAC;
+		fixFenceAS.volume = fixFenceVolume;
+		fixFenceAS.loop = true;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -272,6 +281,28 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public void callPlayDropGasCanSound()
 	{
 		photonView.RPC("playDropGasCanSound", RpcTarget.AllViaServer);
+	}
+	public void callPlayFixFenceSounce()
+	{
+		photonView.RPC("playFixFenseSound", RpcTarget.AllViaServer);
+	}
+
+	public void callStopFixFenceSound()
+	{
+		photonView.RPC("stopFixFenceSound", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void stopFixFenceSound()
+	{
+		fixFenceAS.Stop();
+	}
+
+	[PunRPC]
+	public void playFixFenceSound()
+	{
+		if (!fixFenceAS.isPlaying)
+			fixFenceAS.Play();	
 	}
 
 	[PunRPC]

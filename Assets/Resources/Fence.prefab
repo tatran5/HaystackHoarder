@@ -201,12 +201,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broken: 0
   health: 15
+  maxHealth: 0
   breakTimer: 0
   vertical: 0
   team: 0
-  totalTimeToBreak: 0
+  totalTimeToBreak: 5
   timeToBreak: 0
-  totalTimeToFix: 0
+  totalTimeToFix: 5
   timeToFix: 0
   fixing: 0
 --- !u!114 &5145679156512276124
@@ -2006,15 +2007,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc121be3f680634fbb8cab1fa2d47c8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 313fbd0045f944010919beae39e5fb1f, type: 3}
---- !u!4 &4113719623924706065 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 313fbd0045f944010919beae39e5fb1f,
-    type: 3}
-  m_PrefabInstance: {fileID: 8965658594524282891}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1102686928068876546 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 313fbd0045f944010919beae39e5fb1f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8965658594524282891}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4113719623924706065 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 313fbd0045f944010919beae39e5fb1f,
     type: 3}
   m_PrefabInstance: {fileID: 8965658594524282891}
   m_PrefabAsset: {fileID: 0}

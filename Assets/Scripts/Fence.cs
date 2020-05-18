@@ -37,8 +37,6 @@ public class Fence : MonoBehaviour
         health = Random.Range(maxHealth - maxHealth / 10, maxHealth);
         breakTimer = 0;
         breakTickSeconds = 1f;
-		totalTimeToBreak = 0.8f;
-		totalTimeToFix = 0.8f;
 		Vector3 rotation = gameObject.transform.eulerAngles;
 		vertical = Mathf.Approximately(rotation.y, 90.0f) ||
 						Mathf.Approximately(rotation.y, 270.0f);

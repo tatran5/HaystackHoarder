@@ -25,6 +25,8 @@ public class Player : ControllableObject
 	public float timeSinceCease = 0f;
 	static float maxCeaseTime = 200f;
 
+
+
 	public float timeSinceGotAnimal = 0f;
 	static float gotAnimalOffset = 0.2f;
 
@@ -413,10 +415,15 @@ public class Player : ControllableObject
 				fence.GetComponent<Fence>().FixFence();
 				fence.GetComponent<Fence>().timeToFix = 0f;
 				fence.GetComponent<Fence>().fixing = false;
+				GetComponent<PUN2_PlayerSync>().stopFixFenceSound();
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
 			}
 			else
-			{
+			{ 
+				if (fence.GetComponent<Fence>().timeToFix == 0f)
+				{
+					GetComponent<PUN2_PlayerSync>().playFixFenceSound();
+				}
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(fence.GetComponent<Fence>().timeToFix + Time.fixedDeltaTime, true);
 				fence.GetComponent<Fence>().timeToFix += Time.fixedDeltaTime;
 				fence.GetComponent<Fence>().fixing = true;
