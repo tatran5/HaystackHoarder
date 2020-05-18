@@ -40,6 +40,7 @@ public class Player : ControllableObject
 
 
 	GameObject refFence;
+	GameObject fenceFixing;
 
 	public SphereCollider animalTrigger;
 	public SphereCollider playerTrigger;
@@ -105,7 +106,9 @@ public class Player : ControllableObject
 			timeSinceGotAnimal = 0.0f;
 
 		if (Input.GetKeyUp(kbInteract))
-			GetComponent<PUN2_PlayerSync>().stopFixFenceSound();
+		{
+			fenceFixing.GetComponent<PUN2_FenceSync>().callStopFixFenceSound();
+		}
 	}
 
 	bool HandlePlayerMovement()
@@ -416,16 +419,16 @@ public class Player : ControllableObject
 				fence.GetComponent<Fence>().timeToFix = 0f;
 				fence.GetComponent<Fence>().fixing = false;
 				Debug.Log("STOP FIX FENCE SOUND");
-				// GetComponent<PUN2_PlayerSync>().stopFixFenceSound();
+				fence.GetComponent<PUN2_FenceSync>().callStopFixFenceSound();
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
 			}
 			else
 			{
 				if (fence.GetComponent<Fence>().timeToFix == 0)
 				{
-					Debug.Log("PLAY FIX FENCE SOUND");
-					//GetComponent<PUN2_PlayerSync>().playFixFenceSound();
+					fence.GetComponent<PUN2_FenceSync>().callPlayFixFenceSound();
 				}
+				fenceFixing = fence;
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(fence.GetComponent<Fence>().timeToFix + Time.fixedDeltaTime, true);
 				fence.GetComponent<Fence>().timeToFix += Time.fixedDeltaTime;
 				fence.GetComponent<Fence>().fixing = true;

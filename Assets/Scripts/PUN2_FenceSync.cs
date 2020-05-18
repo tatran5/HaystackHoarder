@@ -134,6 +134,28 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("updateFenceScriptFix", RpcTarget.AllViaServer, ID, timeToBreak, beingBroken);
 	}
 
+	public void callPlayFixFenceSound()
+	{
+		photonView.RPC("playFixFenceSound", RpcTarget.AllViaServer);
+	}
+
+	public void callStopFixFenceSound()
+	{
+		photonView.RPC("stopFixFenceSound", RpcTarget.AllViaServer);
+	}
+	
+	[PunRPC] 
+	public void playFixFenceSound()
+	{
+		fixFenceAS.Play();
+	}
+
+	[PunRPC]
+	public void stopFixFenceSound()
+	{
+		fixFenceAS.Stop();
+	}
+
 	[PunRPC]
 	public void updateFenceScriptFix(int viewID, float timeToFix, bool beingFixed)
 	{
