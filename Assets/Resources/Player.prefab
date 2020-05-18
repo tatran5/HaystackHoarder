@@ -477,7 +477,6 @@ MonoBehaviour:
   state: 3
   toDestroy: 0
   rotationSpeed: 450
-  animator: {fileID: 0}
   timeSinceLastDisrupt: 0
   timeSinceCease: 0
   timeSinceGotAnimal: 0

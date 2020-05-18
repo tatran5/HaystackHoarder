@@ -296,6 +296,17 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		photonView.RPC("playIdleAnimation", RpcTarget.AllViaServer);
 	}
 
+	public void callPlayCarryIdleAnimation()
+	{
+		photonView.RPC("playCarryIdleAnimation", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playCarryIdleAnimation()
+	{
+		animator.Play("CarryIdle");
+	}
+
 	[PunRPC]
 	public void playIdleAnimation()
 	{

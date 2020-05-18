@@ -17,7 +17,6 @@ public class Player : ControllableObject
     // Motion
     public float rotationSpeed = 450;
     private Quaternion targetRotation;
-    public Animator animator;
 
 	public float timeSinceLastDisrupt = 0f;
 	static float maxTimeDisrupt = 10f;
@@ -51,7 +50,6 @@ public class Player : ControllableObject
 	// Start is called before the first frame updates
 	void Start()
     {
-		animator = GetComponent<Animator>();
         progressBar.SetActive(false);
         speed = 4f;
     }
@@ -128,13 +126,11 @@ public class Player : ControllableObject
 			return true;
 		}
 		else if (state == PlayerState.Empty)
-		{
-			Debug.Log("IDLE PLEASE");
 			gameObject.GetComponent<PUN2_PlayerSync>().callPlayIdleAnimation();
-		} else
-		{
-			animator.Play("CarryIdle");
-		}
+
+		else
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayCarryIdleAnimation();
+
 		return false;
 	}
 
