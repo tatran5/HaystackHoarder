@@ -233,6 +233,8 @@ MonoBehaviour:
   healthyFence: {fileID: 6647589654082303362}
   tatteredFence: {fileID: 1102686928068876546}
   brokenFence: {fileID: 4074297336035449223}
+  fixFenceAC: {fileID: 8300000, guid: cf56043bb6876c144a0f3dcbfa65f9b6, type: 3}
+  fixFenceVolume: 1
 --- !u!114 &1417587820185889036
 MonoBehaviour:
   m_ObjectHideFlags: 0

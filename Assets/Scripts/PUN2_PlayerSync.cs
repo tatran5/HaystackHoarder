@@ -39,11 +39,11 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	AudioSource pickupGasCanAS;
 
 	public AudioClip depleteFuelAC;
-	public float depleteFuelVolume;
+	public float depleteFuelVolume = 1f;
 	AudioSource depleteFuelAS;
 
 	public AudioClip fixFenceAC;
-	public float fixFenceVolume;
+	public float fixFenceVolume = 1f;
 	AudioSource fixFenceAS;
 
 	// OBJECT HOLDING SETUP -----------
@@ -122,10 +122,6 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 		depleteFuelAS.clip = depleteFuelAC;
 		depleteFuelAS.volume = depleteFuelVolume;
 
-		fixFenceAS = gameObject.AddComponent<AudioSource>();
-		fixFenceAS.clip = fixFenceAC;
-		fixFenceAS.volume = fixFenceVolume;
-		fixFenceAS.loop = true;
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -284,7 +280,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	}
 	public void callPlayFixFenceSounce()
 	{
-		photonView.RPC("playFixFenseSound", RpcTarget.AllViaServer);
+		photonView.RPC("playFixFenceSound", RpcTarget.AllViaServer);
 	}
 
 	public void callStopFixFenceSound()
@@ -295,14 +291,13 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void stopFixFenceSound()
 	{
-		fixFenceAS.Stop();
+
 	}
 
 	[PunRPC]
 	public void playFixFenceSound()
 	{
-		if (!fixFenceAS.isPlaying)
-			fixFenceAS.Play();	
+		
 	}
 
 	[PunRPC]

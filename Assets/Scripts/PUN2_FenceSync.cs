@@ -26,10 +26,23 @@ public class PUN2_FenceSync : MonoBehaviourPun, IPunObservable
 	public GameObject tatteredFence;
 	public GameObject brokenFence;
 
+	public AudioClip fixFenceAC;
+	public float fixFenceVolume = 1f;
+	AudioSource fixFenceAS;
+
 	// Start is called before the first frame update
 	void Start()
 	{
+		SetupSound();
 		SetupBreakMeter();
+	}
+
+	void SetupSound()
+	{
+		fixFenceAS = gameObject.AddComponent<AudioSource>();
+		fixFenceAS.volume = fixFenceVolume;
+		fixFenceAS.clip = fixFenceAC;
+		fixFenceAS.loop = true;
 	}
 
 	void SetupBreakMeter()

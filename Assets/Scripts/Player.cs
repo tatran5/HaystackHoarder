@@ -55,7 +55,6 @@ public class Player : ControllableObject
         speed = 4f;
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -416,14 +415,16 @@ public class Player : ControllableObject
 				fence.GetComponent<Fence>().FixFence();
 				fence.GetComponent<Fence>().timeToFix = 0f;
 				fence.GetComponent<Fence>().fixing = false;
-				GetComponent<PUN2_PlayerSync>().stopFixFenceSound();
+				Debug.Log("STOP FIX FENCE SOUND");
+				// GetComponent<PUN2_PlayerSync>().stopFixFenceSound();
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
 			}
 			else
 			{
 				if (fence.GetComponent<Fence>().timeToFix == 0)
 				{
-					GetComponent<PUN2_PlayerSync>().playFixFenceSound();
+					Debug.Log("PLAY FIX FENCE SOUND");
+					//GetComponent<PUN2_PlayerSync>().playFixFenceSound();
 				}
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(fence.GetComponent<Fence>().timeToFix + Time.fixedDeltaTime, true);
 				fence.GetComponent<Fence>().timeToFix += Time.fixedDeltaTime;

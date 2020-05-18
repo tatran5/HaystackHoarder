@@ -523,8 +523,8 @@ MonoBehaviour:
   pickupGasCanVolume: 1
   depleteFuelAC: {fileID: 0}
   depleteFuelVolume: 0
-  fixFenceAC: {fileID: 8300000, guid: cf56043bb6876c144a0f3dcbfa65f9b6, type: 3}
-  fixFenceVolume: 0.7
+  fixFenceAC: {fileID: 0}
+  fixFenceVolume: 1
   hayHeld: {fileID: 11351482704388752}
   fuelHeld: {fileID: 9006572236086103788}
   baleHeld: {fileID: 5940095780067555521}
