@@ -281,10 +281,31 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	{
 		photonView.RPC("playDropGasCanSound", RpcTarget.AllViaServer);
 	}
-	
+		
 	public void callPlayRunAnimation()
 	{
 		photonView.RPC("playRunAnimation", RpcTarget.AllViaServer);
+	}
+
+	public void callPlayCarryAnimation()
+	{
+		photonView.RPC("playCarryAnimation", RpcTarget.AllViaServer);
+	}
+	public void callPlayIdleAnimation()
+	{
+		photonView.RPC("playIdleAnimation", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playIdleAnimation()
+	{
+		animator.Play("Idle");
+	}
+
+	[PunRPC]
+	public void playCarryAnimation()
+	{
+		animator.Play("Carry");
 	}
 
 	[PunRPC]

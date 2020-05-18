@@ -116,7 +116,6 @@ public class Player : ControllableObject
 		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 		if (input != Vector3.zero)
 		{
-			//Debug.Log("Movement input");
 			targetRotation = Quaternion.LookRotation(input);
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
@@ -124,13 +123,14 @@ public class Player : ControllableObject
 			if (state == PlayerState.Empty)
 				gameObject.GetComponent<PUN2_PlayerSync>().callPlayRunAnimation();
 			else
-				animator.Play("Carry");
+				gameObject.GetComponent<PUN2_PlayerSync>().callPlayCarryAnimation();
 			transform.position += speed * input * Time.deltaTime;
 			return true;
 		}
 		else if (state == PlayerState.Empty)
 		{
-			animator.Play("Idle");
+			Debug.Log("IDLE PLEASE");
+			gameObject.GetComponent<PUN2_PlayerSync>().callPlayIdleAnimation();
 		} else
 		{
 			animator.Play("CarryIdle");
@@ -418,7 +418,6 @@ public class Player : ControllableObject
 				fence.GetComponent<Fence>().FixFence();
 				fence.GetComponent<Fence>().timeToFix = 0f;
 				fence.GetComponent<Fence>().fixing = false;
-				Debug.Log("STOP FIX FENCE SOUND");
 				fence.GetComponent<PUN2_FenceSync>().callStopFixFenceSound();
 				refFence.GetComponent<PUN2_FenceSync>().updateFixStats(0, false);
 			}
@@ -558,7 +557,6 @@ public class Player : ControllableObject
 		if (dist < 1.5f && other.gameObject.tag == "Player" && timeSinceLastDisrupt >= maxTimeDisrupt
 			&& Input.GetKeyDown(kbInteract))
 		{
-			//Debug.Log("CEASE AND DESIST!");
 			Player otherPlayer = other.gameObject.GetComponent<Player>();
 			PlayerState state = otherPlayer.state;
 
