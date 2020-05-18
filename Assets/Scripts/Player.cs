@@ -105,7 +105,7 @@ public class Player : ControllableObject
 		else
 			timeSinceGotAnimal = 0.0f;
 
-		if (Input.GetKeyUp(kbInteract))
+		if (Input.GetKeyUp(kbInteract) && fenceFixing != null)
 		{
 			fenceFixing.GetComponent<PUN2_FenceSync>().callStopFixFenceSound();
 		}
