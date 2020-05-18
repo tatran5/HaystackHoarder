@@ -17,7 +17,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 
 	public static Vector3 epsilon = new Vector3(0.15f, 0.15f, 0.15f);
 
-	// AUDIO SETUP STARTS -------------
+	// AUDIO SETUP STARTS -------------------------------------------------
 	public AudioClip hayInteractionAC;
 	public float hayInteractionVolume = 1f;
 	AudioSource hayInteractionAS;
@@ -46,22 +46,25 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	public float fixFenceVolume = 1f;
 	AudioSource fixFenceAS;
 
-	// OBJECT HOLDING SETUP -----------
+	// OBJECT HOLDING SETUP ---------------------------------------------------
 	// These are associated with the meshes hidden within player's prefab, not used to be spawn!
 	public GameObject hayHeld;
 	public GameObject fuelHeld;
 	public GameObject baleHeld;
 
-	// OBJECT SPAWN -------------------
+	// OBJECT SPAWN -----------------------------------------------------------
 	// These are associated with objects to be spawn as player drops object
 	public GameObject fuel;
 	public GameObject hay;
 	public GameObject bale;
 
+	// ANIMATION --------------------------------------------------------------
+	Animator animator;
 
 	// Use this for initialization
 	void Start()
 	{
+		animator = GetComponent<Animator>();
 		SetupSound();
 		Debug.Log("Name: " + PhotonNetwork.LocalPlayer.NickName);
 		if (photonView.IsMine)
@@ -278,26 +281,16 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	{
 		photonView.RPC("playDropGasCanSound", RpcTarget.AllViaServer);
 	}
-	public void callPlayFixFenceSounce()
+	
+	public void callPlayRunAnimation()
 	{
-		photonView.RPC("playFixFenceSound", RpcTarget.AllViaServer);
-	}
-
-	public void callStopFixFenceSound()
-	{
-		photonView.RPC("stopFixFenceSound", RpcTarget.AllViaServer);
+		photonView.RPC("playRunAnimation", RpcTarget.AllViaServer);
 	}
 
 	[PunRPC]
-	public void stopFixFenceSound()
+	public void playRunAnimation()
 	{
-
-	}
-
-	[PunRPC]
-	public void playFixFenceSound()
-	{
-		
+		animator.Play("Running");
 	}
 
 	[PunRPC]

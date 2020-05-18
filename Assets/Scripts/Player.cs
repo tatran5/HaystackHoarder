@@ -122,7 +122,7 @@ public class Player : ControllableObject
 				targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 
 			if (state == PlayerState.Empty)
-				animator.Play("Running");
+				gameObject.GetComponent<PUN2_PlayerSync>().callPlayRunAnimation();
 			else
 				animator.Play("Carry");
 			transform.position += speed * input * Time.deltaTime;
