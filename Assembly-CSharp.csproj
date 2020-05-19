@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\Global.cs" />
     <Compile Include="Assets\Scripts\GlobalTutorial.cs" />
     <Compile Include="Assets\Scripts\Haystack.cs" />
+    <Compile Include="Assets\Scripts\Misc\SetupMesh.cs" />
     <Compile Include="Assets\Scripts\PUN2_AnimalSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_BarnSync.cs" />
     <Compile Include="Assets\Scripts\PUN2_DroppableSync.cs" />
