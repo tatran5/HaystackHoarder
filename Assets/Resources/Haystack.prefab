@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3107581247145983863}
   - component: {fileID: 313372228612340780}
   - component: {fileID: 4691467337472230591}
+  - component: {fileID: 435019030238252328}
   m_Layer: 9
   m_Name: Haystack
   m_TagString: Haystack
@@ -154,6 +155,19 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!135 &435019030238252328
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47018750466635252}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &356133440073624260
 PrefabInstance:
   m_ObjectHideFlags: 0
