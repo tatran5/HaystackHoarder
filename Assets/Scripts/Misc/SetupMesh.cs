@@ -16,8 +16,20 @@ public class SetupMesh : MonoBehaviour
 
 	void SetCanvas()
 	{
+		Vector3 curPos = gameObject.transform.position;
+		Vector3 curSca = gameObject.transform.localScale;
+		Quaternion curRot = gameObject.transform.rotation;
+
+		transform.position = new Vector3(0, 0, 0);
+		transform.rotation = Quaternion.identity;
+
 		canvas.transform.position = new Vector3(canvas.transform.position.x, 
-			gameObject.GetComponent<BoxCollider>().size.y / 2f + 1f, canvas.transform.position.z);
+			gameObject.GetComponent<BoxCollider>().size.y + 1f, canvas.transform.position.z);
+		canvas.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+
+		gameObject.transform.position = curPos;
+		gameObject.transform.localScale = curSca;
+		gameObject.transform.rotation = curRot;
 	}
 
 	void SetCollider()
