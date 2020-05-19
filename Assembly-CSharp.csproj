@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\PUN2_WaitingRoomController.cs" />
     <Compile Include="Assets\Scripts\Pitfall.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\PunObjectWithMesh.cs" />
     <Compile Include="Assets\Scripts\Tractor.cs" />
     <Compile Include="Assets\Scripts\UI\Billboard.cs" />
     <Compile Include="Assets\Scripts\UI\ButtonController.cs" />

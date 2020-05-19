@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
+public class PUN2_TractorSync : PunObjectWithMesh
 {
 
 	//List of the scripts that should only be active for the local player (ex. PlayerController, MouseLook etc.)
@@ -18,38 +18,36 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	float timeHarvest;
 	float harvestRequired = 2f;
 	public float team = 0;
-
 	public float timeSincePlayerEnter = 0f;
 	public static float timeOffsetPlayerEnter = 0.2f;
-
 	public TractorState state = TractorState.Empty;
-
 	public GameObject hayOnTractor;
 
-	// SOUND STARTS HERE ------------
-	public AudioClip depleteFuelAC;
-	public float depleteFuelVolume;
-	AudioSource depleteFuelAS;
+	// SOUND STARTS HERE ------------------------------------------------------------------------
+	public AudioClip _depleteFuelAC;
+	public float _depleteFuelVolume;
+	AudioSource _depleteFuelAS;
 
-	public AudioClip enterTractorAC;
-	public float enterTractorVolume = 1f;
-	AudioSource enterTractorAS;
+	public AudioClip _enterTractorAC;
+	public float _enterTractorVolume = 1f;
+	AudioSource _enterTractorAS;
 
-	public AudioClip moveTractorAC;
-	public float moveTractorVolume = 1f;
-	AudioSource moveTractorAS;
+	public AudioClip _moveTractorAC;
+	public float _moveTractorVolume = 1f;
+	AudioSource _moveTractorAS;
 
-	public AudioClip exitTractorAC;
-	public float exitTractorVolume = 1f;
-	AudioSource exitTractorAS;
+	public AudioClip _exitTractorAC;
+	public float _exitTractorVolume = 1f;
+	AudioSource _exitTractorAS;
 
-	public AudioClip harvestHayAC;
-	public float harvestHayVolume = 1f;
-	AudioSource harvestHayAS;
+	public AudioClip _harvestHayAC;
+	public float _harvestHayVolume = 1f;
+	AudioSource _harvestHayAS;
 
 	// Use this for initialization
 	void Start()
 	{
+		SetCollider();
 		SetupSound();
 		if (photonView.IsMine)
 		{
@@ -91,28 +89,29 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 	}
 
+
 	void SetupSound()
 	{
-		depleteFuelAS = gameObject.AddComponent<AudioSource>();
-		depleteFuelAS.clip = depleteFuelAC;
-		depleteFuelAS.volume = depleteFuelVolume;
+		_depleteFuelAS = gameObject.AddComponent<AudioSource>();
+		_depleteFuelAS.clip = _depleteFuelAC;
+		_depleteFuelAS.volume = _depleteFuelVolume;
 
-		enterTractorAS = gameObject.AddComponent<AudioSource>();
-		enterTractorAS.clip = enterTractorAC;
-		enterTractorAS.volume = enterTractorVolume;
+		_enterTractorAS = gameObject.AddComponent<AudioSource>();
+		_enterTractorAS.clip = _enterTractorAC;
+		_enterTractorAS.volume = _enterTractorVolume;
 
-		moveTractorAS = gameObject.AddComponent<AudioSource>();
-		moveTractorAS.clip = moveTractorAC;
-		moveTractorAS.volume = moveTractorVolume;
-		moveTractorAS.loop = true;
+		_moveTractorAS = gameObject.AddComponent<AudioSource>();
+		_moveTractorAS.clip = _moveTractorAC;
+		_moveTractorAS.volume = _moveTractorVolume;
+		_moveTractorAS.loop = true;
 
-		exitTractorAS = gameObject.AddComponent<AudioSource>();
-		exitTractorAS.clip = exitTractorAC;
-		exitTractorAS.volume = exitTractorVolume;
+		_exitTractorAS = gameObject.AddComponent<AudioSource>();
+		_exitTractorAS.clip = _exitTractorAC;
+		_exitTractorAS.volume = _exitTractorVolume;
 
-		harvestHayAS = gameObject.AddComponent<AudioSource>();
-		harvestHayAS.clip = harvestHayAC;
-		harvestHayAS.volume = harvestHayVolume;
+		_harvestHayAS = gameObject.AddComponent<AudioSource>();
+		_harvestHayAS.clip = _harvestHayAC;
+		_harvestHayAS.volume = _harvestHayVolume;
 	}
 
 	void SetupProgressBar()
@@ -130,7 +129,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		progressBar.SetMaxValue(25);
 	}
 
-	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
 		Tractor tractorState = (Tractor)localScripts[0];
 		if (stream.IsWriting)
@@ -192,7 +191,6 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 					{
 						if (!o.activeSelf)
 						{
-							//o.SetActive(true);
 							Tractor t = (Tractor)localScripts[0];
 							Player p = o.GetComponent<Player>();
 							if (p.team == t.team)
@@ -236,7 +234,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		if (tractorState.state == TractorState.Empty || tractorState.state == TractorState.HasHayOnly)
 		{
 			tractorState.RemoveFuel();
-			depleteFuelAS.Play();
+			_depleteFuelAS.Play();
 			callChangeStats(tractorState.timeMove, harvestHay, tractorState.timeHarvestRequired);
 		}
 	}
@@ -257,20 +255,20 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 
 	public void callPlayHarvestHaySoundContinuous()
 	{
-		harvestHayAS.loop = true;
+		_harvestHayAS.loop = true;
 		photonView.RPC("playHarvestHaySound", RpcTarget.AllViaServer);
 	}
 
 	public void callPlayHarvestHaySound()
 	{
-		harvestHayAS.loop = false;
+		_harvestHayAS.loop = false;
 		photonView.RPC("playHarvestHaySound", RpcTarget.AllViaServer);
 	}
 
 	[PunRPC]
 	public void playHarvestHaySound()
 	{
-		harvestHayAS.Play();
+		_harvestHayAS.Play();
 	}
 
 	public void callStopHarvestHaySound()
@@ -281,7 +279,7 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void stopHarvestHaySound()
 	{
-		harvestHayAS.Stop();
+		_harvestHayAS.Stop();
 	}
 
 	[PunRPC]
@@ -301,8 +299,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		{
 			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasPlayerOnly)
 			{
-				moveTractorAS.Stop();
-				exitTractorAS.Play();
+				_moveTractorAS.Stop();
+				_exitTractorAS.Play();
 			}
 				target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.Empty;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.Empty;
@@ -312,8 +310,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		{
 			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayAndPlayer)
 			{
-				moveTractorAS.Stop();
-				exitTractorAS.Play();
+				_moveTractorAS.Stop();
+				_exitTractorAS.Play();
 			}
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayOnly;
@@ -321,8 +319,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		}
 		else if (state == 2)
 		{
-			enterTractorAS.Play();
-			moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
+			_enterTractorAS.Play();
+			_moveTractorAS.PlayDelayed(_enterTractorAS.clip.length);
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasPlayerOnly;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasPlayerOnly;
 			photonView.RPC("displayHay", RpcTarget.AllViaServer, viewID, false);
@@ -331,8 +329,8 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 		{
 			if (target.gameObject.GetComponent<PUN2_TractorSync>().state == TractorState.HasHayOnly)
 			{
-				enterTractorAS.Play();
-				moveTractorAS.PlayDelayed(enterTractorAS.clip.length);
+				_enterTractorAS.Play();
+				_moveTractorAS.PlayDelayed(_enterTractorAS.clip.length);
 			}
 			target.gameObject.GetComponent<PUN2_TractorSync>().state = TractorState.HasHayAndPlayer;
 			target.gameObject.GetComponent<Tractor>().state = TractorState.HasHayAndPlayer;

@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.15169}
+  m_AnchoredPosition: {x: 0, y: 1.246}
   m_SizeDelta: {x: 220, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8905591869965338044
@@ -320,7 +320,7 @@ Transform:
   m_GameObject: {fileID: 6981644264267184858}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8756121023974902272}
   - {fileID: 1405804098678910359}
@@ -416,6 +416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a89a9095b75b744e49e183546fe93465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meshSize: {x: 0, y: 0, z: 0}
   localScripts:
   - {fileID: 6228415393692850211}
   localObjects: []
@@ -425,16 +426,16 @@ MonoBehaviour:
   timeSincePlayerEnter: 0
   state: 3
   hayOnTractor: {fileID: 7786048468940748703}
-  depleteFuelAC: {fileID: 8300000, guid: 9f61268028e72834889f48a027ac6c64, type: 3}
-  depleteFuelVolume: 1
-  enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
-  enterTractorVolume: 1
-  moveTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
-  moveTractorVolume: 1
-  exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
-  exitTractorVolume: 0.5
-  harvestHayAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
-  harvestHayVolume: 1
+  _depleteFuelAC: {fileID: 0}
+  _depleteFuelVolume: 0
+  _enterTractorAC: {fileID: 8300000, guid: d6eca4d0d6e0a464d9b4d63faba0da2b, type: 3}
+  _enterTractorVolume: 1
+  _moveTractorAC: {fileID: 8300000, guid: 96901c2472a4c4c42bf48c4853476672, type: 3}
+  _moveTractorVolume: 1
+  _exitTractorAC: {fileID: 8300000, guid: 85d318480317636429e7f5653499dbe1, type: 3}
+  _exitTractorVolume: 1
+  _harvestHayAC: {fileID: 8300000, guid: 0d36ea94d8149b14891234d3d72d19aa, type: 3}
+  _harvestHayVolume: 1
 --- !u!114 &6228415393692850211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,11 +632,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.31449
+      value: -0.94683
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.000000010133
+      value: -0.00000010246
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalRotation.x
@@ -671,15 +672,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1214126
+      value: 3.275739
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0560001
+      value: 3.275739
       objectReference: {fileID: 0}
     - target: {fileID: 4438806387866552, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5525872
+      value: 3.275739
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dbefd2d969efe24a8582a34131c05cd, type: 3}
