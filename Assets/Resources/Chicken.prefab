@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 3387804198805551315}
   - component: {fileID: 3499706033699792430}
   - component: {fileID: 478355210081004986}
+  - component: {fileID: -3848097550021275148}
   m_Layer: 9
   m_Name: Chicken
   m_TagString: Animal
@@ -243,6 +244,7 @@ MonoBehaviour:
   - {fileID: 0}
   localObjects: []
   happinessMeter: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &879823412369141254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,6 +321,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 3093734272807822078}
+--- !u!95 &-3848097550021275148
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168416071305360503}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 129f3c383e2b5514f84a597c1ba7f5e6, type: 3}
+  m_Controller: {fileID: 9100000, guid: 6d078d49600a46342ad4d9df40af580b, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6352240321121221722
 GameObject:
   m_ObjectHideFlags: 0

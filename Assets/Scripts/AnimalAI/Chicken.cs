@@ -23,7 +23,6 @@ public class Chicken : Animal
 
     }
 
-    // Update is called once per frame
     protected override void GetWanderDirection()
     {
         Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, detectionRadius);
@@ -64,6 +63,7 @@ public class Chicken : Animal
         float angle = Random.Range(-angleRange, angleRange);
 
         Vector2 targetDir = RotateVectorByAngle(playerToAnimal, angle);
+        
         float angleToRotate = Mathf.Acos(Vector3.Dot(new Vector3(0, 0, 1), targetDir.normalized)) * Mathf.Rad2Deg;
         if (targetDir.x < 0) angleToRotate *= -1;
         transform.eulerAngles = new Vector3(0, angleToRotate, 0);

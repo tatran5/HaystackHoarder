@@ -15,9 +15,15 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	Vector3 latestPos;
 	Quaternion latestRot;
 
+	// ANIMATION --------------------------------------------------------------
+	public Animator animator;
+
 	// Start is called before the first frame update
 	void Start()
 	{
+		animator = GetComponent<Animator>();
+     //		animator.Play("Eat");
+	//	callPlayEatAnimation();
 		Animal animalScr = (Animal)localScripts[0];
 		feedMeter = animalScr.feedMeter;
 		SetupProgressBar();
@@ -80,6 +86,40 @@ public class PUN2_AnimalSync : MonoBehaviourPun, IPunObservable
 	public void callFeedAnimal(float amount)
 	{
 		photonView.RPC("feedAnimal", RpcTarget.AllViaServer, photonView.ViewID, amount);
+	}
+
+	public void callPlayEatAnimation()
+	{
+		photonView.RPC("playEatAnimation", RpcTarget.AllViaServer);
+	}
+
+	public void callPlayRunAnimation()
+	{
+		photonView.RPC("playRunAnimation", RpcTarget.AllViaServer);
+	}
+
+	public void callPlayIdleAnimation()
+	{
+		photonView.RPC("playIdleAnimation", RpcTarget.AllViaServer);
+	}
+
+	[PunRPC]
+	public void playIdleAnimation()
+	{
+		animator.Play("Idle");
+	}
+
+
+	[PunRPC]
+	public void playRunAnimation()
+	{
+		animator.Play("Run");
+	}
+
+	[PunRPC]
+	public void playEatAnimation()
+	{
+		animator.Play("Eat");
 	}
 
 	[PunRPC]

@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 506117776026964859}
   - component: {fileID: 8942084000181389971}
   - component: {fileID: 2995997462629434437}
+  - component: {fileID: 3762512284107316126}
   m_Layer: 9
   m_Name: Cow
   m_TagString: Animal
@@ -284,6 +285,7 @@ MonoBehaviour:
   - {fileID: 992849672745287195}
   localObjects: []
   happinessMeter: {fileID: 4616178172575220906}
+  animator: {fileID: 0}
 --- !u!114 &8942084000181389971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,6 +321,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 3488842367092181758}
+--- !u!95 &3762512284107316126
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992849672745287194}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 61a13ef08246a7b4981537dec30dca14, type: 3}
+  m_Controller: {fileID: 9100000, guid: e1cad8957164dee43aaadd2d88c5c680, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3593436148544251837
 GameObject:
   m_ObjectHideFlags: 0

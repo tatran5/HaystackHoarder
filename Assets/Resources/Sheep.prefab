@@ -306,6 +306,7 @@ GameObject:
   - component: {fileID: 4027718266504466823}
   - component: {fileID: 243018187390000435}
   - component: {fileID: 6390032096816130643}
+  - component: {fileID: -3181795110116730220}
   m_Layer: 9
   m_Name: Sheep
   m_TagString: Animal
@@ -434,6 +435,7 @@ MonoBehaviour:
   - {fileID: 4027718266504466823}
   localObjects: []
   happinessMeter: {fileID: 7974329198525464874}
+  animator: {fileID: 0}
 --- !u!114 &4027718266504466823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,7 +459,6 @@ MonoBehaviour:
   currentPos: {x: 0, y: 0}
   normal: {fileID: 2100000, guid: d5b08af45b43ff847a531c6ba80fff8d, type: 2}
   highlighted: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
-  epsilonDistanceOffset: 0.00001
   isFollowingPlayer: 0
   playerFollowing: {fileID: 0}
 --- !u!114 &243018187390000435
@@ -495,6 +496,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1829079269252888739}
+--- !u!95 &-3181795110116730220
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6852437494649865352}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: e698cac18a012084fbc2ac0407962006, type: 3}
+  m_Controller: {fileID: 9100000, guid: e1cad8957164dee43aaadd2d88c5c680, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7813787311628121867
 GameObject:
   m_ObjectHideFlags: 0

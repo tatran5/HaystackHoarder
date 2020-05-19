@@ -4105,6 +4105,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Haystack (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 435019030238252328, guid: 62627f5e2ee3a7947bbd0138d9c227db,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2026329311572266667, guid: 62627f5e2ee3a7947bbd0138d9c227db,
         type: 3}
       propertyPath: m_LocalPosition.x

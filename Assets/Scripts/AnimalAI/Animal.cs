@@ -94,13 +94,6 @@ public class Animal : MonoBehaviour
             feedTimer = 0;
         }
 
-        //slowly darken the color the lower the feed meter gets
-        if (!selected)
-        {
-            Color curr = gameObject.GetComponent<MeshRenderer>().material.color;
-            gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color((feedMeter / 50f) * curr.r, (feedMeter / 50f) * curr.g, (feedMeter / 50f) * curr.b, 1.0f));
-        }
-
 
         if (isFollowingPlayer && playerFollowing != null)
         {
@@ -118,7 +111,12 @@ public class Animal : MonoBehaviour
 
             if (PositionEquality(targetPoint, currentPos))
             {
+                if (targetDirection != Vector3.zero)
+                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+
                 targetDirection = Vector3.zero;
+                // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+               // gameObject.GetComponent<PUN2_AnimalSync>().callPlayIdleAnimation();
             }
 
             if (penNumber > 0)
@@ -126,13 +124,16 @@ public class Animal : MonoBehaviour
                 int fenceIndex = CheckForEscape();
                 if (fenceIndex >= 0)
                 {
+                   //gameObject.GetComponent<PUN2_AnimalSync>().animator.Play("Run");
                     GetEscapeDirection(fenceIndex);
                 }
                 else if (targetDirection == Vector3.zero)
                 {
+                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
                     //GetIdleDirection();
-                 }
-                
+                    // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                }
+
             }
             else
             {
@@ -140,6 +141,10 @@ public class Animal : MonoBehaviour
                 if (penNumber == 0)
                 {
                     GetWanderDirection();
+                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
+                } else
+                {
+                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
                 }
                 gameObject.transform.position += targetDirection * speed * Time.deltaTime;
             }
@@ -336,7 +341,7 @@ public class Animal : MonoBehaviour
 					return;
 				}
 			}
-		}
+		} 
 	}
 
 	public void FeedAnimal()
