@@ -212,8 +212,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.3
+  m_Center: {x: 0, y: -0.2, z: 0}
 --- !u!65 &-9166308631670929492
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -266,7 +266,6 @@ MonoBehaviour:
   currentPos: {x: 0, y: 0}
   normal: {fileID: 0}
   highlighted: {fileID: 0}
-  epsilonDistanceOffset: 0.00001
   isFollowingPlayer: 0
   playerFollowing: {fileID: 0}
 --- !u!54 &3387804198805551315

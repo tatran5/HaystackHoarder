@@ -299,7 +299,10 @@ public class Animal : MonoBehaviour
             Vector2 currentPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
             float wanderX = Random.Range(-1.0f, 1.0f);
             float wanderZ = Random.Range(-1.0f, 1.0f);
+            Vector3 curTargetDirection = targetDirection;
             targetDirection = new Vector3(wanderX, 0.0f, wanderZ);
+            float angleToRotate = Mathf.Acos(Vector3.Dot(curTargetDirection.normalized, targetDirection.normalized)) * Mathf.Rad2Deg;
+            transform.eulerAngles = new Vector3(0, angleToRotate, 0);
 
             // Ray to cast along
             Vector2 targetDir = new Vector2(targetDirection.x, targetDirection.z);

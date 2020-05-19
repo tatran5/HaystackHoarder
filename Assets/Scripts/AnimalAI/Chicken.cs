@@ -41,7 +41,14 @@ public class Chicken : Animal
             Vector2 currentPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
             float wanderX = Random.Range(-1.0f, 1.0f);
             float wanderZ = Random.Range(-1.0f, 1.0f);
+            Vector3 curTargetDirection = new Vector3(0, 0, 1);
             targetDirection = new Vector3(wanderX, 0.0f, wanderZ);
+            Debug.Log("CTD: " + curTargetDirection);
+            Debug.Log("TD: " + targetDirection);
+            float angleToRotate = Mathf.Acos(Vector3.Dot(curTargetDirection.normalized, targetDirection.normalized)) * Mathf.Rad2Deg;
+            if (targetDirection.x < 0) angleToRotate *= -1;
+            transform.eulerAngles = new Vector3(0, angleToRotate, 0);
+            Debug.Log("angleToRotate" + angleToRotate);
 
             // Ray to cast along
             Vector2 targetDir = new Vector2(targetDirection.x, targetDirection.z);

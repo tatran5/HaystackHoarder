@@ -52,7 +52,6 @@ public class SetupMesh : MonoBehaviour
 				bounds.Encapsulate(render.bounds);
 		}
 
-		Debug.Log(bounds.extents * 2);
 		BoxCollider collider = gameObject.GetComponent<BoxCollider>();
 		
 		// Set collider size

@@ -162,8 +162,8 @@ public class Global : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log(grid_getCoordsOfCellIndex(index));
-				Debug.Log("ok thats fair");
+				//Debug.Log(grid_getCoordsOfCellIndex(index));
+				//Debug.Log("ok thats fair");
 				break;
 			}
 		}
