@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.00027863}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 220, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3093734272807822078
@@ -125,11 +125,12 @@ GameObject:
   - component: {fileID: 4513077253783689398}
   - component: {fileID: 5108935113941785253}
   - component: {fileID: 4920632293151428968}
+  - component: {fileID: -9166308631670929492}
   - component: {fileID: 5755941631105720452}
   - component: {fileID: 879823412369141254}
   - component: {fileID: 3387804198805551315}
   - component: {fileID: 3499706033699792430}
-  - component: {fileID: -9166308631670929492}
+  - component: {fileID: 478355210081004986}
   m_Layer: 9
   m_Name: Chicken
   m_TagString: Animal
@@ -209,9 +210,22 @@ SphereCollider:
   m_GameObject: {fileID: 3168416071305360503}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &-9166308631670929492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168416071305360503}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5755941631105720452
 MonoBehaviour:
@@ -242,7 +256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   feedMeter: 0
-  feedTickLength: 0
+  maxFeedMeter: 0
+  feedTickSeconds: 0
   weight: 0
   speed: 0
   penNumber: 0
@@ -292,19 +307,19 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!65 &-9166308631670929492
-BoxCollider:
+--- !u!114 &478355210081004986
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168416071305360503}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f1221bc91386a47972661d2c4ee785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 3093734272807822078}
 --- !u!1 &6352240321121221722
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8490841437565108124

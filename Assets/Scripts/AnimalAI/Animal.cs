@@ -39,7 +39,7 @@ public class Animal : MonoBehaviour
 
 	bool selected = false;
 
-	public float epsilonDistanceOffset = 0.00001f;
+	float epsilonDistanceOffset = 0.1f;
 	public bool isFollowingPlayer = false;
 	public Player playerFollowing;
 
@@ -105,8 +105,9 @@ public class Animal : MonoBehaviour
         if (isFollowingPlayer && playerFollowing != null)
         {
             float positionY = transform.position.y;
-            transform.position = playerFollowing.transform.position - (1f + epsilonDistanceOffset) *
-                playerFollowing.transform.forward * 0.5f * (playerFollowing.transform.localScale.z + transform.localScale.z);
+            float zDist = (playerFollowing.gameObject.GetComponent<BoxCollider>().size.z + 
+                gameObject.GetComponent<BoxCollider>().size.z) / 2f + epsilonDistanceOffset;
+            transform.position = playerFollowing.transform.position - playerFollowing.transform.forward.normalized * zDist;
             transform.position = new Vector3(transform.position.x, positionY, transform.position.z);
             transform.rotation = playerFollowing.transform.rotation;
         }

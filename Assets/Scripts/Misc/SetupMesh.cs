@@ -7,6 +7,7 @@ using UnityEngine;
 public class SetupMesh : MonoBehaviour
 {
 	public Canvas canvas;
+	float epsilon = 0.25f;
 
 	void Start()
 	{
@@ -53,9 +54,22 @@ public class SetupMesh : MonoBehaviour
 
 		Debug.Log(bounds.extents * 2);
 		BoxCollider collider = gameObject.GetComponent<BoxCollider>();
-		collider.size = bounds.extents * 2;
-		collider.center = 0.5f * (bounds.min + bounds.max);
-		Debug.Log(gameObject.GetComponent<BoxCollider>().size);
+		
+		// Set collider size
+		collider.size = bounds.extents * 2 - new Vector3(epsilon, 0, epsilon);
+		if (gameObject.CompareTag("Player"))
+		{
+			// The player might be in T pose which is overestimate the bounds in the x direction
+			collider.size = new Vector3(collider.size.x / 2f, collider.size.y, collider.size.z);
+		}
+		float posSizeX = collider.size.x >= 0 ? collider.size.x : -collider.size.x;
+		float posSizeY = collider.size.y >= 0 ? collider.size.y : -collider.size.y;
+		float posSizeZ = collider.size.z >= 0 ? collider.size.z : -collider.size.z;
+		collider.size = new Vector3(posSizeX, posSizeY, posSizeZ);
+
+
+		// Set collider center
+		collider.center = (bounds.min + bounds.max) * 0.5f;
 
 		gameObject.transform.position = curPos;
 		gameObject.transform.localScale = curSca;
