@@ -146,7 +146,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 992849672745287194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.54, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5815919679149232140}
@@ -266,7 +266,6 @@ MonoBehaviour:
   currentPos: {x: 0, y: 0}
   normal: {fileID: 2100000, guid: bad7d6e0b066e2a44b6f2d9ff2083013, type: 2}
   highlighted: {fileID: 2100000, guid: d0b055618a28a6141b92cd3860609ab6, type: 2}
-  epsilonDistanceOffset: 0.00001
   isFollowingPlayer: 0
   playerFollowing: {fileID: 0}
 --- !u!114 &506117776026964859

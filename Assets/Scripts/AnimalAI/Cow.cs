@@ -60,6 +60,13 @@ public class Cow : Animal
         float angle = Random.Range(-angleRange, angleRange);
 
         Vector2 targetDir = RotateVectorByAngle(average, angle);
+
+        float angleToRotate = Mathf.Acos(Vector3.Dot(new Vector3(0, 0, 1), new Vector3(targetDir.normalized.x, 0, targetDir.normalized.y))) 
+            * Mathf.Rad2Deg;
+        Debug.Log("ROROR" + targetDir.normalized);
+        if (targetDir.x < 0) angleToRotate *= -1;
+        transform.eulerAngles = new Vector3(0, angleToRotate, 0);
+
         if (!GetTargetPoint(targetDir))
         {
             targetDirection = Vector3.zero;

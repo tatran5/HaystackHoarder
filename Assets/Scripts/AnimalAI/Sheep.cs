@@ -36,6 +36,10 @@ public class Sheep : Animal
                 float wanderZ = Random.Range(-1.0f, 1.0f);
                 targetDirection = new Vector3(wanderX, 0.0f, wanderZ);
 
+                float angleToRotate = Mathf.Acos(Vector3.Dot(new Vector3(0, 0, 1), targetDirection.normalized)) * Mathf.Rad2Deg;
+                if (targetDirection.x < 0) angleToRotate *= -1;
+                transform.eulerAngles = new Vector3(0, angleToRotate, 0);
+
                 // Ray to cast along
                 Vector2 targetDir = new Vector2(targetDirection.x, targetDirection.z);
                 if (!GetTargetPoint(targetDir))
