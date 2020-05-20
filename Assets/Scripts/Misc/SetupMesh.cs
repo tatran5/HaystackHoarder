@@ -11,7 +11,8 @@ public class SetupMesh : MonoBehaviour
 
 	void Start()
 	{
-		SetCollider();
+		if (canvas != null)
+			SetCollider();
 		SetCanvas();
 	}
 
