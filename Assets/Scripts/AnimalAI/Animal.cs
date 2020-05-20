@@ -43,10 +43,16 @@ public class Animal : MonoBehaviour
 	public bool isFollowingPlayer = false;
 	public Player playerFollowing;
 
-	/********************
+    bool runAnimation = false;
+
+    /********************
      * MISC. HELPER FUNCTIONS
      ********************/
 
+    private void Start()
+    {
+        gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+    }
     protected bool PositionEquality(Vector2 pos1, Vector2 pos2)
     {
         return Mathf.Abs(pos1.x - pos2.x) < 0.1f && Mathf.Abs(pos1.y - pos2.y) < 0.1f;
@@ -57,7 +63,6 @@ public class Animal : MonoBehaviour
                            v.x * Mathf.Sin(angle) + v.y * Mathf.Cos(angle));
     }
 
-    // Start is called before the first frame update
     protected void InitializeBaseVariables()
     {
         gameObject.GetComponent<MeshRenderer>().material = normal;
@@ -97,12 +102,22 @@ public class Animal : MonoBehaviour
 
         if (isFollowingPlayer && playerFollowing != null)
         {
+            Vector3 lastPos = transform.position;
             float positionY = transform.position.y;
             float zDist = (playerFollowing.gameObject.GetComponent<BoxCollider>().size.z + 
                 gameObject.GetComponent<BoxCollider>().size.z) / 2f + epsilonDistanceOffset;
             transform.position = playerFollowing.transform.position - playerFollowing.transform.forward.normalized * zDist;
             transform.position = new Vector3(transform.position.x, positionY, transform.position.z);
             transform.rotation = playerFollowing.transform.rotation;
+            if (PositionEquality(lastPos, transform.position) && runAnimation)
+            {
+                runAnimation = true;
+                gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
+            } else if (!PositionEquality(lastPos, transform.position) && !runAnimation)
+            {
+                runAnimation = false;
+                gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+            }
         }
         else
         {
@@ -111,8 +126,11 @@ public class Animal : MonoBehaviour
 
             if (PositionEquality(targetPoint, currentPos))
             {
-                if (targetDirection != Vector3.zero)
+                if (runAnimation)
+                {
                     gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                    runAnimation = false;
+                }
 
                 targetDirection = Vector3.zero;
                 // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
@@ -124,12 +142,26 @@ public class Animal : MonoBehaviour
                 int fenceIndex = CheckForEscape();
                 if (fenceIndex >= 0)
                 {
-                   //gameObject.GetComponent<PUN2_AnimalSync>().animator.Play("Run");
+                    if (!runAnimation)
+                    {
+                        gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
+                        runAnimation = true;
+                    }
+                    //gameObject.GetComponent<PUN2_AnimalSync>().animator.Play("Run");
                     GetEscapeDirection(fenceIndex);
                 }
                 else if (targetDirection == Vector3.zero)
                 {
-                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                    if (runAnimation)
+                    {
+                        gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                        runAnimation = false;
+                    }
+                    //if (stopMoving)
+                    //{
+                    //    stopMoving = true;
+                    //    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                    //}
                     //GetIdleDirection();
                     // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
                 }

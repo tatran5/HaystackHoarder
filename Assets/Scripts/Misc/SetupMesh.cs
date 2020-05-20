@@ -61,6 +61,10 @@ public class SetupMesh : MonoBehaviour
 		{
 			// The player might be in T pose which is overestimate the bounds in the x direction
 			collider.size = new Vector3(collider.size.x / 2f, collider.size.y, collider.size.z);
+		} else if (gameObject.CompareTag("Fence"))
+		{
+			// If the fence has really thin colliders, weird behavior might happen
+			collider.size = new Vector3(collider.size.x, collider.size.y * 2, collider.size.z * 3f);
 		}
 		float posSizeX = collider.size.x >= 0 ? collider.size.x : -collider.size.x;
 		float posSizeY = collider.size.y >= 0 ? collider.size.y : -collider.size.y;

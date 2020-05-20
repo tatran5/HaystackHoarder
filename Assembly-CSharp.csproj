@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{A20B30E1-2795-4054-F705-FB8C5A46A3FC}</ProjectGuid>
+    <ProjectGuid>{0410730C-8612-8BF5-F4A2-AC96BA3A75C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -130,31 +130,31 @@
     <None Include="Assets\Meshes\Farmer\UnityChanShader\Shader\Unitychan_chara_hair.shader" />
     <None Include="Assets\Meshes\Farmer\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -334,10 +334,10 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="Photon3Unity3D">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp">
-      <HintPath>D:/Academics/CIS-568-Game-Design/HaystackHoarder/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
+      <HintPath>D:/Academics/CIS-568-Game-Design/ColliderNoLongerWorking/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -696,47 +696,47 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj">
-      <Project>{8434FD4D-52F7-E87D-25D0-CAAA5ADD9119}</Project>
+      <Project>{0307A7B5-E3B7-59D1-54CF-724A8B724F23}</Project>
       <Name>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="PunDemos.DemoHubEditor.csproj">
-      <Project>{E51FEAE7-E6AB-4A2D-1115-C79435650A31}</Project>
+      <Project>{4A866B13-63B0-4BD2-B0F1-F3C3E8EB7F48}</Project>
       <Name>PunDemos.DemoHubEditor</Name>
     </ProjectReference>
     <ProjectReference Include="PunDemos.DemoSlotcarEditor.csproj">
-      <Project>{D1D88B60-0FEA-7FCB-7DB8-880768A2C5EB}</Project>
+      <Project>{578BB2E3-523E-71D7-35A6-FBA9D816508D}</Project>
       <Name>PunDemos.DemoSlotcarEditor</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Demos.csproj">
-      <Project>{A8BD6E1D-B563-B841-0379-62403142911F}</Project>
+      <Project>{8887FA9F-4889-F84C-ACDE-A4FE9C996652}</Project>
       <Name>PhotonUnityNetworking.Demos</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.csproj">
-      <Project>{53B535DB-58F2-5DDF-29AA-5D633D41E4FA}</Project>
+      <Project>{AEAB8DF4-EBA2-96ED-3BA9-EDD3F9348900}</Project>
       <Name>PhotonUnityNetworking.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonWebSocket.csproj">
-      <Project>{F22785DB-C924-8511-A55A-8DDBB42901E8}</Project>
+      <Project>{CA912B7C-8847-DBA5-6456-FE528D4030FE}</Project>
       <Name>PhotonWebSocket</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonRealtime.csproj">
-      <Project>{3EFBD9B4-B1F5-F28A-309E-786A056D60C6}</Project>
+      <Project>{6B212416-5B58-FD0B-9D5A-6E093159BABE}</Project>
       <Name>PhotonRealtime</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.csproj">
-      <Project>{CEA175CB-BD8F-0ADF-E494-DCF2DF2341E3}</Project>
+      <Project>{B481BC3A-B5E9-FE01-B92F-ACC105F6DAEA}</Project>
       <Name>PhotonUnityNetworking</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonChat.csproj">
-      <Project>{BC5F3D00-A59E-8BEA-CDDD-C8C6CF78904E}</Project>
+      <Project>{E7FBF7FB-7FBB-9EB8-0C7D-02A841AEEE03}</Project>
       <Name>PhotonChat</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.Culling.Editor.csproj">
-      <Project>{5FE314A4-A8E1-CEAC-83E8-B9E069B8B332}</Project>
+      <Project>{9DEA6FFE-EFC7-B323-7848-DE51A351409C}</Project>
       <Name>PhotonUnityNetworking.Utilities.Culling.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Editor.csproj">
-      <Project>{1214E117-677B-2750-5B61-1F441F75A46D}</Project>
+      <Project>{0D987967-8CBD-E698-DFE8-6CDAF1A7CAB6}</Project>
       <Name>PhotonUnityNetworking.Editor</Name>
     </ProjectReference>
   </ItemGroup>
