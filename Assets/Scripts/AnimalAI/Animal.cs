@@ -133,8 +133,6 @@ public class Animal : MonoBehaviour
                 }
 
                 targetDirection = Vector3.zero;
-                // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
-               // gameObject.GetComponent<PUN2_AnimalSync>().callPlayIdleAnimation();
             }
 
             if (penNumber > 0)
@@ -147,7 +145,6 @@ public class Animal : MonoBehaviour
                         gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
                         runAnimation = true;
                     }
-                    //gameObject.GetComponent<PUN2_AnimalSync>().animator.Play("Run");
                     GetEscapeDirection(fenceIndex);
                 }
                 else if (targetDirection == Vector3.zero)
@@ -157,13 +154,6 @@ public class Animal : MonoBehaviour
                         gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
                         runAnimation = false;
                     }
-                    //if (stopMoving)
-                    //{
-                    //    stopMoving = true;
-                    //    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
-                    //}
-                    //GetIdleDirection();
-                    // gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
                 }
 
             }
@@ -173,10 +163,18 @@ public class Animal : MonoBehaviour
                 if (penNumber == 0)
                 {
                     GetWanderDirection();
-                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
+                    if (!runAnimation)
+                    {
+                        runAnimation = true;
+                        gameObject.GetComponent<PUN2_AnimalSync>().callPlayRunAnimation();
+                    }
                 } else
                 {
-                    gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                    if (runAnimation)
+                    {
+                        runAnimation = false;
+                        gameObject.GetComponent<PUN2_AnimalSync>().callPlayEatAnimation();
+                    }
                 }
                 gameObject.transform.position += targetDirection * speed * Time.deltaTime;
             }
