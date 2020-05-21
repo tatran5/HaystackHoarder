@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 
 public enum PlayerState {HasHay, HasBale, HasFuel, Empty}
+public enum PlayerAnimationState {Idle, }
 
 // Player should only hold one thing at a time?
 public class Player : ControllableObject
@@ -120,7 +121,7 @@ public class Player : ControllableObject
 
 			if (state == PlayerState.Empty)
 				gameObject.GetComponent<PUN2_PlayerSync>().callPlayRunAnimation();
-			else
+			else if (!gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Carry"))
 				gameObject.GetComponent<PUN2_PlayerSync>().callPlayCarryAnimation();
 			transform.position += speed * input * Time.deltaTime;
 			return true;
@@ -128,7 +129,7 @@ public class Player : ControllableObject
 		else if (state == PlayerState.Empty)
 			gameObject.GetComponent<PUN2_PlayerSync>().callPlayIdleAnimation();
 
-		else
+		else 
 			gameObject.GetComponent<PUN2_PlayerSync>().callPlayCarryIdleAnimation();
 
 		return false;

@@ -11,9 +11,10 @@ public class SetupMesh : MonoBehaviour
 
 	void Start()
 	{
-		if (canvas != null)
+		if (!gameObject.CompareTag("Tractor"))
 			SetCollider();
-		SetCanvas();
+		if (canvas != null) 
+			SetCanvas();
 	}
 
 	void SetCanvas()
@@ -54,18 +55,14 @@ public class SetupMesh : MonoBehaviour
 		}
 
 		BoxCollider collider = gameObject.GetComponent<BoxCollider>();
-		
+
 		// Set collider size
 		collider.size = bounds.extents * 2 - new Vector3(epsilon, 0, epsilon);
 		if (gameObject.CompareTag("Player"))
-		{
-			// The player might be in T pose which is overestimate the bounds in the x direction
-			collider.size = new Vector3(collider.size.x / 2f, collider.size.y, collider.size.z);
-		} else if (gameObject.CompareTag("Fence"))
-		{
-			// If the fence has really thin colliders, weird behavior might happen
-			collider.size = new Vector3(collider.size.x, collider.size.y * 2, collider.size.z * 3f);
-		}
+			collider.size = new Vector3(collider.size.x / 2f, collider.size.y, collider.size.z); // The player might be in T pose which is overestimate the bounds in the x direction
+		else if (gameObject.CompareTag("Fence"))
+			collider.size = new Vector3(collider.size.x, collider.size.y * 2, collider.size.z * 3f);  // If the fence has really thin colliders, weird behavior might happen
+
 		float posSizeX = collider.size.x >= 0 ? collider.size.x : -collider.size.x;
 		float posSizeY = collider.size.y >= 0 ? collider.size.y : -collider.size.y;
 		float posSizeZ = collider.size.z >= 0 ? collider.size.z : -collider.size.z;

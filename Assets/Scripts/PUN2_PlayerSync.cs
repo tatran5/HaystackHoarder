@@ -304,24 +304,28 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void playCarryIdleAnimation()
 	{
+		if (animator == null) animator = gameObject.GetComponent<Animator>();
 		animator.Play("CarryIdle");
 	}
 
 	[PunRPC]
 	public void playIdleAnimation()
 	{
+		if (animator == null) animator = gameObject.GetComponent<Animator>();
 		animator.Play("Idle");
 	}
 
 	[PunRPC]
 	public void playCarryAnimation()
 	{
+		if (animator == null) animator = gameObject.GetComponent<Animator>();
 		animator.Play("Carry");
 	}
 
 	[PunRPC]
 	public void playRunAnimation()
 	{
+		if (animator == null) animator = gameObject.GetComponent<Animator>();
 		animator.Play("Running");
 	}
 
