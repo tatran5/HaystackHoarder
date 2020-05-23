@@ -61,6 +61,7 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	// ANIMATION --------------------------------------------------------------
 	Animator animator;
 
+
 	// Use this for initialization
 	void Start()
 	{
@@ -344,6 +345,16 @@ public class PUN2_PlayerSync : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	public void playRefillFuelSound()
 	{
+		if (refillFuelAS == null)
+		{
+			refillFuelAS = gameObject.AddComponent<AudioSource>();
+			refillFuelAS.clip = refillFuelAC;
+			refillFuelAS.volume = refillFuelVolume;
+		} else if (refillFuelAS.clip == null)
+		{
+			refillFuelAS.clip = refillFuelAC;
+			refillFuelAS.volume = refillFuelVolume;
+		}
 		refillFuelAS.Play();
 	}
 

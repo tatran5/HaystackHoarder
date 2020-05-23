@@ -14,7 +14,7 @@ Watch out because other players are trying to gather hay for their animals too, 
 
 -Networking using Pun2 to create rooms to synchronize players. Once all players join a room, the owner of the room can start the session which loads the map and begins the match. Photon also tracks the state of players (holding an item or not), the animals' meters and what player they belong to, the health of each players' fences, and the state of haystacks, barns, and player tractors.
 
-![](Images/TwoPlayer.png)
+![](Images/Game.png)
 
 -Animal AI. Animals stay calm while in a pen. If a fence breaks, the animal will try to escape and will run away from players that move towards them. Chickens constantly move around the map and avoid players; sheep run as far away from the player as possible; and cows stay stationary as long as the player is not too close.
 
@@ -37,15 +37,11 @@ barn to process hay into bale.
 
 -Bring the bale towards one of your animals and press space to feed animals.
 
-![](Images/Hay.png)
-
 -Approach your fuel station and press space to get a gas can. Bring it to your tractor and press space again to refill the tractor's fuel.
 
 -Keep animal's meter full by feeding them to get bonus points.
 
 -Fences break down over time. Move next to a fence and press space to fix the fence. If it breaks, your animals will try to escape. Approach them and press space to collect them and press space to release them into your pen.
-
-![](Images/Fence.png)
 
 -Approach an opponent's fence and hold space to break your opponent's fences.
 

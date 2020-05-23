@@ -9,7 +9,7 @@ public class Fence : MonoBehaviour
 
 	public bool broken;
 	public float health;
-    public float maxHealth;
+    public float maxHealth = 300;
     public float breakTimer;
 	float breakTickSeconds;    // Controls how fast health deterioriates over time
 
@@ -33,7 +33,6 @@ public class Fence : MonoBehaviour
 	{
 		fixing = false;
 		broken = false;
-        maxHealth = 80.0f;
         health = Random.Range(maxHealth - maxHealth / 10, maxHealth);
         breakTimer = 0;
         breakTickSeconds = 1f;

@@ -48,6 +48,9 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 	AudioSource harvestHayAS;
 
 	// Use this for initialization
+
+	// OTHERS -----------------------------------------------------------------
+
 	void Start()
 	{
 		SetupSound();
@@ -199,8 +202,10 @@ public class PUN2_TractorSync : MonoBehaviourPun, IPunObservable
 							{
 								if (t.playerPos != null)
 								{
+									GameObject[] grounds = GameObject.FindGameObjectsWithTag("Ground");
 									Vector3 newPos = t.gameObject.transform.position;
-									o.transform.position = new Vector3(newPos.x + 2f, newPos.y, newPos.z);
+									float posY = grounds[0].transform.position.y + grounds[0].transform.localScale.y / 2f + o.GetComponent<BoxCollider>().size.y / 2f + 0.05f;
+									o.transform.position = new Vector3(newPos.x + 2f, posY, newPos.z);
 								}
 								o.SetActive(true);
 								timeSincePlayerEnter = 0.0f;
