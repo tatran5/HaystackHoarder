@@ -14,7 +14,7 @@ Watch out because other players are trying to gather hay for their animals too, 
 
 -Networking using Pun2 to create rooms to synchronize players. Once all players join a room, the owner of the room can start the session which loads the map and begins the match. Photon also tracks the state of players (holding an item or not), the animals' meters and what player they belong to, the health of each players' fences, and the state of haystacks, barns, and player tractors.
 
-![](Images/Game.png)
+![](Images/game.png)
 
 -Animal AI. Animals stay calm while in a pen. If a fence breaks, the animal will try to escape and will run away from players that move towards them. Chickens constantly move around the map and avoid players; sheep run as far away from the player as possible; and cows stay stationary as long as the player is not too close.
 
