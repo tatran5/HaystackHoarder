@@ -1,6 +1,6 @@
 # Haystack Hoarder
 
-Made with Unity (2019.2.13f1) and Photon Networking. Inspired by Vincent Van Gogh's "Haystacks in Provence."
+Made with Unity (2019.2.13f1) and Photon Networking. Inspired by Vincent Van Gogh's "Haystacks in Provence." A video of most features is [here](https://www.youtube.com/watch?v=wbF0_8g5IS0)
 
 ![](Images/Title.png)
 
